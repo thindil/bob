@@ -1,0 +1,4 @@
+bin/bob
+bin/gmon.out
+obj/*
+tests/driver/*
