@@ -26,7 +26,9 @@ begin
       Put_Line("Available commands are:");
       Put_Line("help - show all available commands (this screen)");
       for I in Commands_List.Iterate loop
-         Put_Line(To_String(Commands_Container.Key(I)));
+         Put_Line
+           (To_String(Commands_Container.Key(I)) & " - " &
+            To_String(Commands_List(I).Description));
       end loop;
    end if;
 end Bob;

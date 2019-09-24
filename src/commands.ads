@@ -14,17 +14,14 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 
 package Commands is
 
-   package UnboundedString_Container is new Vectors(Positive,
-      Unbounded_String);
-
    type Command_Record is record
-      Commands: UnboundedString_Container.Vector;
+      Execute: Unbounded_String;
+      Description: Unbounded_String;
    end record;
 
    package Commands_Container is new Hashed_Maps(Unbounded_String,
