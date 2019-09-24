@@ -1,5 +1,3 @@
-with "yaml";
-
 project bob is
 
     for Main use ("bob.adb");
