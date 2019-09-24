@@ -13,20 +13,26 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Command_Line; use Ada.Command_Line;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
-with Commands; use Commands;
-with Config; use Config;
+with Ada.Directories; use Ada.Directories;
+with Yaml.Dom; use Yaml.Dom;
+with Yaml.Dom.Loading; use Yaml.Dom.Loading;
+with Yaml.Source; use Yaml.Source;
+with Yaml.Source.File; use Yaml.Source.File;
 
-procedure Bob is
-begin
-   LoadConfig;
-   if Argument_Count = 0 or else Argument(1) = "help" then
-      Put_Line("Available commands are:");
-      Put_Line("help - show all available commands (this screen)");
-      for I in Commands_List.Iterate loop
-         Put_Line(To_String(Commands_Container.Key(I)));
-      end loop;
-   end if;
-end Bob;
+package body Config is
+
+   procedure LoadConfig is
+      ConfigFile: Pointer;
+   begin
+      if not Exists(".bob.yml") then
+         return;
+      end if;
+      ConfigFile := As_Source(".bob.yml");
+      declare
+         Document: Document_Reference := From_Source(ConfigFile);
+      begin
+         null;
+      end;
+   end LoadConfig;
+
+end Config;

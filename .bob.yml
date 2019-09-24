@@ -1,0 +1,3 @@
+- command:
+   name: runtests
+   execute: cd tests/driver && ./test_runner

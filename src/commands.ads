@@ -13,20 +13,23 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
-with Commands; use Commands;
-with Config; use Config;
+with Ada.Strings.Unbounded.Hash;
 
-procedure Bob is
-begin
-   LoadConfig;
-   if Argument_Count = 0 or else Argument(1) = "help" then
-      Put_Line("Available commands are:");
-      Put_Line("help - show all available commands (this screen)");
-      for I in Commands_List.Iterate loop
-         Put_Line(To_String(Commands_Container.Key(I)));
-      end loop;
-   end if;
-end Bob;
+package Commands is
+
+   package UnboundedString_Container is new Vectors(Positive,
+      Unbounded_String);
+
+   type Command_Record is record
+      Commands: UnboundedString_Container.Vector;
+   end record;
+
+   package Commands_Container is new Hashed_Maps(Unbounded_String,
+      Command_Record, Ada.Strings.Unbounded.Hash, "=");
+
+   Commands_List: Commands_Container.Map;
+
+end Commands;
