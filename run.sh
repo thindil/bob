@@ -7,6 +7,5 @@ then
    ./test_runner
 else
    # run the program
-   cd bin || exit
-   ./bob "$@"
+   bin/bob "$@"
 fi
