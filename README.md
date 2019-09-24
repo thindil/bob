@@ -29,14 +29,6 @@ To build you need:
   The program does not work with old compilers (like GCC 4.9) since it
   lacks full support for Ada 2012.
 
-* AdaYaml library - experimental YAML implementation in Ada 2012.
-
-  https://ada.yaml.io
-
-  Follow instructions included in the source code of the library to compile
-  and install it.
-
-
 If you have all the required packages, navigate to the main directory(where
 this file is) to compile:
 
