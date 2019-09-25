@@ -42,8 +42,7 @@ this file is) to compile:
 
 ## Running it
 
-When you trying to run build by yourself version of the program, use script
-`run.sh` or if you prefer, `bob` executable from `bin` directory.
+When you trying to run the program, use `bob` executable from `bin` directory.
 
 To get list of available commands/aliases for Bob, run it or without any
 arguments or with argument `help`:
