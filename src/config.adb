@@ -23,7 +23,8 @@ package body Config is
 
    procedure LoadConfig is
       ConfigFile: File_Type;
-      Name, Execute, Line, Description: Unbounded_String;
+      Name, Execute, Line, Description, Key, Value: Unbounded_String;
+      ColonPosition: Positive;
    begin
       if not Exists(".bob.yml") then
          return;
@@ -35,17 +36,21 @@ package body Config is
             Name := Null_Unbounded_String;
             Execute := Null_Unbounded_String;
             Description := Null_Unbounded_String;
+            Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
-         if Length(Line) > 4 and then Slice(Line, 1, 4) = "name" then
-            Name := Unbounded_Slice(Line, 7, Length(Line));
-         elsif Length(Line) > 7 and then Slice(Line, 1, 7) = "execute" then
-            Execute := Unbounded_Slice(Line, 10, Length(Line));
-         elsif Length(Line) > 11
-           and then Slice(Line, 1, 11) = "description" then
-            Description := Unbounded_Slice(Line, 14, Length(Line));
+         ColonPosition := Index(Line, ":");
+         Key := Unbounded_Slice(Line, 1, ColonPosition - 1);
+         Value := Unbounded_Slice(Line, ColonPosition + 2, Length(Line));
+         if Key = To_Unbounded_String("name") then
+            Name := Value;
+         elsif Key = To_Unbounded_String("execute") then
+            Execute := Value;
+         elsif Key = To_Unbounded_String("description") then
+            Description := Value;
          end if;
          if Name /= Null_Unbounded_String and
-           Execute /= Null_Unbounded_String then
+           Execute /= Null_Unbounded_String and
+           Description /= Null_Unbounded_String then
             Commands_List.Include
               (Name, (Execute => Execute, Description => Description));
          end if;
