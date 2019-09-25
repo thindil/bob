@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Directories; use Ada.Directories;
+with Ada.Strings; use Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -25,6 +27,7 @@ package body Commands is
       Success: Boolean;
       Tokens, SubTokens: Slice_Set;
       Command, Arguments: Unbounded_String := Null_Unbounded_String;
+      ArgumentsStarts: Slice_Number;
    begin
       Create(Tokens, To_String(Commands_List(Key).Execute), "&&");
       for I in 1 .. Slice_Count(Tokens) loop
@@ -34,20 +37,30 @@ package body Commands is
          Create(SubTokens, Slice(Tokens, I), " ");
          if Slice(SubTokens, 1)'Length > 0 then
             Append(Command, Locate_Exec_On_Path(Slice(SubTokens, 1)).all);
+            ArgumentsStarts := 2;
          else
-            Append(Command, Slice(SubTokens, 2));
+            Append(Command, Locate_Exec_On_Path(Slice(SubTokens, 2)).all);
+            ArgumentsStarts := 3;
          end if;
-         for I in 2 .. Slice_Count(SubTokens) loop
-            Append(Arguments, " " & Slice(SubTokens, I));
+         for J in ArgumentsStarts .. Slice_Count(SubTokens) loop
+            Append(Arguments, " " & Slice(SubTokens, J));
          end loop;
-         Spawn(To_String(Command), Argument_String_To_List(To_String(Arguments)).all, Success);
+         if Slice(SubTokens, 1) = "cd" then
+            Set_Directory
+              (Current_Directory & Directory_Separator &
+               To_String(Trim(Arguments, Both)));
+            goto End_Of_Loop;
+         end if;
+         Spawn
+           (To_String(Command),
+            Argument_String_To_List(To_String(Arguments)).all, Success);
          if not Success then
             Put_Line("Error during executing '" & To_String(Command) & "'");
             exit;
          end if;
+         <<End_Of_Loop>>
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
-         <<End_Of_Loop>>
       end loop;
    end ExecuteCommand;
 
