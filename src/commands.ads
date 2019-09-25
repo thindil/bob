@@ -29,4 +29,6 @@ package Commands is
 
    Commands_List: Commands_Container.Map;
 
+   procedure ExecuteCommand;
+
 end Commands;

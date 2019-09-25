@@ -30,5 +30,7 @@ begin
            (To_String(Commands_Container.Key(I)) & " - " &
             To_String(Commands_List(I).Description));
       end loop;
+   else
+      ExecuteCommand;
    end if;
 end Bob;
