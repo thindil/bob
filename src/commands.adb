@@ -25,16 +25,15 @@ package body Commands is
    procedure ExecuteCommand is
       Key: constant Unbounded_String := To_Unbounded_String(Argument(1));
       Success: Boolean;
-      Tokens, SubTokens: Slice_Set;
+      SubTokens: Slice_Set;
       Command, Arguments: Unbounded_String := Null_Unbounded_String;
       ArgumentsStarts: Slice_Number;
    begin
-      Create(Tokens, To_String(Commands_List(Key).Execute), "&&");
-      for I in 1 .. Slice_Count(Tokens) loop
-         if Slice(Tokens, I)'Length = 0 then
+      for Execute of Commands_List(Key).Execute loop
+         if Length(Execute) = 0 then
             goto End_Of_Loop;
          end if;
-         Create(SubTokens, Slice(Tokens, I), " ");
+         Create(SubTokens, To_String(Execute), " ");
          if Slice(SubTokens, 1)'Length > 0 then
             Append(Command, Locate_Exec_On_Path(Slice(SubTokens, 1)).all);
             ArgumentsStarts := 2;

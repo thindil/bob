@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -23,8 +24,9 @@ package body Config is
 
    procedure LoadConfig is
       ConfigFile: File_Type;
-      Name, Execute, Line, Description, Key, Value: Unbounded_String;
-      ColonPosition: Positive;
+      Name, Line, Description, Key, Value: Unbounded_String;
+      ColonPosition: Natural;
+      Execute: UnboundedString_Container.Vector;
    begin
       if not Exists(".bob.yml") then
          return;
@@ -34,22 +36,28 @@ package body Config is
          Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          if Line = To_Unbounded_String("- command:") then
             Name := Null_Unbounded_String;
-            Execute := Null_Unbounded_String;
+            Execute.Clear;
             Description := Null_Unbounded_String;
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
          ColonPosition := Index(Line, ":");
+         if ColonPosition = 0 then
+            ColonPosition := Index(Line, "-");
+         end if;
          Key := Unbounded_Slice(Line, 1, ColonPosition - 1);
-         Value := Unbounded_Slice(Line, ColonPosition + 2, Length(Line));
+         if Key = To_Unbounded_String("execute") then
+            Value := Null_Unbounded_String;
+         else
+            Value := Unbounded_Slice(Line, ColonPosition + 2, Length(Line));
+         end if;
          if Key = To_Unbounded_String("name") then
             Name := Value;
-         elsif Key = To_Unbounded_String("execute") then
-            Execute := Value;
          elsif Key = To_Unbounded_String("description") then
             Description := Value;
+         elsif Key /= To_Unbounded_String("execute") then
+            Execute.Append(Value);
          end if;
-         if Name /= Null_Unbounded_String and
-           Execute /= Null_Unbounded_String and
+         if Name /= Null_Unbounded_String and Execute.Length > 0 and
            Description /= Null_Unbounded_String then
             Commands_List.Include
               (Name, (Execute => Execute, Description => Description));
