@@ -1,8 +1,11 @@
 - command:
    name: runtests
-   execute: cd tests/driver && ./test_runner
+   execute:
+      - cd tests/driver
+      - ./test_runner
    description: Run Bob unit tests
 - command:
    name: debug
-   execute: gprbuild -P bob.gpr
+   execute:
+      - gprbuild -P bob.gpr
    description: Build Bob in debug mode
