@@ -46,6 +46,12 @@ Explanation:
 * `description` - Command description, will be show on run `bob help` (or just
                   `bob`) command.
 
+Commands to execute can have also variables used in they definitions. Variables
+starts with sign `$`. `$` and number after it means argument from command line
+entered during executing Bob command. For example, `$2` means second argument
+after Bob command name. Thus if you enter: `bob dosomething one two`, `$2`
+will be replaced by word `two`.
+
 ## Build the program from sources
 
 To build you need:
