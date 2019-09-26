@@ -45,6 +45,14 @@ package body Commands is
             Append(Arguments, " " & Slice(SubTokens, J));
          end loop;
          if Slice(SubTokens, 1) = "cd" then
+            if not Exists
+                (Current_Directory & Directory_Separator &
+                 To_String(Trim(Arguments, Both))) then
+               Put_Line
+                 ("Directory: " & Current_Directory & Directory_Separator &
+                  To_String(Trim(Arguments, Both)) & " doesn't exists.");
+               exit;
+            end if;
             Set_Directory
               (Current_Directory & Directory_Separator &
                To_String(Trim(Arguments, Both)));
