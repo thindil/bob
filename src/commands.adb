@@ -40,7 +40,9 @@ package body Commands is
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
             exit when VariableStarts = 0 or VariableStarts = Length(Execute);
-            exit when not Is_Digit(Element(Execute, VariableStarts + 1));
+            if not Is_Digit(Element(Execute, VariableStarts + 1)) then
+               goto End_Of_Command_Line_Loop;
+            end if;
             NumberPosition := VariableStarts + 1;
             ArgumentNumber := Null_Unbounded_String;
             loop
@@ -57,6 +59,7 @@ package body Commands is
             Replace_Slice
               (Execute, VariableStarts, NumberPosition - 1,
                Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
+            <<End_Of_Command_Line_Loop>>
             VariableStarts := VariableStarts + 1;
          end loop;
          Create(SubTokens, To_String(Execute), " ");
