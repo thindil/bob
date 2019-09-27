@@ -25,8 +25,11 @@ package body Config is
    procedure LoadConfig is
       ConfigFile: File_Type;
       Name, Line, Description, Key, Value: Unbounded_String;
-      ColonPosition: Natural;
+      SeparatorPosition: Natural;
       Execute: UnboundedString_Container.Vector;
+      Variables: Variables_Container.Map;
+      type Items_Type is (COMMAND, VARIABLE);
+      ItemType: Items_Type;
    begin
       if not Exists(".bob.yml") then
          return;
@@ -37,30 +40,47 @@ package body Config is
          if Line = To_Unbounded_String("- command:") then
             Name := Null_Unbounded_String;
             Execute.Clear;
+            Variables.Clear;
             Description := Null_Unbounded_String;
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
-         ColonPosition := Index(Line, ":");
-         if ColonPosition = 0 then
-            ColonPosition := Index(Line, "-");
+         SeparatorPosition := Index(Line, ":");
+         if SeparatorPosition = 0 then
+            SeparatorPosition := Index(Line, "-");
          end if;
-         Key := Unbounded_Slice(Line, 1, ColonPosition - 1);
-         if Key = To_Unbounded_String("execute") then
+         Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
+         if Key = To_Unbounded_String("execute") or
+           Key = To_Unbounded_String("variables") then
             Value := Null_Unbounded_String;
          else
-            Value := Unbounded_Slice(Line, ColonPosition + 2, Length(Line));
+            Value :=
+              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
          end if;
          if Key = To_Unbounded_String("name") then
             Name := Value;
          elsif Key = To_Unbounded_String("description") then
             Description := Value;
-         elsif Key /= To_Unbounded_String("execute") then
-            Execute.Append(Value);
+         elsif Key = To_Unbounded_String("execute") then
+            ItemType := COMMAND;
+         elsif Key = To_Unbounded_String("variables") then
+            ItemType := VARIABLE;
+         else
+            if ItemType = COMMAND then
+               Execute.Append(Value);
+            else
+               SeparatorPosition := Index(Value, "=");
+               Variables.Include
+                 (Unbounded_Slice(Value, 1, SeparatorPosition - 2),
+                  Unbounded_Slice
+                    (Value, SeparatorPosition + 2, Length(Value)));
+            end if;
          end if;
          if Name /= Null_Unbounded_String and Execute.Length > 0 and
            Description /= Null_Unbounded_String then
             Commands_List.Include
-              (Name, (Execute => Execute, Description => Description));
+              (Name,
+               (Execute => Execute, Description => Description,
+                Variables => Variables));
          end if;
       end loop;
       Close(ConfigFile);

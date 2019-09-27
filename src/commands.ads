@@ -23,8 +23,12 @@ package Commands is
    package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
 
+   package Variables_Container is new Hashed_Maps(Unbounded_String,
+      Unbounded_String, Ada.Strings.Unbounded.Hash, "=");
+
    type Command_Record is record
       Execute: UnboundedString_Container.Vector;
+      Variables: Variables_Container.Map;
       Description: Unbounded_String;
    end record;
 
