@@ -64,12 +64,20 @@ package body Commands is
          end loop;
          Create(SubTokens, To_String(Execute), " ");
          if Slice(SubTokens, 1)'Length > 0 then
-            Append(Command, Locate_Exec_On_Path(Slice(SubTokens, 1)).all);
             ArgumentsStarts := 2;
          else
-            Append(Command, Locate_Exec_On_Path(Slice(SubTokens, 2)).all);
             ArgumentsStarts := 3;
          end if;
+         if Locate_Exec_On_Path(Slice(SubTokens, ArgumentsStarts - 1)) =
+           null then
+            Put_Line
+              ("Command: " & Slice(SubTokens, ArgumentsStarts - 1) &
+               " doesn't exists.");
+            return;
+         end if;
+         Append
+           (Command,
+            Locate_Exec_On_Path(Slice(SubTokens, ArgumentsStarts - 1)).all);
          for J in ArgumentsStarts .. Slice_Count(SubTokens) loop
             Append(Arguments, " " & Slice(SubTokens, J));
          end loop;
