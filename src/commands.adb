@@ -39,13 +39,14 @@ package body Commands is
          -- Replace variables with command line arguments (if needed)
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
-            exit when VariableStarts = 0 or
-              not Is_Digit(Element(Execute, VariableStarts + 1));
+            exit when VariableStarts = 0 or VariableStarts = Length(Execute);
+            exit when not Is_Digit(Element(Execute, VariableStarts + 1));
             NumberPosition := VariableStarts + 1;
             ArgumentNumber := Null_Unbounded_String;
             loop
                Append(ArgumentNumber, Element(Execute, NumberPosition));
                NumberPosition := NumberPosition + 1;
+               exit when NumberPosition > Length(Execute);
                exit when not Is_Digit(Element(Execute, NumberPosition));
             end loop;
             if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
