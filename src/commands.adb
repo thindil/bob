@@ -36,28 +36,27 @@ package body Commands is
          if Length(Execute) = 0 then
             goto End_Of_Loop;
          end if;
+         -- Replace variables with command line arguments (if needed)
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
-            exit when VariableStarts = 0;
-            if Is_Digit(Element(Execute, VariableStarts + 1)) then
-               NumberPosition := VariableStarts + 1;
-               ArgumentNumber := Null_Unbounded_String;
-               loop
-                  Append(ArgumentNumber, Element(Execute, NumberPosition));
-                  NumberPosition := NumberPosition + 1;
-                  exit when not Is_Digit(Element(Execute, NumberPosition));
-               end loop;
-               if Argument_Count <=
-                 Positive'Value(To_String(ArgumentNumber)) then
-                  Put_Line
-                    ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
-                  return;
-               end if;
-               Replace_Slice
-                 (Execute, VariableStarts, NumberPosition - 1,
-                  Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
-               VariableStarts := VariableStarts + 1;
+            exit when VariableStarts = 0 or
+              not Is_Digit(Element(Execute, VariableStarts + 1));
+            NumberPosition := VariableStarts + 1;
+            ArgumentNumber := Null_Unbounded_String;
+            loop
+               Append(ArgumentNumber, Element(Execute, NumberPosition));
+               NumberPosition := NumberPosition + 1;
+               exit when not Is_Digit(Element(Execute, NumberPosition));
+            end loop;
+            if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
+               Put_Line
+                 ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
+               return;
             end if;
+            Replace_Slice
+              (Execute, VariableStarts, NumberPosition - 1,
+               Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
+            VariableStarts := VariableStarts + 1;
          end loop;
          Create(SubTokens, To_String(Execute), " ");
          if Slice(SubTokens, 1)'Length > 0 then
