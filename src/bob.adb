@@ -22,7 +22,10 @@ with Config; use Config;
 procedure Bob is
 begin
    LoadConfig;
-   if Argument_Count = 0 or else Argument(1) = "help" then
+   if Argument_Count = 0
+     or else
+     (Argument(1) = "help" or
+      not Commands_List.Contains(To_Unbounded_String(Argument(1)))) then
       Put_Line("Available commands are:");
       Put_Line("help - show all available commands (this screen)");
       for I in Commands_List.Iterate loop
