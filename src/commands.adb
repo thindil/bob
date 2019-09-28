@@ -16,6 +16,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Directories; use Ada.Directories;
+with Ada.Environment_Variables; use Ada.Environment_Variables;
 with Ada.Strings; use Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
@@ -32,6 +33,12 @@ package body Commands is
       ArgumentsStarts: Slice_Number;
       VariableStarts, NumberPosition: Natural := 1;
    begin
+      -- Load enviroment variables if need
+      for I in Commands_List(Key).Variables.Iterate loop
+         Set
+           (To_String(Variables_Container.Key(I)),
+            To_String(Commands_List(Key).Variables(I)));
+      end loop;
       for Execute of Commands_List(Key).Execute loop
          if Length(Execute) = 0 then
             goto End_Of_Loop;
@@ -62,6 +69,35 @@ package body Commands is
             <<End_Of_Command_Line_Loop>>
             VariableStarts := VariableStarts + 1;
          end loop;
+         -- Replace variables with enviroment variables values
+         VariableStarts := 1;
+         loop
+            VariableStarts := Index(Execute, "$", VariableStarts);
+            exit when VariableStarts = 0 or VariableStarts = Length(Execute);
+            if not Is_Alphanumeric(Element(Execute, VariableStarts + 1)) then
+               goto End_Of_Variables_Loop;
+            end if;
+            NumberPosition := VariableStarts + 1;
+            ArgumentNumber := Null_Unbounded_String;
+            loop
+               Append(ArgumentNumber, Element(Execute, NumberPosition));
+               NumberPosition := NumberPosition + 1;
+               exit when NumberPosition > Length(Execute);
+               exit when not Is_Alphanumeric(Element(Execute, NumberPosition));
+            end loop;
+            if not Ada.Environment_Variables.Exists
+                (To_String(ArgumentNumber)) then
+               Put_Line
+                 ("Variable: " & To_String(ArgumentNumber) &
+                  " doesn't exists.");
+               return;
+            end if;
+            Replace_Slice
+              (Execute, VariableStarts, NumberPosition - 1,
+               Value(To_String(ArgumentNumber)));
+            <<End_Of_Variables_Loop>>
+            VariableStarts := VariableStarts + 1;
+         end loop;
          Create(SubTokens, To_String(Execute), " ");
          if Slice(SubTokens, 1)'Length > 0 then
             ArgumentsStarts := 2;
@@ -82,7 +118,7 @@ package body Commands is
             Append(Arguments, " " & Slice(SubTokens, J));
          end loop;
          if Slice(SubTokens, 1) = "cd" then
-            if not Exists
+            if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
                  To_String(Trim(Arguments, Both))) then
                Put_Line
