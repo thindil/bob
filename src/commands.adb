@@ -27,10 +27,9 @@ package body Commands is
    procedure ExecuteCommand is
       Key: constant Unbounded_String := To_Unbounded_String(Argument(1));
       Success: Boolean;
-      SubTokens: Slice_Set;
+      Tokens: Slice_Set;
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
-      ArgumentsStarts: Slice_Number;
       VariableStarts, NumberPosition: Natural := 1;
    begin
       -- Load enviroment variables if need
@@ -98,26 +97,16 @@ package body Commands is
             <<End_Of_Variables_Loop>>
             VariableStarts := VariableStarts + 1;
          end loop;
-         Create(SubTokens, To_String(Execute), " ");
-         if Slice(SubTokens, 1)'Length > 0 then
-            ArgumentsStarts := 2;
-         else
-            ArgumentsStarts := 3;
-         end if;
-         if Locate_Exec_On_Path(Slice(SubTokens, ArgumentsStarts - 1)) =
-           null then
-            Put_Line
-              ("Command: " & Slice(SubTokens, ArgumentsStarts - 1) &
-               " doesn't exists.");
+         Create(Tokens, To_String(Execute), " ", Multiple);
+         if Locate_Exec_On_Path(Slice(Tokens, 1)) = null then
+            Put_Line("Command: " & Slice(Tokens, 1) & " doesn't exists.");
             return;
          end if;
-         Append
-           (Command,
-            Locate_Exec_On_Path(Slice(SubTokens, ArgumentsStarts - 1)).all);
-         for J in ArgumentsStarts .. Slice_Count(SubTokens) loop
-            Append(Arguments, " " & Slice(SubTokens, J));
+         Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
+         for J in 2 .. Slice_Count(Tokens) loop
+            Append(Arguments, " " & Slice(Tokens, J));
          end loop;
-         if Slice(SubTokens, 1) = "cd" then
+         if Slice(Tokens, 1) = "cd" then
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
                  To_String(Trim(Arguments, Both))) then
