@@ -44,9 +44,9 @@ package body Config is
             Description := Null_Unbounded_String;
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
-         SeparatorPosition := Index(Line, ":");
-         if SeparatorPosition = 0 then
-            SeparatorPosition := Index(Line, "-");
+         SeparatorPosition := Index(Line, "-");
+         if SeparatorPosition /= 1 then
+            SeparatorPosition := Index(Line, ":");
          end if;
          Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
          if Key = To_Unbounded_String("execute") or
