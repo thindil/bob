@@ -66,13 +66,13 @@ def fixdocs(directory):
     for dirname in glob.glob(directory + "*/"):
         fixdocs(dirname)
 
-docsdir = "docs"
-configfile = "others/robodocada.rc"
+DOCSDIR = "docs"
+CONFIGFILE = "others/robodocada.rc"
 
 if len(sys.argv) > 1:
-    configfile = sys.argv[1]
+    CONFIGFILE = sys.argv[1]
     if len(sys.argv) > 2:
-        docsdir = sys.argv[2]
+        DOCSDIR = sys.argv[2]
 
-subprocess.call(["robodoc", "--rc", configfile])
-fixdocs(docsdir)
+subprocess.call(["robodoc", "--rc", CONFIGFILE])
+fixdocs(DOCSDIR)
