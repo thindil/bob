@@ -18,25 +18,65 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 
+-- ****h* Bob/Commands
+-- FUNCTION
+-- Provide code for manipulate configured Bob commands
+-- SOURCE
 package Commands is
+-- ****
 
+   -- ****t* Commands/UnboundedString_Container
+   -- FUNCTION
+   -- Used to store commands to execute
+   -- SOURCE
    package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
+   -- ****
 
+   -- ****t* Commands/Variables_Container
+   -- FUNCTION
+   -- Used to store enviroment variables for the command
+   -- SOURCE
    package Variables_Container is new Hashed_Maps(Unbounded_String,
       Unbounded_String, Ada.Strings.Unbounded.Hash, "=");
+   -- ****
 
+   -- ****t* Commands/Command_Record
+   -- FUNCTION
+   -- Data structure for the Bob commands.
+   -- PARAMETERS
+   -- Execute     - Commands or programs to execute with this command.
+   -- Variables   - Environment variables for this command.
+   -- Description - Description of the command. Will be show to the user with
+   --               help command.
+   -- SOURCE
    type Command_Record is record
       Execute: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
       Description: Unbounded_String;
    end record;
+   -- ****
 
+   -- ****t* Commands/Commands_Container
+   -- FUNCTION
+   -- Used to store all available Bob commands.
+   -- SOURCE
    package Commands_Container is new Hashed_Maps(Unbounded_String,
       Command_Record, Ada.Strings.Unbounded.Hash, "=");
+   -- ****
 
+   -- ****v* Commands/Commands_List
+   -- FUNCTION
+   -- List of all available Bob commands.
+   -- SOURCE
    Commands_List: Commands_Container.Map;
+   -- ****
 
+   -- ****f* Commands/ExecuteCommand
+   -- FUNCTION
+   -- Execute selected Bob command
+   -- SOURCE
    procedure ExecuteCommand;
+   -- ****
 
 end Commands;

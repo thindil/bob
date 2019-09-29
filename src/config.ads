@@ -13,8 +13,18 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Bob/Config
+-- FUNCTION
+-- Provide code for manipulate configuration files
+-- SOURCE
 package Config is
+-- ****
 
+   -- ****f* Config/LoadConfig
+   -- FUNCTION
+   -- Load local configuration .bob.yml file
+   -- SOURCE
    procedure LoadConfig;
+   -- ****
 
 end Config;
