@@ -43,6 +43,7 @@ package body Commands is
             goto End_Of_Loop;
          end if;
          -- Replace variables with command line arguments (if needed)
+         VariableStarts := 1;
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
             exit when VariableStarts = 0 or VariableStarts = Length(Execute);
@@ -120,6 +121,7 @@ package body Commands is
                To_String(Trim(Arguments, Both)));
             goto End_Of_Loop;
          end if;
+         Trim(Arguments, Both);
          Spawn
            (To_String(Command),
             Argument_String_To_List(To_String(Arguments)).all, Success);
