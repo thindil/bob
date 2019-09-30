@@ -13,9 +13,16 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
+with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Commands; use Commands;
 with Config; use Config;
 
@@ -36,4 +43,36 @@ begin
    else
       ExecuteCommand;
    end if;
+exception
+   when An_Exception : others =>
+      declare
+         ErrorFile: File_Type;
+         ErrorText: Unbounded_String;
+         FilePath: constant String := Current_Directory & Directory_Separator & "error.log";
+      begin
+         if Exists(FilePath) then
+            Open(ErrorFile, Append_File, FilePath);
+         else
+            Create(ErrorFile, Append_File, FilePath);
+         end if;
+         Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
+         Append(ErrorText, LF);
+         Append(ErrorText, "1.0");
+         Append(ErrorText, LF);
+         Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
+         Append(ErrorText, LF);
+         Append(ErrorText, "Message: " & Exception_Message(An_Exception));
+         Append(ErrorText, LF);
+         Append
+           (ErrorText, "-------------------------------------------------");
+         Append(ErrorText, LF);
+         Append(ErrorText, Symbolic_Traceback(An_Exception));
+         Append(ErrorText, LF);
+         Append
+           (ErrorText, "-------------------------------------------------");
+         Put_Line(ErrorFile, To_String(ErrorText));
+         Close(ErrorFile);
+         Put_Line
+           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://github.com/thindil/bob/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file '" & FilePath & "'.");
+      end;
 end Bob;
