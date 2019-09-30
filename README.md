@@ -1,19 +1,14 @@
 ## General information
 
-*NOTE*: Bob is in an early stage of the development so, some of described
-things here are not implemented yet. Additionally, many things may change
-or break, use at your own risk.
-
 Bob is Not Intelligent console assistant. Bod doesn't try to replace any
 existing shells or build systems. It is designed for extend them. Very often
 when you have few projects to work, they use different commands or build
-systems to maintain. To organize it often you have to add or global aliases
+systems to maintain. To organize it, often you have to add or global aliases
 to your shell or create scripts which grow over time to maintain it. Bob
 trying to solve this problem by adding ability to create local aliases for
-each directory. It doing this by creating configuration files (in YAML) with
+each directory. It is doing this by creating configuration files (in YAML) with
 defined aliases in each directory. When Bob is executed in selected directory,
-it reads main configuration file of the program and configuration file
-(if exists) for selected directory for aliases.
+it reads configuration file (if exists) for selected directory for aliases.
 
 ### Configuration file
 
@@ -63,7 +58,8 @@ entered during executing Bob command. For example, `$2` means second argument
 after Bob command name. Thus if you enter: `bob dosomething one two`, `$2`
 will be replaced by word `two`. `$` and any alphanumeric character(s) means
 environment variable with that name, available durning executing this Bob
-command. In this example, it is variable `$DIRECTORY`.
+command. In this example, it is variable `$DIRECTORY`. For more advanced, real
+life example, look at it own *.bob.yml* file.
 
 ## Build the program from sources
 
