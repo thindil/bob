@@ -86,7 +86,9 @@ this file is) to compile:
 
 * If you prefer using console: in main source code directory type
   `gprbuild -P bob.gpr` for debug mode build or for release mode:
-  `gprbuild -P bob.gpr -XMode=release`.
+  `gprbuild -P bob.gpr -XMode=release`. If you have already instaled **Bob**
+  you can also use it to build the program. For debug mode: `bob debug`
+  and for relaese mode: `bob release`.
 
 ## Running it
 
