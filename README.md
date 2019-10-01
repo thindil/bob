@@ -97,6 +97,23 @@ arguments or with argument `help`:
 
 `bin/bob help` will show list of available commands too
 
+## Generating code documentation
+
+To generate (or regenerate) code documentation, you need ROBODoc If you have
+it, in main program directory (where this file is) enter terminal command:
+`others/generatedocs.py`. For more information about this script, please look
+[here](https://github.com/thindil/roboada#generatedocspy). This version of
+script have set all default settings for Bob code. If you have Bob installed,
+you can also use for it command: `bob docs`.
+
+## Contributing to the project
+For detailed informations about contributing to the project (bugs reporting,
+ideas propositions, code conduct, etc), see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licenses
+
+Bob is available under [GPLv3](COPYING) license.
+
 ----
 
 That's all for now, as usual, probably I forgot about something important ;)
