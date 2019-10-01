@@ -16,12 +16,12 @@
    execute:
       - gprclean -P bob.gpr
       - gprbuild -p bob.gpr -XMode=release
-      - mkdir -p "$releasedir"/share/doc
-      - mkdir -p "$releasedir"/bin
-      - cp bin/bob "$releasedir"/bin
-      - cp README.md "$releasedir"/share/doc
-      - cp COPYING "$releasedir"/share/doc
-      - cp CHANGELOG.md "$releasedir"/share/doc
+      - mkdir -p $releasedir/share/doc
+      - mkdir -p $releasedir/bin
+      - cp bin/bob $releasedir/bin
+      - cp README.md $releasedir/share/doc
+      - cp COPYING $releasedir/share/doc
+      - cp CHANGELOG.md $releasedir/share/doc
       - gprclean -P bob.gpr
    description: Build Bob in release mode
 - command:
