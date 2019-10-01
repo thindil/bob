@@ -22,6 +22,7 @@
       - cp README.md $releasedir/share/doc
       - cp COPYING $releasedir/share/doc
       - cp CHANGELOG.md $releasedir/share/doc
+      - cp CONTRIBUTING.md $releasedir/share/doc
       - gprclean -P bob.gpr
    description: Build Bob in release mode
 - command:
