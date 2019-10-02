@@ -51,18 +51,10 @@
       - others/generatedocs.py
    description: Generate code documentation
 - command:
-   name: gcov
-   execute:
-      - mkdir -p gcov
-      - cd gcov
-      - ~/gnat/bin/gcov -f ../obj/*.o
-      - cd ..
-   description: Generate gcov reports for each file in gcov directory. You may need to change gcov path in this script to work
-- command:
    name: gprof
    execute:
-      - gprof bin/bob bin/gmon.out > gprofreport.txt
-   description: Generate gprof report in main directory
+      - gprof bin/bob gmon.out
+   description: Generate gprof report
 - command:
    name: windows
    execute:
