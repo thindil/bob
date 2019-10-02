@@ -37,6 +37,9 @@ package body Config is
       Open(ConfigFile, In_File, ".bob.yml");
       while not End_Of_File(ConfigFile) loop
          Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
+         if Length(Line) = 0 or Element(Line, 1) = '#' then
+            goto End_Of_Loop;
+         end if;
          if Line = To_Unbounded_String("- command:") then
             Name := Null_Unbounded_String;
             Execute.Clear;
@@ -82,6 +85,7 @@ package body Config is
                (Execute => Execute, Description => Description,
                 Variables => Variables));
          end if;
+         <<End_Of_Loop>>
       end loop;
       Close(ConfigFile);
    end LoadConfig;
