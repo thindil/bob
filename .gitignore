@@ -1,4 +1,4 @@
 bin/bob
-bin/gmon.out
+gmon.out
 obj/*
 tests/driver/*
