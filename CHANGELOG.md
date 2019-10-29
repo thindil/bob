@@ -1,5 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Problems with cd command on Debian
+
 ## [1.0] - 2019-10-02
 Initial release
