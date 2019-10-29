@@ -26,7 +26,7 @@ with Commands; use Commands;
 with Config; use Config;
 
 procedure Bob is
-   Version: constant String := "1.0";
+   Version: constant String := "2.0";
 begin
    LoadConfig;
    if Argument_Count = 0
