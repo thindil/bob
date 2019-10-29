@@ -7,7 +7,7 @@ find any bug in the program, please report it at
 
 ### Some general hints about reporting bugs
 
-- In "Title" field try write very short but not too general description of
+- In "Title" field try write short but not too general description of
   problem. Good example: "The program crash when running command". Bad
   example: "The program crashes often."
 - In body/comment field try write that much informations about problem as
@@ -31,7 +31,7 @@ Title: "The program crashed when trying to run command"
 
 Body:
 
-1. Enter in terminal: bob mycommand
+1. In terminal, enter: bob mycommand
 2. Press enter
 3. The program crashes
 
@@ -58,9 +58,10 @@ other case, fell free to fix my code.
 ### Coding standard
 
 When you write your own code, feel free to use any coding standard you want.
-But before you send your changes to the project, please use command `gnatpp`
-which automatically format source code to project coding standard. Proper
-`gnatpp` command usage (in main project directory, where *bob.gpr* file is):
+Before you send your changes to the project, please use command `gnatpp` which
+automatically format the source code to the project coding standard. Proper
+`gnatpp` command usage (in the main project directory, where *bob.gpr* file
+is):
 
 `gnatpp -P bob.gpr`
 
@@ -88,11 +89,11 @@ header:
 format for documentation headers.
 
 2-9 - Documentation. For all available options, please refer to ROBODoc
-documentation. Hunter uses `-- ` for start all documenation lines.
+documentation. Bob uses `-- ` for start all documenation lines.
 
 10 - Source code of item.
 
-11 - Documentation footer. Hunter uses `-- ****` for closing documentation.
+11 - Documentation footer. Bob uses `-- ****` for closing documentation.
 
 How to generate the code documentation is described in main *README.md* file.
 
