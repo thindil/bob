@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Problems with cd command on Debian
+- Some typos in contributing guide
 
 ## [1.0] - 2019-10-02
 Initial release
