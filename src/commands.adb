@@ -99,14 +99,6 @@ package body Commands is
             VariableStarts := VariableStarts + 1;
          end loop;
          Create(Tokens, To_String(Execute), " ", Multiple);
-         if Locate_Exec_On_Path(Slice(Tokens, 1)) = null then
-            Put_Line("Command: " & Slice(Tokens, 1) & " doesn't exists.");
-            return;
-         end if;
-         Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
-         for J in 2 .. Slice_Count(Tokens) loop
-            Append(Arguments, " " & Slice(Tokens, J));
-         end loop;
          if Slice(Tokens, 1) = "cd" then
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
@@ -121,6 +113,14 @@ package body Commands is
                To_String(Trim(Arguments, Both)));
             goto End_Of_Loop;
          end if;
+         if Locate_Exec_On_Path(Slice(Tokens, 1)) = null then
+            Put_Line("Command: " & Slice(Tokens, 1) & " doesn't exists.");
+            return;
+         end if;
+         Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
+         for J in 2 .. Slice_Count(Tokens) loop
+            Append(Arguments, " " & Slice(Tokens, J));
+         end loop;
          Trim(Arguments, Both);
          Spawn
            (To_String(Command),
