@@ -103,13 +103,14 @@ package body Commands is
             Append(Arguments, " " & Slice(Tokens, J));
          end loop;
          Trim(Arguments, Both);
+         -- Move to the selected directory
          if Slice(Tokens, 1) = "cd" then
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
                  To_String(Arguments)) then
                Put_Line
-                 ("Directory: " & Current_Directory & Directory_Separator &
-                  To_String(Arguments) & " doesn't exists.");
+                 ("Directory: '" & Current_Directory & Directory_Separator &
+                  To_String(Arguments) & "' doesn't exists.");
                return;
             end if;
             Set_Directory
@@ -118,7 +119,7 @@ package body Commands is
             goto End_Of_Loop;
          end if;
          if Locate_Exec_On_Path(Slice(Tokens, 1)) = null then
-            Put_Line("Command: " & Slice(Tokens, 1) & " doesn't exists.");
+            Put_Line("Command: '" & Slice(Tokens, 1) & "' doesn't exists.");
             return;
          end if;
          Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
@@ -126,7 +127,7 @@ package body Commands is
            (To_String(Command),
             Argument_String_To_List(To_String(Arguments)).all, Success);
          if not Success then
-            Put_Line("Error during executing '" & To_String(Command) & "'");
+            Put_Line("Error during executing '" & To_String(Execute) & "'");
             return;
          end if;
          <<End_Of_Loop>>
