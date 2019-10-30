@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Show whole command on error
+- Show available commands sorted alphabetically
 
 ### Fixed
 - Problems with cd command on Debian
