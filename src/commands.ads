@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Containers.Ordered_Maps;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
@@ -61,8 +62,8 @@ package Commands is
    -- FUNCTION
    -- Used to store all available Bob commands.
    -- SOURCE
-   package Commands_Container is new Hashed_Maps(Unbounded_String,
-      Command_Record, Ada.Strings.Unbounded.Hash, "=");
+   package Commands_Container is new Ordered_Maps(Unbounded_String,
+      Command_Record);
    -- ****
 
    -- ****v* Commands/Commands_List
