@@ -41,6 +41,13 @@ package body Config is
             goto End_Of_Loop;
          end if;
          if Line = To_Unbounded_String("- command:") then
+            if Name /= Null_Unbounded_String and Execute.Length > 0 and
+              Description /= Null_Unbounded_String then
+               Commands_List.Include
+                 (Name,
+                  (Execute => Execute, Description => Description,
+                   Variables => Variables, Output => Output));
+            end if;
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
@@ -80,13 +87,6 @@ package body Config is
                   Unbounded_Slice
                     (Value, SeparatorPosition + 2, Length(Value)));
             end if;
-         end if;
-         if Name /= Null_Unbounded_String and Execute.Length > 0 and
-           Description /= Null_Unbounded_String then
-            Commands_List.Include
-              (Name,
-               (Execute => Execute, Description => Description,
-                Variables => Variables, Output => Output));
          end if;
          <<End_Of_Loop>>
       end loop;
