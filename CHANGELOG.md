@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Better formatting of list of available commands
+
 ### Changed
 - Show whole command on error
 - Show available commands sorted alphabetically
