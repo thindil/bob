@@ -35,13 +35,37 @@ begin
       (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
        Argument(1) /= "about")) then
       Put_Line("Available commands are:");
-      Put_Line("help - show all available commands (this screen)");
-      Put_Line("about - show the program version and license info");
-      for I in Commands_List.Iterate loop
-         Put_Line
-           (To_String(Commands_Container.Key(I)) & " - " &
-            To_String(Commands_List(I).Description));
-      end loop;
+      declare
+         StringLength: Positive := 5;
+      begin
+         for I in Commands_List.Iterate loop
+            if Length(Commands_Container.Key(I)) > StringLength then
+               StringLength := Length(Commands_Container.Key(I));
+            end if;
+         end loop;
+         declare
+            procedure AddEntry(Key, Description: Unbounded_String) is
+               KeyString: String(1 .. StringLength) := (others => ' ');
+               KeyLength: constant Positive := Length(Key);
+            begin
+               KeyString(1 .. KeyLength) := To_String(Key);
+               Put_Line(KeyString & " - " & To_String(Description));
+            end AddEntry;
+         begin
+            AddEntry
+              (To_Unbounded_String("help"),
+               To_Unbounded_String
+                 ("show all available commands (this screen)"));
+            AddEntry
+              (To_Unbounded_String("about"),
+               To_Unbounded_String
+                 ("show the program version and license info"));
+            for I in Commands_List.Iterate loop
+               AddEntry
+                 (Commands_Container.Key(I), Commands_List(I).Description);
+            end loop;
+         end;
+      end;
    elsif Argument(1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
