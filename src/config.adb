@@ -24,7 +24,7 @@ package body Config is
 
    procedure LoadConfig is
       ConfigFile: File_Type;
-      Name, Line, Description, Key, Value: Unbounded_String;
+      Name, Line, Description, Key, Value, Output: Unbounded_String;
       SeparatorPosition: Natural;
       Execute: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
@@ -45,6 +45,7 @@ package body Config is
             Execute.Clear;
             Variables.Clear;
             Description := Null_Unbounded_String;
+            Output := To_Unbounded_String("standard");
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
          SeparatorPosition := Index(Line, "-");
@@ -63,6 +64,8 @@ package body Config is
             Name := Value;
          elsif Key = To_Unbounded_String("description") then
             Description := Value;
+         elsif Key = To_Unbounded_String("output") then
+            Output := Value;
          elsif Key = To_Unbounded_String("execute") then
             ItemType := COMMAND;
          elsif Key = To_Unbounded_String("variables") then
@@ -83,7 +86,7 @@ package body Config is
             Commands_List.Include
               (Name,
                (Execute => Execute, Description => Description,
-                Variables => Variables));
+                Variables => Variables, Output => Output));
          end if;
          <<End_Of_Loop>>
       end loop;

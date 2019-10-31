@@ -50,11 +50,16 @@ package Commands is
    -- Variables   - Environment variables for this command.
    -- Description - Description of the command. Will be show to the user with
    --               help command.
+   -- Output      - Where to send output of this command. Possible options are:
+   --               "standard" standard output (default), "error" standard
+--               error output, anything other will be treated as path to file
+   --               where output should be redirected.
    -- SOURCE
    type Command_Record is record
       Execute: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
       Description: Unbounded_String;
+      Output: Unbounded_String;
    end record;
    -- ****
 

@@ -26,7 +26,6 @@ package body Commands is
 
    procedure ExecuteCommand is
       Key: constant Unbounded_String := To_Unbounded_String(Argument(1));
-      Success: Boolean;
       Tokens: Slice_Set;
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
@@ -123,13 +122,36 @@ package body Commands is
             return;
          end if;
          Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
-         Spawn
-           (To_String(Command),
-            Argument_String_To_List(To_String(Arguments)).all, Success);
-         if not Success then
-            Put_Line("Error during executing '" & To_String(Execute) & "'");
-            return;
-         end if;
+         declare
+            FileDescriptor: File_Descriptor;
+            Output: constant String := To_String(Commands_List(Key).Output);
+            ReturnCode: Integer;
+         begin
+            if Output = "standard" then
+               FileDescriptor := Standout;
+            elsif Output = "error" then
+               FileDescriptor := Standerr;
+            else
+               if Ada.Directories.Exists(Output) then
+                  Delete_File(Output);
+               end if;
+               FileDescriptor := Create_Output_Text_File(Output);
+               if FileDescriptor = Invalid_FD then
+                  Put_Line
+                    ("Error during executing '" & To_String(Execute) &
+                     "'. Can't create '" & Output & "' as a output file.");
+                  return;
+               end if;
+            end if;
+            Spawn
+              (To_String(Command),
+               Argument_String_To_List(To_String(Arguments)).all,
+               FileDescriptor, ReturnCode);
+            if ReturnCode > 0 then
+               Put_Line("Error during executing '" & To_String(Execute) & "'");
+               return;
+            end if;
+         end;
          <<End_Of_Loop>>
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
