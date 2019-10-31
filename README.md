@@ -1,7 +1,7 @@
 ## General information
 
 Bob is Not Intelligent console assistant. Bod doesn't try to replace any
-existing shells or build systems. It is designed for extend them. Very often
+existing shells or build systems. It is designed for extend them. Often
 when you have few projects to work, they use different commands or build
 systems to maintain. To organize it, often you have to add or global aliases
 to your shell or create scripts which grow over time to maintain it. Bob
@@ -9,6 +9,9 @@ trying to solve this problem by adding ability to create local aliases for
 each directory. It is doing this by creating configuration files (in YAML) with
 defined aliases in each directory. When Bob is executed in selected directory,
 it reads configuration file (if exists) for selected directory for aliases.
+
+**Note:** This version of README.md is about development version of the
+program. Some things may be different in released version of Bob.
 
 ### Configuration file
 
@@ -23,6 +26,7 @@ configuration:
        execute:
            - ls $DIRECTORY
        description: Show content of $DIRECTORY directory
+       output: standard
 
 Explanation:
 
@@ -51,6 +55,13 @@ Explanation:
                             much as you want other commands or programs.
 * `description`        - Command description, will be show on run `bob help`
                          (or just `bob`) command.
+* `output`             - Optional parameter. Redirect command output to the
+                         selected place. Possible options are: `standard`:
+                         redirect output to standard output, `error`: redirect
+                         output to standard error output, any other value will
+                         be treated as name for file to which redirect output.
+                         Path to the file should be relative to the current
+                         directory.
 
 Commands to execute can have also variables used in they definitions. Variables
 starts with sign `$`. `$` and number after it means argument from command line
