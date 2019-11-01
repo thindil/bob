@@ -139,7 +139,7 @@ package body Commands is
                if FileDescriptor = Invalid_FD then
                   Put_Line
                     ("Error during executing '" & To_String(Execute) &
-                     "'. Can't create '" & Output & "' as a output file.");
+                     "'. Can't create '" & Output & "' as the output file.");
                   return;
                end if;
             end if;
