@@ -35,6 +35,7 @@ begin
       (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
        Argument(1) /= "about")) then
       Put_Line("Available commands are:");
+      Put_Line("##### Build-in commands #####");
       declare
          StringLength: Positive := 5;
       begin
@@ -60,6 +61,7 @@ begin
               (To_Unbounded_String("about"),
                To_Unbounded_String
                  ("show the program version and license info"));
+            Put_Line("##### Local commands ########");
             for I in Commands_List.Iterate loop
                AddEntry
                  (Commands_Container.Key(I), Commands_List(I).Description);
