@@ -90,6 +90,13 @@ package body Config is
          end if;
          <<End_Of_Loop>>
       end loop;
+      if Name /= Null_Unbounded_String and Execute.Length > 0 and
+         Description /= Null_Unbounded_String then
+         Commands_List.Include
+            (Name,
+            (Execute => Execute, Description => Description,
+            Variables => Variables, Output => Output));
+      end if;
       Close(ConfigFile);
    end LoadConfig;
 
