@@ -36,7 +36,7 @@ Explanation:
 * `name: list`         - Name of the selected command. It will be used as
                          argument for Bob. In this example, full command for
                          Bob will be `bob list`.
-* `variables:`         - Mark start of list of enviromental variables which
+* `variables:`         - Mark start of list of environmental variables which
                          will be added when running this Bob command.
 * `- [name] = [value]` - Each environment variable which will be added
                          during running this Bob command must starts with
@@ -68,7 +68,7 @@ starts with sign `$`. `$` and number after it means argument from command line
 entered during executing Bob command. For example, `$2` means second argument
 after Bob command name. Thus if you enter: `bob dosomething one two`, `$2`
 will be replaced by word `two`. `$` and any alphanumeric character(s) means
-environment variable with that name, available durning executing this Bob
+environment variable with that name, available during executing this Bob
 command. In this example, it is variable `$DIRECTORY`. For more advanced, real
 life example, look at it own *.bob.yml* file.
 
@@ -93,9 +93,9 @@ this file is) to compile:
 
 * If you prefer using console: in main source code directory type
   `gprbuild -P bob.gpr` for debug mode build or for release mode:
-  `gprbuild -P bob.gpr -XMode=release`. If you have already instaled **Bob**
+  `gprbuild -P bob.gpr -XMode=release`. If you have already installed **Bob**
   you can also use it to build the program. For debug mode: `bob debug`
-  and for relaese mode: `bob release`.
+  and for release mode: `bob release`.
 
 ## Running it
 
