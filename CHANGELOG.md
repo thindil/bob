@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Better formatting of list of available commands
 - Option to set output for commands
 - Check for correctness of command configuration
+- Option to set command for selected operating system only (Windows or Unix)
 
 ### Changed
 - Show whole command on error
