@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Better formatting of list of available commands
 - Option to set output for commands
+- Check for correctness of command configuration
 
 ### Changed
 - Show whole command on error
