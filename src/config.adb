@@ -18,6 +18,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Commands; use Commands;
 
 package body Config is
@@ -26,12 +27,20 @@ package body Config is
       ConfigFile: File_Type;
       Name, Line, Description, Key, Value, Output: Unbounded_String;
       SeparatorPosition: Natural;
-      Execute: UnboundedString_Container.Vector;
+      Execute, Flags: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
-      type Items_Type is (COMMAND, VARIABLE);
+      type Items_Type is (COMMAND, VARIABLE, FLAG);
       ItemType: Items_Type;
       procedure AddCommand is
       begin
+         if Flags.Contains(To_Unbounded_String("windowsonly")) and
+           Directory_Separator = '/' then
+            return;
+         end if;
+         if Flags.Contains(To_Unbounded_String("unixonly")) and
+           Directory_Separator = '\' then
+            return;
+         end if;
          if Commands_List.Contains(Name) then
             Put_Line
               ("Can't add command '" & To_String(Name) &
@@ -49,7 +58,7 @@ package body Config is
                Commands_List.Include
                  (Name,
                   (Execute => Execute, Description => Description,
-                   Variables => Variables, Output => Output));
+                   Variables => Variables, Output => Output, Flags => Flags));
             end if;
          end if;
       end AddCommand;
@@ -68,6 +77,7 @@ package body Config is
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
+            Flags.Clear;
             Description := Null_Unbounded_String;
             Output := To_Unbounded_String("standard");
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
@@ -78,7 +88,8 @@ package body Config is
          end if;
          Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
          if Key = To_Unbounded_String("execute") or
-           Key = To_Unbounded_String("variables") then
+           Key = To_Unbounded_String("variables") or
+           Key = To_Unbounded_String("flags") then
             Value := Null_Unbounded_String;
          else
             Value :=
@@ -94,16 +105,21 @@ package body Config is
             ItemType := COMMAND;
          elsif Key = To_Unbounded_String("variables") then
             ItemType := VARIABLE;
+         elsif Key = To_Unbounded_String("flags") then
+            ItemType := FLAG;
          else
-            if ItemType = COMMAND then
-               Execute.Append(Value);
-            else
-               SeparatorPosition := Index(Value, "=");
-               Variables.Include
-                 (Unbounded_Slice(Value, 1, SeparatorPosition - 2),
-                  Unbounded_Slice
-                    (Value, SeparatorPosition + 2, Length(Value)));
-            end if;
+            case ItemType is
+               when COMMAND =>
+                  Execute.Append(Value);
+               when FLAG =>
+                  Flags.Append(Value);
+               when VARIABLE =>
+                  SeparatorPosition := Index(Value, "=");
+                  Variables.Include
+                    (Unbounded_Slice(Value, 1, SeparatorPosition - 2),
+                     Unbounded_Slice
+                       (Value, SeparatorPosition + 2, Length(Value)));
+            end case;
          end if;
          <<End_Of_Loop>>
       end loop;

@@ -54,12 +54,20 @@ package Commands is
    --               "standard" standard output (default), "error" standard
 --               error output, anything other will be treated as path to file
    --               where output should be redirected.
+   -- Flags       - Flags assigned to this command. Possible options are:
+   --               "unixonly" command available only on Unix systems,
+   --               "windowsonly" command available only on Windows,
+   --               "internal" internal command, don't show on list of
+   --               available commands, "evaluratevariables" treat command
+   --               variables as programs to execute and assign result to the
+   --               variables.
    -- SOURCE
    type Command_Record is record
       Execute: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
       Description: Unbounded_String;
       Output: Unbounded_String;
+      Flags: UnboundedString_Container.Vector;
    end record;
    -- ****
 
