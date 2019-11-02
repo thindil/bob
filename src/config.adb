@@ -30,6 +30,29 @@ package body Config is
       Variables: Variables_Container.Map;
       type Items_Type is (COMMAND, VARIABLE);
       ItemType: Items_Type;
+      procedure AddCommand is
+      begin
+         if Commands_List.Contains(Name) then
+            Put_Line
+              ("Can't add command '" & To_String(Name) &
+               "'. There is one declared with that name.");
+         elsif Name /= Null_Unbounded_String then
+            if Execute.Length = 0 then
+               Put_Line
+                 ("Can't add command '" & To_String(Name) &
+                  "'. No commands to execute are entered.");
+            elsif Description = Null_Unbounded_String then
+               Put_Line
+                 ("Can't add command '" & To_String(Name) &
+                  "'. No command description provided.");
+            else
+               Commands_List.Include
+                 (Name,
+                  (Execute => Execute, Description => Description,
+                   Variables => Variables, Output => Output));
+            end if;
+         end if;
+      end AddCommand;
    begin
       if not Exists(".bob.yml") then
          return;
@@ -41,13 +64,7 @@ package body Config is
             goto End_Of_Loop;
          end if;
          if Line = To_Unbounded_String("- command:") then
-            if Name /= Null_Unbounded_String and Execute.Length > 0 and
-              Description /= Null_Unbounded_String then
-               Commands_List.Include
-                 (Name,
-                  (Execute => Execute, Description => Description,
-                   Variables => Variables, Output => Output));
-            end if;
+            AddCommand;
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
@@ -90,13 +107,7 @@ package body Config is
          end if;
          <<End_Of_Loop>>
       end loop;
-      if Name /= Null_Unbounded_String and Execute.Length > 0 and
-         Description /= Null_Unbounded_String then
-         Commands_List.Include
-            (Name,
-            (Execute => Execute, Description => Description,
-            Variables => Variables, Output => Output));
-      end if;
+      AddCommand;
       Close(ConfigFile);
    end LoadConfig;
 
