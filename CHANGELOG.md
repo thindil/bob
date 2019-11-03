@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Option to set output for commands
 - Check for correctness of command configuration
 - Option to set command for selected operating system only (Windows or Unix)
+- Option to set command as internal: don't show that command on available
+  commands list
 
 ### Changed
 - Show whole command on error
