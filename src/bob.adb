@@ -63,8 +63,11 @@ begin
                  ("show the program version and license info"));
             Put_Line("##### Local commands ########");
             for I in Commands_List.Iterate loop
-               AddEntry
-                 (Commands_Container.Key(I), Commands_List(I).Description);
+               if not Commands_List(I).Flags.Contains
+                   (To_Unbounded_String("internal")) then
+                  AddEntry
+                    (Commands_Container.Key(I), Commands_List(I).Description);
+               end if;
             end loop;
          end;
       end;
