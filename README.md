@@ -27,6 +27,8 @@ configuration:
            - ls $DIRECTORY
        description: Show content of $DIRECTORY directory
        output: standard
+       flags:
+           - unixonly
 
 Explanation:
 
@@ -53,15 +55,24 @@ Explanation:
                          `cd` will not be executed. It is used by the program
                          for set proper directory. Each command can execute as
                             much as you want other commands or programs.
-* `description`        - Command description, will be show on run `bob help`
+* `description:`       - Command description, will be show on run `bob help`
                          (or just `bob`) command.
-* `output`             - Optional parameter. Redirect command output to the
+* `output:`            - Optional parameter. Redirect command output to the
                          selected place. Possible options are: `standard`:
                          redirect output to standard output, `error`: redirect
                          output to standard error output, any other value will
                          be treated as name for file to which redirect output.
                          Path to the file should be relative to the current
                          directory.
+* `flags:`             - Mark start of list of command's flags. Optional.
+* `- [flag]`           - Each flag assigned to this Bob command. Possible
+                         values are: `unixonly`: command is avaialable only on
+                         Unix-like systems, `windowsonly`: command is available
+                         only on Windows systems, `internal`: command is not
+                         visible on commands list, but can be normally run (can
+                         be useful for recursive calls), `evaluatevariables`:
+                         command variables are treated as commands to run and
+                         they result will be assigned to that variable.
 
 Commands to execute can have also variables used in they definitions. Variables
 starts with sign `$`. `$` and number after it means argument from command line
