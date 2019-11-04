@@ -19,6 +19,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables; use Ada.Environment_Variables;
 with Ada.Strings; use Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
+with GNAT.Expect; use GNAT.Expect;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with GNAT.String_Split; use GNAT.String_Split;
 
@@ -32,11 +33,45 @@ package body Commands is
       VariableStarts, NumberPosition: Natural := 1;
    begin
       -- Load enviroment variables if need
-      for I in Commands_List(Key).Variables.Iterate loop
-         Set
-           (To_String(Variables_Container.Key(I)),
-            To_String(Commands_List(Key).Variables(I)));
-      end loop;
+      declare
+         EvaluateVariables: constant Boolean :=
+           Commands_List(Key).Flags.Contains
+             (To_Unbounded_String("evaluatevariables"));
+         Descriptor: Process_Descriptor;
+         Args: Argument_List_Access;
+         Result: Expect_Match;
+      begin
+         for I in Commands_List(Key).Variables.Iterate loop
+            if not EvaluateVariables then
+               Set
+                 (To_String(Variables_Container.Key(I)),
+                  To_String(Commands_List(Key).Variables(I)));
+            else
+               Args :=
+                 Argument_String_To_List
+                   (To_String(Commands_List(Key).Variables(I)));
+               Non_Blocking_Spawn
+                 (Descriptor, Args(Args'First).all,
+                  Args(Args'First + 1 .. Args'Last));
+               Expect(Descriptor, Result, ".+", 10_000);
+               case Result is
+                  when Expect_Timeout =>
+                     Put_Line
+                       ("Failed to evaluate variable '" &
+                        To_String(Variables_Container.Key(I)) & "'.");
+                     Close(Descriptor);
+                     return;
+                  when 1 =>
+                     Set
+                       (To_String(Variables_Container.Key(I)),
+                        Expect_Out(Descriptor));
+                  when others =>
+                     null;
+               end case;
+               Close(Descriptor);
+            end if;
+         end loop;
+      end;
       for Execute of Commands_List(Key).Execute loop
          if Length(Execute) = 0 then
             goto End_Of_Loop;
