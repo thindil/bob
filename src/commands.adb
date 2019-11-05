@@ -21,13 +21,11 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Expect; use GNAT.Expect;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
-with GNAT.String_Split; use GNAT.String_Split;
 
 package body Commands is
 
    procedure ExecuteCommand is
       Key: constant Unbounded_String := To_Unbounded_String(Argument(1));
-      Tokens: Slice_Set;
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;
@@ -132,13 +130,48 @@ package body Commands is
             <<End_Of_Variables_Loop>>
             VariableStarts := VariableStarts + 1;
          end loop;
-         Create(Tokens, To_String(Execute), " ", Multiple);
-         for J in 2 .. Slice_Count(Tokens) loop
-            Append(Arguments, " " & Slice(Tokens, J));
-         end loop;
-         Trim(Arguments, Both);
+         -- Split command line
+         declare
+            CurrentChar: Character;
+            Chars: constant array(1 .. 3) of Character := (' ', ''', '"');
+            StartIndex: Natural := Length(Execute) + 1;
+            EndIndex: Natural;
+         begin
+            loop
+               CurrentChar := '.';
+               if StartIndex = Length(Execute) + 1 then
+                  for Char of Chars loop
+                     if Index(Execute, Char & "", 1) > 0
+                       and then Index(Execute, Char & "", 1) < StartIndex then
+                        StartIndex := Index(Execute, Char & "", 1);
+                        CurrentChar := Char;
+                     end if;
+                  end loop;
+                  StartIndex := 1;
+               else
+                  EndIndex := Length(Execute);
+                  for Char of Chars loop
+                     if Index(Execute, Char & "", StartIndex) > 0
+                       and then Index(Execute, Char & "", StartIndex) <
+                         EndIndex then
+                        EndIndex := Index(Execute, Char & "", StartIndex);
+                        CurrentChar := Char;
+                     end if;
+                  end loop;
+               end if;
+               exit when CurrentChar = '.';
+               EndIndex := Index(Execute, CurrentChar & "", StartIndex);
+               if Command = Null_Unbounded_String then
+                  Command :=
+                    Unbounded_Slice(Execute, StartIndex, EndIndex - 1);
+               else
+                  Append(Arguments, Slice(Execute, StartIndex, EndIndex - 1));
+               end if;
+               StartIndex := EndIndex + 1;
+            end loop;
+         end;
          -- Move to the selected directory
-         if Slice(Tokens, 1) = "cd" then
+         if Command = To_Unbounded_String("cd") then
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
                  To_String(Arguments)) then
@@ -152,11 +185,12 @@ package body Commands is
                To_String(Trim(Arguments, Both)));
             goto End_Of_Loop;
          end if;
-         if Locate_Exec_On_Path(Slice(Tokens, 1)) = null then
-            Put_Line("Command: '" & Slice(Tokens, 1) & "' doesn't exists.");
+         if Locate_Exec_On_Path(To_String(Command)) = null then
+            Put_Line("Command: '" & To_String(Command) & "' doesn't exists.");
             return;
          end if;
-         Append(Command, Locate_Exec_On_Path(Slice(Tokens, 1)).all);
+         Command :=
+           To_Unbounded_String(Locate_Exec_On_Path(To_String(Command)).all);
          declare
             FileDescriptor: File_Descriptor;
             Output: constant String := To_String(Commands_List(Key).Output);
