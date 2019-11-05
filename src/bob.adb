@@ -106,6 +106,10 @@ exception
          FilePath: constant String :=
            Current_Directory & Directory_Separator & "error.log";
       begin
+         Put_Line
+           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://github.com/thindil/bob/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file '" &
+            FilePath & "'.");
+         New_Line;
          if Exists(FilePath) then
             Open(ErrorFile, Append_File, FilePath);
          else
@@ -114,15 +118,15 @@ exception
          Put_Line(ErrorFile, Ada.Calendar.Formatting.Image(Clock));
          Put_Line(ErrorFile, Version);
          Put_Line(ErrorFile, "Exception: " & Exception_Name(An_Exception));
+         Put_Line("Exception: " & Exception_Name(An_Exception));
          Put_Line(ErrorFile, "Message: " & Exception_Message(An_Exception));
+         Put_Line("Message: " & Exception_Message(An_Exception));
          Put_Line
            (ErrorFile, "-------------------------------------------------");
          Put(ErrorFile, Symbolic_Traceback(An_Exception));
+         Put_Line(Symbolic_Traceback(An_Exception));
          Put_Line
            (ErrorFile, "-------------------------------------------------");
          Close(ErrorFile);
-         Put_Line
-           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://github.com/thindil/bob/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file '" &
-            FilePath & "'.");
       end;
 end Bob;
