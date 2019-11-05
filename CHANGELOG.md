@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Option to set command as internal: don't show that command on available
   commands list
 - Option to set command variables to evaluate
+- Support for commands with spaces in names in executing commands
 
 ### Changed
 - Show whole command on error
