@@ -51,10 +51,12 @@ Explanation:
 * `- [command]`        - Each command or program which will be executed during
                          running this Bob command must starts with hypen. If
                          you want to made that command maximum portable, use
-                         relative paths instead of absolute. *Note:* command
-                         `cd` will not be executed. It is used by the program
-                         for set proper directory. Each command can execute as
-                            much as you want other commands or programs.
+                         relative paths instead of absolute. If you want to
+                         execute command which contains space, put it in
+                         quotes or apostrofes. *Note:* command `cd` will not
+                         be executed. It is used by the program for set proper
+                         directory. Each command can execute as much as you
+                         want other commands or programs.
 * `description:`       - Command description, will be show on run `bob help`
                          (or just `bob`) command.
 * `output:`            - Optional parameter. Redirect command output to the
@@ -130,7 +132,7 @@ you can also use for it command: `bob docs`.
 
 ## Contributing to the project
 For detailed informations about contributing to the project (bugs reporting,
-ideas propositions, code conduct, etc), see [CONTRIBUTING.md](CONTRIBUTING.md)
+ideas propositions, code conduct, etc.), see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Licenses
 
