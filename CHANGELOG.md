@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Show whole command on error
 - Show available commands sorted alphabetically
 - Updated README.md
+- More information on crash screen
 
 ### Fixed
 - Problems with cd command on Debian
