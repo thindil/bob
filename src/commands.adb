@@ -132,43 +132,34 @@ package body Commands is
          end loop;
          -- Split command line
          declare
-            CurrentChar: Character;
-            Chars: constant array(1 .. 3) of Character := (' ', ''', '"');
-            StartIndex: Natural := Length(Execute) + 1;
-            EndIndex: Natural;
+            StartIndex: Natural;
+            EndIndex: Integer;
          begin
-            loop
-               CurrentChar := '.';
-               if StartIndex = Length(Execute) + 1 then
-                  for Char of Chars loop
-                     if Index(Execute, Char & "", 1) > 0
-                       and then Index(Execute, Char & "", 1) < StartIndex then
-                        StartIndex := Index(Execute, Char & "", 1);
-                        CurrentChar := Char;
-                     end if;
-                  end loop;
+            case Element(Execute, 1) is
+               when ''' =>
+                  StartIndex := 2;
+                  EndIndex := Index(Execute, "'", 2) - 1;
+               when '"' =>
+                  StartIndex := 2;
+                  EndIndex := Index(Execute, """", 2) - 1;
+               when others =>
                   StartIndex := 1;
-               else
-                  EndIndex := Length(Execute);
-                  for Char of Chars loop
-                     if Index(Execute, Char & "", StartIndex) > 0
-                       and then Index(Execute, Char & "", StartIndex) <
-                         EndIndex then
-                        EndIndex := Index(Execute, Char & "", StartIndex);
-                        CurrentChar := Char;
-                     end if;
-                  end loop;
-               end if;
-               exit when CurrentChar = '.';
-               EndIndex := Index(Execute, CurrentChar & "", StartIndex);
-               if Command = Null_Unbounded_String then
-                  Command :=
-                    Unbounded_Slice(Execute, StartIndex, EndIndex - 1);
-               else
-                  Append(Arguments, Slice(Execute, StartIndex, EndIndex - 1));
-               end if;
-               StartIndex := EndIndex + 1;
-            end loop;
+                  EndIndex := Index(Execute, " ", 2) - 1;
+            end case;
+            if EndIndex < 1 then
+               EndIndex := Length(Execute);
+            end if;
+            Command := Unbounded_Slice(Execute, StartIndex, EndIndex);
+            case Element(Execute, 1) is
+               when ''' | '"' =>
+                  EndIndex := EndIndex + 3;
+               when others =>
+                  EndIndex := EndIndex + 2;
+            end case;
+            if EndIndex < Length(Execute) then
+               Arguments :=
+                 Unbounded_Slice(Execute, EndIndex, Length(Execute));
+            end if;
          end;
          -- Move to the selected directory
          if Command = To_Unbounded_String("cd") then
