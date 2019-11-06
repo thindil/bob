@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   commands list
 - Option to set command variables to evaluate
 - Support for commands with spaces in names in executing commands
+- Option to include other Bob's configuration files
 
 ### Changed
 - Show whole command on error
