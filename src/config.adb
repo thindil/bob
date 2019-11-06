@@ -73,6 +73,12 @@ package body Config is
          if Length(Line) = 0 or Element(Line, 1) = '#' then
             goto End_Of_Loop;
          end if;
+         if Length(Line) > 10 and then Slice(Line, 1, 10) = "- include:" then
+            SeparatorPosition := Index(Line, ":");
+            Value :=
+              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+            LoadConfig(To_String(Value));
+         end if;
          if Line = To_Unbounded_String("- command:") then
             AddCommand;
             Name := Null_Unbounded_String;
@@ -108,8 +114,6 @@ package body Config is
             ItemType := VARIABLE;
          elsif Key = To_Unbounded_String("flags") then
             ItemType := FLAG;
-         elsif Key = To_Unbounded_String("file") then
-            LoadConfig(To_String(Value));
          else
             case ItemType is
                when COMMAND =>
