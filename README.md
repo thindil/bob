@@ -19,6 +19,7 @@ Bob looking for file `.bob.yml` in current directory (where it is executed).
 If it find it, it reads all available commands from here. Sample
 configuration:
 
+     - include: ../.bob.yml
      - command:
        name: list
        variables:
@@ -32,6 +33,10 @@ configuration:
 
 Explanation:
 
+* `- include: [path]`  - Optional entry. Add it, if you want to include any
+                         other Bob's configuration file. Path must be
+                         absolute or relative to the current configuration
+                         file.
 * `-command:`          - Each command for Bob must starts from this line.
                          Each configuration file may have as much as you
                          want commands defined.
