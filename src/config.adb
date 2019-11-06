@@ -23,7 +23,7 @@ with Commands; use Commands;
 
 package body Config is
 
-   procedure LoadConfig is
+   procedure LoadConfig(FileName: String := ".bob.yml") is
       ConfigFile: File_Type;
       Name, Line, Description, Key, Value, Output: Unbounded_String;
       SeparatorPosition: Natural;
@@ -63,10 +63,11 @@ package body Config is
          end if;
       end AddCommand;
    begin
-      if not Exists(".bob.yml") then
+      if not Exists(FileName) then
+         Put_Line("File: '" & FileName & "' doesn't exists.");
          return;
       end if;
-      Open(ConfigFile, In_File, ".bob.yml");
+      Open(ConfigFile, In_File, FileName);
       while not End_Of_File(ConfigFile) loop
          Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          if Length(Line) = 0 or Element(Line, 1) = '#' then
@@ -107,6 +108,8 @@ package body Config is
             ItemType := VARIABLE;
          elsif Key = To_Unbounded_String("flags") then
             ItemType := FLAG;
+         elsif Key = To_Unbounded_String("file") then
+            LoadConfig(To_String(Value));
          else
             case ItemType is
                when COMMAND =>

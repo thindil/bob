@@ -22,9 +22,12 @@ package Config is
 
    -- ****f* Config/LoadConfig
    -- FUNCTION
-   -- Load local configuration .bob.yml file
+   -- Load specified configuration file
+   -- PARAMETERS
+   -- FileName - Path (absolute or relative) to configuration file which will
+   --            be loaded
    -- SOURCE
-   procedure LoadConfig;
+   procedure LoadConfig(FileName: String := ".bob.yml");
    -- ****
 
 end Config;
