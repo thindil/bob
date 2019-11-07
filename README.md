@@ -126,6 +126,12 @@ arguments or with argument `help`:
 
 `bin/bob help` will show list of available commands too
 
+### Testing versions
+
+Here are available also testing versions of the program. You can find them
+in [Releases](https://github.com/thindil/bob/releases/tag/travis-dev-build).
+To use them, just extract file(s) from the archive.
+
 ## Generating code documentation
 
 To generate (or regenerate) code documentation, you need ROBODoc If you have
