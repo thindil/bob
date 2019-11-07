@@ -30,7 +30,7 @@ package body Commands is
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;
    begin
-      -- Load enviroment variables if need
+      -- Load environment variables if needed
       declare
          EvaluateVariables: constant Boolean :=
            Commands_List(Key).Flags.Contains
@@ -40,10 +40,13 @@ package body Commands is
          Result: Expect_Match;
       begin
          for I in Commands_List(Key).Variables.Iterate loop
+            -- Just set environment variable
             if not EvaluateVariables then
                Set
                  (To_String(Variables_Container.Key(I)),
                   To_String(Commands_List(Key).Variables(I)));
+            -- If proper flag is set, evaluate environment variable before
+            -- set it
             else
                Args :=
                  Argument_String_To_List
@@ -101,7 +104,7 @@ package body Commands is
             <<End_Of_Command_Line_Loop>>
             VariableStarts := VariableStarts + 1;
          end loop;
-         -- Replace variables with enviroment variables values
+         -- Replace variables with enviroment variables values (if needed)
          VariableStarts := 1;
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
@@ -161,7 +164,7 @@ package body Commands is
                  Unbounded_Slice(Execute, EndIndex, Length(Execute));
             end if;
          end;
-         -- Move to the selected directory
+         -- Enter selected directory
          if Command = To_Unbounded_String("cd") then
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
@@ -180,6 +183,7 @@ package body Commands is
             Put_Line("Command: '" & To_String(Command) & "' doesn't exists.");
             return;
          end if;
+         -- Execute command
          Command :=
            To_Unbounded_String(Locate_Exec_On_Path(To_String(Command)).all);
          declare

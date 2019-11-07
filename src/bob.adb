@@ -28,7 +28,9 @@ with Config; use Config;
 procedure Bob is
    Version: constant String := "2.0";
 begin
+   -- Load local configuration file
    LoadConfig;
+   -- Show list of available commands
    if Argument_Count = 0
      or else
      (Argument(1) = "help" or
@@ -71,6 +73,7 @@ begin
             end loop;
          end;
       end;
+   -- Show information about the program
    elsif Argument(1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
@@ -96,6 +99,7 @@ begin
         ("You should have received a copy of the GNU General Public License");
       Put_Line
         ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
+   -- Execute entered command
    else
       ExecuteCommand;
    end if;

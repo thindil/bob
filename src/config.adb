@@ -63,6 +63,7 @@ package body Config is
          end if;
       end AddCommand;
    begin
+      -- Check if selected configuration file exist
       if not Exists(FileName) then
          Put_Line("File: '" & FileName & "' doesn't exists.");
          return;
@@ -73,12 +74,14 @@ package body Config is
          if Length(Line) = 0 or Element(Line, 1) = '#' then
             goto End_Of_Loop;
          end if;
+         -- Include other configuration file
          if Length(Line) > 10 and then Slice(Line, 1, 10) = "- include:" then
             SeparatorPosition := Index(Line, ":");
             Value :=
               Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
             LoadConfig(To_String(Value));
          end if;
+         -- Add a command
          if Line = To_Unbounded_String("- command:") then
             AddCommand;
             Name := Null_Unbounded_String;
@@ -89,6 +92,7 @@ package body Config is
             Output := To_Unbounded_String("standard");
             Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          end if;
+         -- Parse configuration settings
          SeparatorPosition := Index(Line, "-");
          if SeparatorPosition /= 1 then
             SeparatorPosition := Index(Line, ":");
