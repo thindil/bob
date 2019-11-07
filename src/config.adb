@@ -80,6 +80,7 @@ package body Config is
             Value :=
               Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
             LoadConfig(To_String(Value));
+            goto End_Of_Loop;
          end if;
          -- Add a command
          if Line = To_Unbounded_String("- command:") then
