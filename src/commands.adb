@@ -45,8 +45,8 @@ package body Commands is
                Set
                  (To_String(Variables_Container.Key(I)),
                   To_String(Commands_List(Key).Variables(I)));
-            -- If proper flag is set, evaluate environment variable before
-            -- set it
+               -- If proper flag is set, evaluate environment variable before
+               -- set it
             else
                Args :=
                  Argument_String_To_List

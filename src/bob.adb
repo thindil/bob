@@ -73,7 +73,7 @@ begin
             end loop;
          end;
       end;
-   -- Show information about the program
+      -- Show information about the program
    elsif Argument(1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
@@ -99,7 +99,7 @@ begin
         ("You should have received a copy of the GNU General Public License");
       Put_Line
         ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
-   -- Execute entered command
+      -- Execute entered command
    else
       ExecuteCommand;
    end if;
