@@ -104,8 +104,15 @@ package body Config is
            Key = To_Unbounded_String("flags") then
             Value := Null_Unbounded_String;
          else
-            Value :=
-              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+            if SeparatorPosition + 2 >= Length(Line) then
+               Put_Line
+                 ("Command: '" & To_String(Name) & "' empty value for key: '" &
+                  To_String(Key) & "'.");
+               Value := Null_Unbounded_String;
+            else
+               Value :=
+                 Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+            end if;
          end if;
          if Key = To_Unbounded_String("name") then
             Name := Value;
