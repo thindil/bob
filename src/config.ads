@@ -27,7 +27,8 @@ package Config is
    -- FileName - Path (absolute or relative) to configuration file which will
    --            be loaded
    -- SOURCE
-   procedure LoadConfig(FileName: String := ".bob.yml");
-   -- ****
+   procedure LoadConfig(FileName: String := ".bob.yml") with
+      Pre => FileName'Length > 0;
+      -- ****
 
 end Config;
