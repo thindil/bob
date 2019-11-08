@@ -91,7 +91,7 @@ package body Config is
             Flags.Clear;
             Description := Null_Unbounded_String;
             Output := To_Unbounded_String("standard");
-            Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
+            goto End_Of_Loop;
          end if;
          -- Parse configuration settings
          SeparatorPosition := Index(Line, "-");
