@@ -94,6 +94,7 @@ package Commands is
    --       program
    -- SOURCE
    procedure ExecuteCommand(Key: Unbounded_String) with
+      Pre => Key /= Null_Unbounded_String,
       Test_Case => ("Test_ExecuteCommand", Nominal);
       -- ****
 
