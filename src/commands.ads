@@ -89,8 +89,12 @@ package Commands is
    -- ****f* Commands/ExecuteCommand
    -- FUNCTION
    -- Execute selected Bob command
+   -- PARAMETERS
+   -- Key - Command name which the user entered as a first parameter for the
+   --       program
    -- SOURCE
-   procedure ExecuteCommand;
-   -- ****
+   procedure ExecuteCommand(Key: Unbounded_String) with
+      Test_Case => ("Test_ExecuteCommand", Nominal);
+      -- ****
 
 end Commands;

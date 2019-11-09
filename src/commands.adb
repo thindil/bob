@@ -24,8 +24,7 @@ with GNAT.OS_Lib; use GNAT.OS_Lib;
 
 package body Commands is
 
-   procedure ExecuteCommand is
-      Key: constant Unbounded_String := To_Unbounded_String(Argument(1));
+   procedure ExecuteCommand(Key: Unbounded_String) is
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;

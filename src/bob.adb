@@ -101,7 +101,7 @@ begin
         ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
       -- Execute entered command
    else
-      ExecuteCommand;
+      ExecuteCommand(To_Unbounded_String(Argument(1)));
    end if;
 exception
    when An_Exception : others =>
