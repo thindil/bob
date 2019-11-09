@@ -41,7 +41,7 @@ package body Config.Test_Data is
       Put_Line(ConfigFile, "  name:");
       Put_Line(ConfigFile, "  execute:");
       Put_Line(ConfigFile, "    - ls -a .");
-      Put_Line(ConfigFile, "  description: test command");
+      Put_Line(ConfigFile, "  description: test command without name");
       Close(ConfigFile);
    end Set_Up;
 
