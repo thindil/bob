@@ -29,6 +29,10 @@ package body Commands is
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;
    begin
+      if not Commands_List.Contains(Key) then
+         Put_Line("No available command with name '" & To_String(Key) & "'.");
+         return;
+      end if;
       -- Load environment variables if needed
       declare
          EvaluateVariables: constant Boolean :=
