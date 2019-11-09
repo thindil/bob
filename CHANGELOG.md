@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Typos in README.md
 - Crash on comment after command mark in config file
 - Crash on load command with empty value for any setting
+- Possible crash on non existing command
 
 ## [1.0] - 2019-10-02
 Initial release
