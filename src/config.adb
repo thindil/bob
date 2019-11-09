@@ -54,6 +54,10 @@ package body Config is
                Put_Line
                  ("Can't add command '" & To_String(Name) &
                   "'. No command description provided.");
+            elsif Output = Null_Unbounded_String then
+               Put_Line
+                 ("Can't add command '" & To_String(Name) &
+                  "'. No command result output provided.");
             else
                Commands_List.Include
                  (Name,
