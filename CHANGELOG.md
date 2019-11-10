@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Support for commands with spaces in names in executing commands
 - Option to include other Bob's configuration files
 - Option to set minimal required version of the program
+- Coloring error messages on Unix systems
 
 ### Changed
 - Show whole command on error
