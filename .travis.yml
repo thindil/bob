@@ -11,25 +11,25 @@ matrix:
    include:
       - os: linux
         env:
-         - EXTENSION=tar.gz
+         - FILENAME=bob-dev-Linux-64.tar.gz
         install:
          - docker pull thindil/gnat;
         script:
          - docker run -v $(pwd):/app thindil/gnat /bin/sh -c "cd /app && others/build.sh"
-         - tar -czf bob-development.tar.gz usr
+         - tar -czf bob-dev-Linux-64.tar.gz usr
       - os: windows
         env:
-         - EXTENSION=zip
+         - FILENAME=bob-dev-Windows-64.zip
         install:
          - export "PATH=/c/GNAT/bin:$PATH";
          - wget "https://www.dropbox.com/s/2kk2hb6fvpy9a58/gnat.7z?dl=0" -O gnat.7z;
          - 7z x gnat.7z -oc:/;
         script:
          - gprbuild -P bob.gpr -XMode=release
-         - 7z a -tzip bob-development.zip bin;
+         - 7z a -tzip bob-dev-Windows-64.zip bin;
 
 before_deploy:
-    - "if [[ $EXTENSION == \"tar.gz\" ]]; then git tag -f travis-dev-build && git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${KEY}@github.com/${TRAVIS_REPO_SLUG}.git && git push -f gh travis-dev-build && git remote remove gh; fi"
+    - "if [[ $FILENAME == \"bob-dev-Linux-64.tar.gz\" ]]; then git tag -f travis-dev-build && git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${KEY}@github.com/${TRAVIS_REPO_SLUG}.git && git push -f gh travis-dev-build && git remote remove gh; fi"
     - export "TRAVIS_TAG=travis-dev-build";
 
 deploy:
@@ -37,7 +37,7 @@ deploy:
   skip_cleanup: true
   api-key: $KEY
   file:
-   - bob-development.$EXTENSION
+     - $FILENAME
   name: Continuous Integration build
   body: Development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
   prerelease: true
