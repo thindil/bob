@@ -19,6 +19,7 @@ Bob looking for file `.bob.yml` in current directory (where it is executed).
 If it find it, it reads all available commands from here. Sample
 configuration:
 
+     version: 2.0
      - include: ../.bob.yml
      - command:
        name: list
@@ -33,6 +34,11 @@ configuration:
 
 Explanation:
 
+* `version: [version]` - Optional entry. Minimal required version of the
+                         program to load this configuration file. If present,
+                         the program will load the rest of the configuration
+                         file only when the program version will be same or
+                         higher.
 * `- include: [path]`  - Optional entry. Add it, if you want to include any
                          other Bob's configuration file. Path must be
                          absolute or relative to the current configuration
