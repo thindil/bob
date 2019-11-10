@@ -71,6 +71,7 @@ package body Config.Test_Data.Tests is
 
    begin
 
+      Commands_List.Clear;
       LoadConfig;
       Assert(Commands_List.Length = 1, "Failed to load all commands.");
 
