@@ -78,6 +78,21 @@ package body Config is
          if Length(Line) = 0 or Element(Line, 1) = '#' then
             goto End_Of_Loop;
          end if;
+         -- Check compatybility of configuration file version and the program
+         -- version
+         if Length(Line) > 8 and then Slice(Line, 1, 8) = "version:" then
+            SeparatorPosition := Index(Line, ":");
+            Value :=
+              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+            if Float'Value(To_String(Value)) > Float'Value(Version) then
+               Put_Line
+                 ("Can't add commands from configuration file '" & FileName &
+                  "'. It require Bob in version at least: '" &
+                  To_String(Value) & "' while your version is '" & Version &
+                  "'.");
+               return;
+            end if;
+         end if;
          -- Include other configuration file
          if Length(Line) > 10 and then Slice(Line, 1, 10) = "- include:" then
             SeparatorPosition := Index(Line, ":");

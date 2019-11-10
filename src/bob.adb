@@ -26,7 +26,6 @@ with Commands; use Commands;
 with Config; use Config;
 
 procedure Bob is
-   Version: constant String := "2.0";
 begin
    -- Load local configuration file
    LoadConfig;

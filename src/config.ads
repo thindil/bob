@@ -20,6 +20,13 @@
 package Config is
 -- ****
 
+   -- ****v* Config/Version
+   -- FUNCTION
+   -- Version of the program
+   -- SOURCE
+   Version: constant String := "2.0";
+   -- ****
+
    -- ****f* Config/LoadConfig
    -- FUNCTION
    -- Load specified configuration file
