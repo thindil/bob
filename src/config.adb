@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Commands; use Commands;
+with Messages; use Messages;
 
 package body Config is
 
@@ -42,20 +43,20 @@ package body Config is
             return;
          end if;
          if Commands_List.Contains(Name) then
-            Put_Line
+            ShowMessage
               ("Can't add command '" & To_String(Name) &
                "'. There is one declared with that name.");
          elsif Name /= Null_Unbounded_String then
             if Execute.Length = 0 then
-               Put_Line
+               ShowMessage
                  ("Can't add command '" & To_String(Name) &
                   "'. No commands to execute are entered.");
             elsif Description = Null_Unbounded_String then
-               Put_Line
+               ShowMessage
                  ("Can't add command '" & To_String(Name) &
                   "'. No command description provided.");
             elsif Output = Null_Unbounded_String then
-               Put_Line
+               ShowMessage
                  ("Can't add command '" & To_String(Name) &
                   "'. No command result output provided.");
             else
@@ -69,7 +70,7 @@ package body Config is
    begin
       -- Check if selected configuration file exist
       if not Exists(FileName) then
-         Put_Line("File: '" & FileName & "' doesn't exists.");
+         ShowMessage("File: '" & FileName & "' doesn't exists.");
          return;
       end if;
       Open(ConfigFile, In_File, FileName);
@@ -85,7 +86,7 @@ package body Config is
             Value :=
               Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
             if Float'Value(To_String(Value)) > Float'Value(Version) then
-               Put_Line
+               ShowMessage
                  ("Can't add commands from configuration file '" & FileName &
                   "'. It require Bob in version at least: '" &
                   To_String(Value) & "' while your version is '" & Version &
@@ -124,7 +125,7 @@ package body Config is
             Value := Null_Unbounded_String;
          else
             if SeparatorPosition + 2 >= Length(Line) then
-               Put_Line
+               ShowMessage
                  ("Command: '" & To_String(Name) & "' empty value for key: '" &
                   To_String(Key) & "'.");
                Value := Null_Unbounded_String;

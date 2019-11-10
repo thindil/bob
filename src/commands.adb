@@ -18,9 +18,9 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables; use Ada.Environment_Variables;
 with Ada.Strings; use Ada.Strings;
-with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Expect; use GNAT.Expect;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
+with Messages; use Messages;
 
 package body Commands is
 
@@ -30,7 +30,8 @@ package body Commands is
       VariableStarts, NumberPosition: Natural := 1;
    begin
       if not Commands_List.Contains(Key) then
-         Put_Line("No available command with name '" & To_String(Key) & "'.");
+         ShowMessage
+           ("No available command with name '" & To_String(Key) & "'.");
          return;
       end if;
       -- Load environment variables if needed
@@ -60,7 +61,7 @@ package body Commands is
                Expect(Descriptor, Result, ".+", 10_000);
                case Result is
                   when Expect_Timeout =>
-                     Put_Line
+                     ShowMessage
                        ("Failed to evaluate variable '" &
                         To_String(Variables_Container.Key(I)) & "'.");
                      Close(Descriptor);
@@ -97,7 +98,7 @@ package body Commands is
                exit when not Is_Digit(Element(Execute, NumberPosition));
             end loop;
             if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
-               Put_Line
+               ShowMessage
                  ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
                return;
             end if;
@@ -125,7 +126,7 @@ package body Commands is
             end loop;
             if not Ada.Environment_Variables.Exists
                 (To_String(ArgumentNumber)) then
-               Put_Line
+               ShowMessage
                  ("Variable: " & To_String(ArgumentNumber) &
                   " doesn't exists.");
                return;
@@ -172,7 +173,7 @@ package body Commands is
             if not Ada.Directories.Exists
                 (Current_Directory & Directory_Separator &
                  To_String(Arguments)) then
-               Put_Line
+               ShowMessage
                  ("Directory: '" & Current_Directory & Directory_Separator &
                   To_String(Arguments) & "' doesn't exists.");
                return;
@@ -183,7 +184,8 @@ package body Commands is
             goto End_Of_Loop;
          end if;
          if Locate_Exec_On_Path(To_String(Command)) = null then
-            Put_Line("Command: '" & To_String(Command) & "' doesn't exists.");
+            ShowMessage
+              ("Command: '" & To_String(Command) & "' doesn't exists.");
             return;
          end if;
          -- Execute command
@@ -204,7 +206,7 @@ package body Commands is
                end if;
                FileDescriptor := Create_Output_Text_File(Output);
                if FileDescriptor = Invalid_FD then
-                  Put_Line
+                  ShowMessage
                     ("Error during executing '" & To_String(Execute) &
                      "'. Can't create '" & Output & "' as the output file.");
                   return;
@@ -215,7 +217,8 @@ package body Commands is
                Argument_String_To_List(To_String(Arguments)).all,
                FileDescriptor, ReturnCode);
             if ReturnCode > 0 then
-               Put_Line("Error during executing '" & To_String(Execute) & "'");
+               ShowMessage
+                 ("Error during executing '" & To_String(Execute) & "'");
                return;
             end if;
          end;

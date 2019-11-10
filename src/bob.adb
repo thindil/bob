@@ -24,6 +24,7 @@ with GNAT.OS_Lib; use GNAT.OS_Lib;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Commands; use Commands;
 with Config; use Config;
+with Messages; use Messages;
 
 procedure Bob is
 begin
@@ -109,7 +110,7 @@ exception
          FilePath: constant String :=
            Current_Directory & Directory_Separator & "error.log";
       begin
-         Put_Line
+         ShowMessage
            ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://github.com/thindil/bob/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file '" &
             FilePath & "'.");
          New_Line;
