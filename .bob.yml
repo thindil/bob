@@ -1,9 +1,12 @@
+version: 2.0
 - command:
    name: runtests
    execute:
       - cd tests/driver
       - ./test_runner
    description: Run Bob unit tests
+   flags:
+      - unixonly
 - command:
    name: debug
    execute:
@@ -11,13 +14,13 @@
    description: Build Bob in debug mode
 - command:
    name: release
-   variables:
-      - releasedir = usr
    execute:
       - gprclean -P bob.gpr
       - others/build.sh
       - gprclean -P bob.gpr
    description: Build Bob in release mode
+   flags:
+      - unixonly
 - command:
    name: analyze
    execute:
@@ -38,18 +41,35 @@
    execute:
       - gprbuild -P tests/driver/test_driver.gpr
    description: Build Bob unit tests
+   flags:
+      - unixonly
 - command:
    name: docs
    execute:
       - others/generatedocs.py
    description: Generate code documentation
+   flags:
+      - unixonly
 - command:
    name: gprof
    execute:
       - gprof bin/bob gmon.out
    description: Generate gprof report
+   output: gprof.txt
+   flags:
+      - unixonly
 - command:
    name: windows
    execute:
+      - gprclean -P bob.gpr
       - wineconsole others/build.cmd
    description: Build Windows version of Bob on Linux
+   flags:
+      - unixonly
+- command:
+   name: release
+   execute:
+      - others\build.cmd
+   description: Build Bob in release mode
+   flags:
+      - windowsonly
