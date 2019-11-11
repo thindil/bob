@@ -21,10 +21,12 @@ package body Messages is
 
    procedure ShowMessage(Text: String; MType: Messages_Types := Error) is
    begin
+      -- If operating system is Unix and message type is Error, color it in red
       if Directory_Separator = '/' and then MType = Error then
          Put(ESC & "[31m");
       end if;
       Put_Line(Text);
+      -- Reset text color in terminal if needed
       if Directory_Separator = '/' and then MType /= Normal then
          Put(ESC & "[0m");
       end if;

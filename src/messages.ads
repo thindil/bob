@@ -13,10 +13,29 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Bob/Messages
+-- FUNCTION
+-- Provides code to show the program messages to the user
+-- SOURCE
 package Messages is
+-- ****
 
+   -- ****t* Messages/Messages_Types
+   -- FUNCTION
+   -- Types of messages: Normal or Error
+   -- SOURCE
    type Messages_Types is (Normal, Error);
+   -- ****
 
+   -- ****f* Messages/ShowMessage
+   -- FUNCTION
+   -- Show selected message to the user. On Unix Error type messages are
+   -- colored
+   -- PARAMETERS
+   -- Text  - Text to show to the user
+   -- MType - Type of message. Default is Error
+   -- SOURCE
    procedure ShowMessage(Text: String; MType: Messages_Types := Error);
+   -- ****
 
 end Messages;
