@@ -20,7 +20,7 @@ project bob is
             when "debug" | "analyze" =>
                 for Default_Switches("ada") use ("-E", "-shared");
             when "release" =>
-                for Default_Switches("ada") use ("-E");
+                for Default_Switches("ada") use ("-static");
         end case;
     end Binder;
 
@@ -35,7 +35,8 @@ project bob is
                     "-gnateE");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
-                    "-gnatn2");
+                    "-ffunction-sections",
+                    "-fdata-sections");
             when "analyze" =>
                 for Default_Switches ("ada") use ("-pg",
                     "-fprofile-arcs",
