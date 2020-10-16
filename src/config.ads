@@ -1,4 +1,4 @@
--- Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ package Config is
    -- FUNCTION
    -- Version of the program
    -- SOURCE
-   Version: constant String := "2.0";
+   Version: constant String := "3.0";
    -- ****
 
    -- ****f* Config/LoadConfig
