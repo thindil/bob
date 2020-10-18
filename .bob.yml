@@ -16,7 +16,14 @@ version: 2.0
    name: release
    execute:
       - gprclean -P bob.gpr
-      - others/build.sh
+      - gprbuild -p bob.gpr -XMode=release
+      - mkdir -p usr/share/doc/bob
+      - mkdir -p usr/bin
+      - cp bin/bob usr/bin
+      - cp README.md usr/share/doc/bob
+      - cp COPYING usr/share/doc/bob
+      - cp CHANGELOG.md usr/share/doc/bob
+      - cp CONTRIBUTING.md usr/share/doc/bob
       - gprclean -P bob.gpr
    description: Build Bob in release mode
    flags:
@@ -61,15 +68,30 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - gprclean -P bob.gpr
-      - wineconsole others/build.cmd
+      - gprclean -P bob.gpr --target=x86_64-windows
+      - gprbuild -p -P steamsky.gpr -XMode=release --target=x86_64-windows
+      - mkdir -p release/doc/bob
+      - mkdir -p release/bin
+      - cp bin/bob release/bin
+      - cp README.md release/doc/bob
+      - cp COPYING release/doc/bob
+      - cp CHANGELOG.md release/doc/bob
+      - cp CONTRIBUTING.md release/doc/bob
+      - gprclean -P bob.gpr --target=x86_64-windows
    description: Build Windows version of Bob on Linux
    flags:
       - unixonly
 - command:
    name: release
    execute:
-      - others\build.cmd
+      - gprclean -P bob.gpr
+      - gprbuild -P bob.gpr -XMode=release
+      - XCOPY /S bin release\
+      - XCOPY README.md release\doc\
+      - XCOPY COPYING release\doc\
+      - XCOPY CHANGELOG.md release\doc\
+      - XCOPY CONTRIBUTING.md release\doc\
+      - gprclean -P bob.gpr
    description: Build Bob in release mode
    flags:
       - windowsonly
