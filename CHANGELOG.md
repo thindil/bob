@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated README.md
+
 ## [2.0] - 2019-11-11
 
 ### Added
