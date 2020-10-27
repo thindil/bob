@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Typos in README.md
+
 ## [2.0] - 2019-11-11
 
 ### Added
