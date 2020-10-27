@@ -16,7 +16,7 @@ program. Some things may be different in released version of Bob.
 ### Configuration file
 
 Bob looking for file `.bob.yml` in current directory (where it is executed).
-If it find it, it reads all available commands from here. Sample
+If it finds it, it reads all available commands from here. Sample
 configuration:
 
      version: 2.0
@@ -61,7 +61,7 @@ Explanation:
                          when running this Bob command.
 * `- [command]`        - Each command or program which will be executed during
                          running this Bob command must starts with hypen. If
-                         you want to made that command maximum portable, use
+                         you want to make that command maximum portable, use
                          relative paths instead of absolute. If you want to
                          execute command which contains space, put it in
                          quotes or apostrofes. *Note:* command `cd` will not
@@ -84,13 +84,13 @@ Explanation:
                          only on Windows systems, `internal`: command is not
                          visible on commands list, but can be normally run (can
                          be useful for recursive calls), `evaluatevariables`:
-                         command variables are treated as commands to run and
+                         command variables are treated as commands to run, and
                          they result will be assigned to that variable.
 
-Commands to execute can have also variables used in they definitions. Variables
-starts with sign `$`. `$` and number after it means argument from command line
+Commands to execute can have also variables used in the definitions. Variables
+start with sign `$`. `$` and number after it means argument from command line
 entered during executing Bob command. For example, `$2` means second argument
-after Bob command name. Thus if you enter: `bob dosomething one two`, `$2`
+after Bob command name. Thus, if you enter: `bob dosomething one two`, `$2`
 will be replaced by word `two`. `$` and any alphanumeric character(s) means
 environment variable with that name, available during executing this Bob
 command. In this example, it is variable `$DIRECTORY`. For more advanced, real
@@ -111,8 +111,8 @@ To build you need:
 If you have all the required packages, navigate to the main directory(where
 this file is) to compile:
 
-* Easiest way to compile the program is use Gnat Programming Studio included
-  in GNAT. Just run GPS, select *bob.gpr* as a project file and select
+* The easiest way to compile the program is use Gnat Programming Studio
+  included in GNAT. Just run GPS, select *bob.gpr* as a project file and select
   option `Build All`.
 
 * If you prefer using console: in main source code directory type
@@ -123,7 +123,8 @@ this file is) to compile:
 
 ## Running it
 
-When you trying to run the program, use `bob` executable from `bin` directory.
+When you are trying to run the program, use `bob` executable from `bin`
+directory.
 
 To get list of available commands/aliases for Bob, run it or without any
 arguments or with argument `help`:
@@ -149,7 +150,7 @@ script have set all default settings for Bob code. If you have Bob installed,
 you can also use for it command: `bob docs`.
 
 ## Contributing to the project
-For detailed informations about contributing to the project (bugs reporting,
+For detailed information about contributing to the project (bugs reporting,
 ideas propositions, code conduct, etc.), see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Licenses
