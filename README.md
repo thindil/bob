@@ -135,8 +135,9 @@ arguments or with argument `help`:
 
 ### Testing versions
 
-Here are available also testing versions of the program. You can find them
-in [Releases](https://github.com/thindil/bob/releases/tag/travis-dev-build).
+Here are available testing versions of the game. You can find them
+in [Actions](https://github.com/thindil/bob/actions?query=workflow%3A"Continuous+Integration").
+Just select option from the list of results to see Artifacts list.
 To use them, just extract file(s) from the archive.
 
 ## Generating code documentation
