@@ -98,18 +98,34 @@ life example, look at it own *.bob.yml* file.
 
 ## Build the program from sources
 
+### Docker way
+
+You can use Docker images `adabuild` and `adabuildwin64` from the project
+[dockerada](https://github.com/thindil/dockerada). They contain all libraries
+and compiler needed to build the game.
+
+To build Linux version of the program, download `adabuild` image and type in
+console:
+
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuild /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release"`
+
+To build Windows 64-bit version of the program, download `adabuildwin64` image
+and type in console:
+
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuildwin64 /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release --target=x86_64-windows"`
+
+### Classic way
+
 To build you need:
 
-* compiler - GCC with enabled Ada support or (best option) GNAT from:
+* compiler - GCC with enabled Ada support or GNAT from:
 
   https://www.adacore.com/download/
 
-  It is recommended to use GNAT GPL 2019 to compile the program.
   The program does not work with old compilers (like GCC 4.9) since it
   lacks full support for Ada 2012.
 
-If you have all the required packages, navigate to the main directory(where
-this file is) to compile:
+If you have it, navigate to the main directory(where this file is) to compile:
 
 * The easiest way to compile the program is use Gnat Programming Studio
   included in GNAT. Just run GPS, select *bob.gpr* as a project file and select
