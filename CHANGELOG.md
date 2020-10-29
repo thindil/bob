@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 
 ### Fixed
-- Typos in README.md
+- Typos in README.md, CONTRIBUTING.md
 
 ## [2.0] - 2019-11-11
 
