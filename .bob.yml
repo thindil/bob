@@ -1,13 +1,5 @@
 version: 2.0
 - command:
-   name: runtests
-   execute:
-      - cd tests/driver
-      - ./test_runner
-   description: Run Bob unit tests
-   flags:
-      - unixonly
-- command:
    name: debug
    execute:
       - gprbuild -P bob.gpr
@@ -47,7 +39,9 @@ version: 2.0
    name: tests
    execute:
       - gprbuild -P tests/driver/test_driver.gpr
-   description: Build Bob unit tests
+      - cd tests/driver
+      - ./test_runner
+   description: Build and execute Bob unit tests
    flags:
       - unixonly
 - command:
