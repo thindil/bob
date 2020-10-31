@@ -89,3 +89,9 @@ version: 2.0
    description: Build Bob in release mode
    flags:
       - windowsonly
+- command:
+   name: pretty
+   execute:
+      - gnatpp -P bob.gpr
+      - gnatpp -P tests/prettytests.gpr
+   description: Pretty print Bob source code
