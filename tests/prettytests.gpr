@@ -1,0 +1,9 @@
+with "../bob.gpr";
+
+project PrettyTests is
+
+   for Source_Dirs use (".");
+
+   package Pretty_Printer renames Bob.Pretty_Printer;
+
+end PrettyTests;
