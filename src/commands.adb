@@ -170,17 +170,14 @@ package body Commands is
          end;
          -- Enter selected directory
          if Command = To_Unbounded_String("cd") then
-            if not Ada.Directories.Exists
-                (Current_Directory & Directory_Separator &
-                 To_String(Arguments)) then
+            Arguments :=
+              To_Unbounded_String(Normalize_Pathname(To_String(Arguments)));
+            if not Ada.Directories.Exists(To_String(Arguments)) then
                ShowMessage
-                 ("Directory: '" & Current_Directory & Directory_Separator &
-                  To_String(Arguments) & "' doesn't exists.");
+                 ("Directory: '" & To_String(Arguments) & "' doesn't exists.");
                return;
             end if;
-            Set_Directory
-              (Current_Directory & Directory_Separator &
-               To_String(Trim(Arguments, Both)));
+            Set_Directory(To_String(Arguments));
             goto End_Of_Loop;
          end if;
          if Locate_Exec_On_Path(To_String(Command)) = null then
