@@ -8,8 +8,8 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 package body Commands.Test_Data is
 
-   procedure Set_Up (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Set_Up(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
       ConfigFile: File_Type;
    begin
       Create(ConfigFile, Out_File, ".bob.yml");
@@ -45,8 +45,9 @@ package body Commands.Test_Data is
       Close(ConfigFile);
    end Set_Up;
 
-   procedure Tear_Down (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Tear_Down(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
-   end Tear_Down;end Commands.Test_Data;
+   end Tear_Down;
+end Commands.Test_Data;

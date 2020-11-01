@@ -6,10 +6,11 @@ with Gnattest_Generated;
 
 package Commands.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Commands.Test_Data.Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Commands.Test_Data
+     .Test with
+   null record;
 
-   procedure Test_ExecuteCommand_8553d1_927533 (Gnattest_T : in out Test);
+   procedure Test_ExecuteCommand_8553d1_533ac5(Gnattest_T: in out Test);
    --  commands.ads:96:4:ExecuteCommand:Test_ExecuteCommand
 
 end Commands.Test_Data.Tests;
