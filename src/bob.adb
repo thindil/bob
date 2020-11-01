@@ -37,7 +37,8 @@ begin
       (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
        Argument(1) /= "about")) then
       -- Show info about unknown command
-      if Argument_Count > 0 and then
+      if Argument_Count > 0
+        and then
         (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
          Argument(1) /= "help") then
          ShowMessage("Unknown command '" & Argument(1) & "'.");
