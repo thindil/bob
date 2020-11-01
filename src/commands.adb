@@ -18,6 +18,7 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables; use Ada.Environment_Variables;
 with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Maps; use Ada.Strings.Maps;
 with GNAT.Expect; use GNAT.Expect;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Messages; use Messages;
@@ -168,6 +169,16 @@ package body Commands is
                  Unbounded_Slice(Execute, EndIndex, Length(Execute));
             end if;
          end;
+         -- Translate path if needed
+         if Commands_List(Key).Flags.Contains
+             (To_Unbounded_String("windowspath")) and
+           Directory_Separator = '/' then
+            Translate(Arguments, To_Mapping("\", "/"));
+         elsif Commands_List(Key).Flags.Contains
+             (To_Unbounded_String("unixpath")) and
+           Directory_Separator = '\' then
+            Translate(Arguments, To_Mapping("/", "\"));
+         end if;
          -- Enter selected directory
          if Command = To_Unbounded_String("cd") then
             Arguments :=
