@@ -79,13 +79,18 @@ Explanation:
                          directory.
 * `flags:`             - Mark start of list of command's flags. Optional.
 * `- [flag]`           - Each flag assigned to this Bob command. Possible
-                         values are: `unixonly`: command is avaialable only on
+                         values are: `unixonly`: command is available only on
                          Unix-like systems, `windowsonly`: command is available
                          only on Windows systems, `internal`: command is not
                          visible on commands list, but can be normally run (can
                          be useful for recursive calls), `evaluatevariables`:
                          command variables are treated as commands to run, and
-                         they result will be assigned to that variable.
+                         they result will be assigned to that variable,
+                         `windowspath`: paths in the command are in Windows
+                         style (use \ for directory separator), will be
+                         translated on Unix, `unixpath`: paths in the command
+                         are in Unix style (use / for directory separator),
+                         will be translated on Windows.
 
 Commands to execute can have also variables used in the definitions. Variables
 start with sign `$`. `$` and number after it means argument from command line
