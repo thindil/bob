@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to translate path between windows and unix
+
 ### Changed
 - Updated README.md
 
