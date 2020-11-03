@@ -1,4 +1,4 @@
-version: 2.0
+version: 3.0
 - command:
    name: debug
    execute:
@@ -43,14 +43,14 @@ version: 2.0
       - ./test_runner
    description: Build and execute Bob unit tests
    flags:
-      - unixonly
+      - unixpath
 - command:
    name: docs
    execute:
-      - others/generatedocs.tcl
+      - tclsh others/generatedocs.tcl
    description: Generate code documentation
    flags:
-      - unixonly
+      - unixpath
 - command:
    name: gprof
    execute:
@@ -58,7 +58,7 @@ version: 2.0
    description: Generate gprof report
    output: gprof.txt
    flags:
-      - unixonly
+      - unixpath
 - command:
    name: windows
    execute:
