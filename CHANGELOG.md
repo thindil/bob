@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in README.md, CONTRIBUTING.md
+- Crash on invalid command entry in config file
 
 ## [2.0] - 2019-11-11
 
