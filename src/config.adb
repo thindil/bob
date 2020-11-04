@@ -1,4 +1,4 @@
--- Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -117,6 +117,12 @@ package body Config is
          SeparatorPosition := Index(Line, "-");
          if SeparatorPosition /= 1 then
             SeparatorPosition := Index(Line, ":");
+         end if;
+         if SeparatorPosition = 0 then
+            ShowMessage
+              ("Command '" & To_String(Name) & "' invalid entry: '" &
+               To_String(Line) & "'");
+            goto End_Of_Loop;
          end if;
          Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
          if Key = To_Unbounded_String("execute") or
