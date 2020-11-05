@@ -35,7 +35,7 @@ begin
      or else
      (Argument(1) = "help" or
       (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
-       Argument(1) /= "about")) then
+       Argument(1) not in "about" | "config")) then
       -- Show info about unknown command
       if Argument_Count > 0
         and then
@@ -70,6 +70,10 @@ begin
               (To_Unbounded_String("about"),
                To_Unbounded_String
                  ("show the program version and license info"));
+            AddEntry
+              (To_Unbounded_String("config"),
+               To_Unbounded_String
+                 ("rename the selected file to .bob.yml or add it content to the existing .bob.yml"));
             Put_Line("##### Local commands ########");
             for I in Commands_List.Iterate loop
                if not Commands_List(I).Flags.Contains
@@ -106,6 +110,33 @@ begin
         ("You should have received a copy of the GNU General Public License");
       Put_Line
         ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
+      -- Convert file to .bob.yml or add its command to it
+   elsif Argument(1) = "config" then
+      if Argument_Count < 2 then
+         ShowMessage
+           ("You have to enter the name of the file which will be added to .bob.yml");
+         return;
+      end if;
+      if not Exists(".bob.yml") then
+         Copy_File(Argument(2), ".bob.yml");
+         ShowMessage
+           ("File '" & Argument(2) & "' was copied as .bob.yml", Normal);
+      else
+         declare
+            Source_File, Config_File: File_Type;
+         begin
+            Open(Source_File, In_File, Argument(2));
+            Open(Config_File, Append_File, ".bob.yml");
+            while not End_Of_File(Source_File) loop
+               Put_Line(Config_File, Get_Line(Source_File));
+            end loop;
+            Close(Config_File);
+            Close(Source_File);
+         end;
+         ShowMessage
+           ("File '" & Argument(2) & "' content was copied to .bob.yml file",
+            Normal);
+      end if;
       -- Execute entered command
    else
       ExecuteCommand(To_Unbounded_String(Argument(1)));
