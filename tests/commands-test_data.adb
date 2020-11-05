@@ -42,6 +42,11 @@ package body Commands.Test_Data is
       Put_Line(ConfigFile, "  execute:");
       Put_Line(ConfigFile, "    - ls -a .");
       Put_Line(ConfigFile, "  description: test command without name");
+      Put_Line(ConfigFile, "- command:");
+      Put_Line(ConfigFile, "  name: test5");
+      Put_Line(ConfigFile, "  execute:");
+      Put_Line(ConfigFile, "    ls -a .");
+      Put_Line(ConfigFile, "  description: test command with invalid entry");
       Close(ConfigFile);
    end Set_Up;
 
