@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to translate path between windows and unix
+- Command to convert any file to Bob configuration or add its content to
+  existing Bob configuration file
 
 ### Changed
 - Updated README.md
