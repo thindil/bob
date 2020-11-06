@@ -56,9 +56,8 @@ begin
          declare
             procedure AddEntry(Key, Description: Unbounded_String) is
                KeyString: String(1 .. StringLength) := (others => ' ');
-               KeyLength: constant Positive := Length(Key);
             begin
-               KeyString(1 .. KeyLength) := To_String(Key);
+               KeyString(1 .. Length(Key)) := To_String(Key);
                Put_Line(KeyString & " - " & To_String(Description));
             end AddEntry;
          begin
