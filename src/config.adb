@@ -125,9 +125,9 @@ package body Config is
             goto End_Of_Loop;
          end if;
          Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
-         if Key = To_Unbounded_String("execute") or
-           Key = To_Unbounded_String("variables") or
-           Key = To_Unbounded_String("flags") then
+         if Key in To_Unbounded_String("execute") |
+               To_Unbounded_String("variables") |
+               To_Unbounded_String("flags") then
             Value := Null_Unbounded_String;
          else
             if SeparatorPosition + 2 >= Length(Line) then
