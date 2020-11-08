@@ -1,4 +1,4 @@
--- Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -19,14 +19,14 @@ with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 
--- ****h* Bob/Commands
+-- ****h* Commands/Commands
 -- FUNCTION
 -- Provide code for manipulate configured Bob commands
 -- SOURCE
 package Commands is
 -- ****
 
-   -- ****t* Commands/UnboundedString_Container
+   -- ****t* Commands/Commands.UnboundedString_Container
    -- FUNCTION
    -- Used to store commands to execute
    -- SOURCE
@@ -34,7 +34,7 @@ package Commands is
       Unbounded_String);
    -- ****
 
-   -- ****t* Commands/Variables_Container
+   -- ****t* Commands/Commands.Variables_Container
    -- FUNCTION
    -- Used to store enviroment variables for the command
    -- SOURCE
@@ -42,7 +42,7 @@ package Commands is
       Unbounded_String, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* Commands/Command_Record
+   -- ****t* Commands/Commands.Command_Record
    -- FUNCTION
    -- Data structure for the Bob commands.
    -- PARAMETERS
@@ -52,7 +52,7 @@ package Commands is
    --               help command.
    -- Output      - Where to send output of this command. Possible options are:
    --               "standard" standard output (default), "error" standard
---               error output, anything other will be treated as path to file
+   --               error output, anything other will be treated as path to file
    --               where output should be redirected.
    -- Flags       - Flags assigned to this command. Possible options are:
    --               "unixonly" command available only on Unix systems,
@@ -71,7 +71,7 @@ package Commands is
    end record;
    -- ****
 
-   -- ****t* Commands/Commands_Container
+   -- ****t* Commands/Commands.Commands_Container
    -- FUNCTION
    -- Used to store all available Bob commands.
    -- SOURCE
@@ -79,14 +79,14 @@ package Commands is
       Command_Record);
    -- ****
 
-   -- ****v* Commands/Commands_List
+   -- ****v* Commands/Commands.Commands_List
    -- FUNCTION
    -- List of all available Bob commands.
    -- SOURCE
    Commands_List: Commands_Container.Map;
    -- ****
 
-   -- ****f* Commands/ExecuteCommand
+   -- ****f* Commands/Commands.ExecuteCommand
    -- FUNCTION
    -- Execute selected Bob command
    -- PARAMETERS
