@@ -1,4 +1,4 @@
--- Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,21 +13,21 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Bob/Messages
+-- ****h* Messages/Messages
 -- FUNCTION
 -- Provides code to show the program messages to the user
 -- SOURCE
 package Messages is
 -- ****
 
-   -- ****t* Messages/Messages_Types
+   -- ****t* Messages/Messages.Messages_Types
    -- FUNCTION
    -- Types of messages: Normal or Error
    -- SOURCE
    type Messages_Types is (Normal, Error);
    -- ****
 
-   -- ****f* Messages/ShowMessage
+   -- ****f* Messages/Messages.ShowMessage
    -- FUNCTION
    -- Show selected message to the user. On Unix Error type messages are
    -- colored
