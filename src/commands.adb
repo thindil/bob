@@ -141,7 +141,7 @@ package body Commands is
          -- Split command line
          declare
             StartIndex: Positive range 1 .. 2;
-            EndIndex: Natural range 0 .. Length(Execute) + 3;
+            EndIndex: Integer range -1 .. Length(Execute) + 3;
          begin
             case Element(Execute, 1) is
                when ''' =>
