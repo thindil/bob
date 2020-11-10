@@ -46,7 +46,7 @@ begin
       Put_Line("Available commands are:");
       Put_Line("##### Build-in commands #####");
       declare
-         StringLength: Positive := 5;
+         StringLength: Positive := 6;
       begin
          for I in Commands_List.Iterate loop
             if Length(Commands_Container.Key(I)) > StringLength then
