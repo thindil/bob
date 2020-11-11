@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0] - 2020-11-11
 
 ### Added
 - Option to translate path between windows and unix
