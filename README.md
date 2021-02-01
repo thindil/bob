@@ -12,6 +12,9 @@ it reads configuration file (if exists) for selected directory for aliases.
 
 **Note:** This version of README.md is about development version of the
 program. Some things may be different in released version of Bob.
+If you read this file on Github: **please don't send pull requests here**.
+All will be automatically closed. Any code propositions should go to
+the [Fossil](https://www.laeran.pl/repositories/bob) repository.
 
 ### Configuration file
 
@@ -19,7 +22,7 @@ Bob looking for file `.bob.yml` in current directory (where it is executed).
 If it finds it, it reads all available commands from here. Sample
 configuration:
 
-     version: 2.0
+     version: 3.0
      - include: ../.bob.yml
      - command:
        name: list
