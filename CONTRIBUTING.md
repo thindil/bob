@@ -1,9 +1,7 @@
 ## Bugs reporting
 
 Bugs are not only problems or the program crashes, but also typos. If you
-find any bug in the program, please report it at
-<https://github.com/thindil/bob/issues> or if you prefer, on mail
-<thindil@laeran.pl>
+find any bug in the program, please report it at options available at [contact page](https://www.laeran.pl/repositories/bob/wiki?name=Contact).
 
 ### Some general hints about reporting bugs
 
@@ -38,10 +36,9 @@ Body:
 ## Features propositions
 
 If you want to talk/propose changes in any existing the prorgam feature or
-mechanic, feel free to contact me via issues tracker or mail (addresses of
-both you can find at top of this file). General rule about propositions is
-same as for bugs reports - please, try to write that much information as
-possible. This help us all better understand purpose of your changes.
+mechanic, feel free to contact me options available at [contact page](https://www.laeran.pl/repositories/bob/wiki?name=Contact). General rule about propositions is same as for bugs reports - please,
+try to write that much information as possible. This help us all better
+understand purpose of your changes.
 
 ## Code propositions
 
@@ -49,11 +46,10 @@ possible. This help us all better understand purpose of your changes.
 
 If you want to start help in the program development, please consider starts
 from something easy like fixing bugs. Before you been want to add new feature
-to the program, please contact with me by issues tracker or mail, addresses
-of both are at top of this file. Same as with features proposition - your code
-may "collide" with my work and it this moment you may just lose time by
-working on it. So it is better that we first discuss your proposition. In any
-other case, fell free to fix my code.
+to the program, please contact with me by options available at [contact page](https://www.laeran.pl/repositories/bob/wiki?name=Contact). Same as with features proposition - your code may "collide" with
+my work and it this moment you may just lose time by working on it. So it is
+better that we first discuss your proposition. In any other case, fell free
+to fix my code.
 
 ### Coding standard
 
@@ -99,10 +95,12 @@ How to generate the code documentation is described in main *README.md* file.
 
 ### Code submission
 
-Preferred way to submit your code is clone repository and then open new pull
-proposal at <https://github.com/thindil/bob/compare>. But if you prefer,
-you can send your code by mail too (email address is at top of this file). In
-that situation, please append to your mail patch file with changes.
+A preferred way to submit your code is to use [tickets](https://www.laeran.pl/repositories/bob/ticket)
+on the project page. Please attach to that ticket file with diff changes,
+the best if done with command `fossil diff`. But any other diff program will
+work. In that situation, please add information which program was used to
+create the diff file. If you prefer you can also use other options from
+[contact page](https://www.laeran.pl/repositories/bob/wiki?name=Contact).
 
 ## Additional debugging options
 
