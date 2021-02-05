@@ -30,7 +30,8 @@ package body Config is
       SeparatorPosition: Natural;
       Execute, Flags: UnboundedString_Container.Vector;
       Variables: Variables_Container.Map;
-      type Items_Type is (COMMAND, VARIABLE, FLAG);
+      type Items_Type is (COMMAND, VARIABLE, FLAG) with
+         Default_Value => COMMAND;
       ItemType: Items_Type;
       procedure AddCommand is
       begin
