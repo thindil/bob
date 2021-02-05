@@ -3,8 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## Changed
+### Changed
 - Updated contributing guide
+
+### Fixed
+- Lack of default value for config item type
 
 ## [3.0] - 2020-11-11
 
