@@ -29,6 +29,7 @@ package body Commands is
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;
+      CommandPath: GNAT.OS_Lib.String_Access;
    begin
       if not Commands_List.Contains(Key) then
          ShowMessage
@@ -191,18 +192,20 @@ package body Commands is
             Set_Directory(To_String(Arguments));
             goto End_Of_Loop;
          end if;
-         if Locate_Exec_On_Path(To_String(Command)) = null then
+         CommandPath := Locate_Exec_On_Path(To_String(Command));
+         if CommandPath = null then
             ShowMessage
               ("Command: '" & To_String(Command) & "' doesn't exists.");
             return;
          end if;
          -- Execute command
-         Command :=
-           To_Unbounded_String(Locate_Exec_On_Path(To_String(Command)).all);
+         Command := To_Unbounded_String(CommandPath.all);
          declare
             FileDescriptor: File_Descriptor;
             Output: constant String := To_String(Commands_List(Key).Output);
             ReturnCode: Integer;
+            Arguments_List: Argument_List_Access :=
+              Argument_String_To_List(To_String(Arguments));
          begin
             if Output = "standard" then
                FileDescriptor := Standout;
@@ -221,9 +224,9 @@ package body Commands is
                end if;
             end if;
             Spawn
-              (To_String(Command),
-               Argument_String_To_List(To_String(Arguments)).all,
-               FileDescriptor, ReturnCode);
+              (To_String(Command), Arguments_List.all, FileDescriptor,
+               ReturnCode);
+            Free(Arguments_List);
             if ReturnCode > 0 then
                ShowMessage
                  ("Error during executing '" & To_String(Execute) & "'");
@@ -231,6 +234,7 @@ package body Commands is
             end if;
          end;
          <<End_Of_Loop>>
+         Free(CommandPath);
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
       end loop;
