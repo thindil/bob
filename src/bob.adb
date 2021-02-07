@@ -1,4 +1,4 @@
--- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ begin
    elsif Argument(1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
-      Put_Line("Copyright (C) 2019-2020 Bartek thindil Jasicki");
+      Put_Line("Copyright (C) 2019-2021 Bartek thindil Jasicki");
       New_Line;
       Put_Line
         ("This program is free software: you can redistribute it and/or modify");
