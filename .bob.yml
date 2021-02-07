@@ -100,4 +100,4 @@ version: 3.0
    execute:
       - fossil push
       - fossil git export
-   description: Update remove Fossil repository and its Git mirror
+   description: Update remote Fossil repository and its Git mirror
