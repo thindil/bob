@@ -148,7 +148,7 @@ exception
            Current_Directory & Directory_Separator & "error.log";
       begin
          ShowMessage
-           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://github.com/thindil/bob/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file '" &
+           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://www.laeran.pl/repositories/bob/wiki?name=Contact and attach (if possible) file '" &
             FilePath & "'.");
          New_Line;
          if Exists(FilePath) then
