@@ -16,6 +16,7 @@
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Containers; use Ada.Containers;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -154,21 +155,27 @@ begin
       for I in Commands_List.Iterate loop
          if Commands_Container.Key(I) = To_Unbounded_String(Argument(2)) then
             Put_Line("##### Variables ####");
+            if Commands_List(I).Variables.Length = 0 then
+               Put_Line("no variables declared");
+            end if;
             for J in Commands_List(I).Variables.Iterate loop
                Put_Line
-                 ("   " & To_String(Variables_Container.Key(J)) & " = " &
+                 (To_String(Variables_Container.Key(J)) & " = " &
                   To_String(Commands_List(I).Variables(J)));
             end loop;
             Put_Line("##### Commands #####");
             for Command of Commands_List(I).Execute loop
-               Put_Line("   " & To_String(Command));
+               Put_Line(To_String(Command));
             end loop;
             Put_Line("##### Flags ########");
+            if Commands_List(I).Flags.Length = 0 then
+               Put_Line("no flags assigned");
+            end if;
             for Flag of Commands_List(I).Flags loop
-               Put_Line("   " & To_String(Flag));
+               Put_Line(To_String(Flag));
             end loop;
             Put_Line("##### Output #######");
-            Put_Line("   " & To_String(Commands_List(I).Output));
+            Put_Line(To_String(Commands_List(I).Output));
          end if;
       end loop;
       -- Execute entered command
