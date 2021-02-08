@@ -35,7 +35,7 @@ begin
      or else
      (Argument(1) = "help" or
       (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
-       Argument(1) not in "about" | "config")) then
+       Argument(1) not in "about" | "config" | "show")) then
       -- Show info about unknown command
       if Argument_Count > 0
         and then
@@ -73,6 +73,10 @@ begin
               (To_Unbounded_String("config"),
                To_Unbounded_String
                  ("rename the selected file to .bob.yml or add it content to the existing .bob.yml"));
+            AddEntry
+              (To_Unbounded_String("show"),
+               To_Unbounded_String
+                 ("show the content of the selected local command"));
             Put_Line("##### Local commands ########");
             for I in Commands_List.Iterate loop
                if not Commands_List(I).Flags.Contains
@@ -136,6 +140,37 @@ begin
            ("File '" & Argument(2) & "' content was copied to .bob.yml file",
             Normal);
       end if;
+      -- Show the content of the selected command
+   elsif Argument(1) = "show" then
+      if Argument_Count < 2 then
+         ShowMessage
+           ("You have to enter the name of the command which content you want to see.");
+         return;
+      end if;
+      if not Commands_List.Contains(To_Unbounded_String(Argument(2))) then
+         ShowMessage("Command: '" & Argument(2) & "' doesn't exists.");
+         return;
+      end if;
+      for I in Commands_List.Iterate loop
+         if Commands_Container.Key(I) = To_Unbounded_String(Argument(2)) then
+            Put_Line("##### Variables ####");
+            for J in Commands_List(I).Variables.Iterate loop
+               Put_Line
+                 ("   " & To_String(Variables_Container.Key(J)) & " = " &
+                  To_String(Commands_List(I).Variables(J)));
+            end loop;
+            Put_Line("##### Commands #####");
+            for Command of Commands_List(I).Execute loop
+               Put_Line("   " & To_String(Command));
+            end loop;
+            Put_Line("##### Flags ########");
+            for Flag of Commands_List(I).Flags loop
+               Put_Line("   " & To_String(Flag));
+            end loop;
+            Put_Line("##### Output #######");
+            Put_Line("   " & To_String(Commands_List(I).Output));
+         end if;
+      end loop;
       -- Execute entered command
    else
       ExecuteCommand(To_Unbounded_String(Argument(1)));
