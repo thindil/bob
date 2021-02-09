@@ -7,20 +7,20 @@ project bob is
 
     for Create_Missing_Dirs use "True";
 
-    type Mode_Type is ("debug", "release", "analyze");
+    type Mode_Type is ("debug", "release", "analyze", "style");
     Mode : Mode_Type := external ("Mode", "debug");
 
     package Builder is
-        for Default_Switches("ada") use ("-j0", "-gnat2012", "-g");
+        for Default_Switches("ada") use ("-j0", "-gnat2012", "-g", "-d");
         for Global_Configuration_Pragmas use "gnat.adc";
     end Builder;
 
     package Binder is
         case Mode is
-            when "debug" | "analyze" =>
-                for Default_Switches("ada") use ("-E", "-shared");
             when "release" =>
-                for Default_Switches("ada") use ("-static");
+               for Default_Switches("ada") use ("-static");
+            when others =>
+               for Default_Switches("ada") use ("-E", "-shared");
         end case;
     end Binder;
 
@@ -41,12 +41,14 @@ project bob is
                 for Default_Switches ("ada") use ("-pg",
                     "-fprofile-arcs",
                     "-ftest-coverage");
+            when "style" =>
+               for Default_Switches ("ada") use ("-gnaty3aAbBdefhIklnOprSux");
         end case;
     end Compiler;
 
     package Linker is
         case Mode is
-            when "debug" =>
+            when "debug" | "style" =>
               for Default_Switches ("ada") use ("-no-pie");
             when "release" =>
                 for Default_Switches ("ada") use ("-Wl,--gc-sections");
