@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Command to show the content of the selected local Bob command
+
 ### Changed
 - Updated contributing guide
 
