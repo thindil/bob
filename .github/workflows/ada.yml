@@ -16,6 +16,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Style check
+      run: |
+         gprbuild -P bob.gpr
+         gprclean -P bob.gpr
+
     - name: Generate tests
       run: gnattest -P bob.gpr
 
