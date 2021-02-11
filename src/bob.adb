@@ -49,11 +49,12 @@ begin
       declare
          StringLength: Positive := 6;
       begin
+         Get_String_Length_Loop :
          for I in Commands_List.Iterate loop
             if Length(Commands_Container.Key(I)) > StringLength then
                StringLength := Length(Commands_Container.Key(I));
             end if;
-         end loop;
+         end loop Get_String_Length_Loop;
          declare
             procedure AddEntry(Key, Description: Unbounded_String) is
                KeyString: String(1 .. StringLength) := (others => ' ');
@@ -79,13 +80,14 @@ begin
                To_Unbounded_String
                  ("show the content of the selected local command"));
             Put_Line("##### Local commands ########");
+            Get_Commands_Loop :
             for I in Commands_List.Iterate loop
                if not Commands_List(I).Flags.Contains
                    (To_Unbounded_String("internal")) then
                   AddEntry
                     (Commands_Container.Key(I), Commands_List(I).Description);
                end if;
-            end loop;
+            end loop Get_Commands_Loop;
          end;
       end;
       -- Show information about the program
@@ -131,9 +133,10 @@ begin
          begin
             Open(Source_File, In_File, Argument(2));
             Open(Config_File, Append_File, ".bob.yml");
+            Copy_Configuration_Loop :
             while not End_Of_File(Source_File) loop
                Put_Line(Config_File, Get_Line(Source_File));
-            end loop;
+            end loop Copy_Configuration_Loop;
             Close(Config_File);
             Close(Source_File);
          end;
@@ -158,22 +161,25 @@ begin
             if Commands_List(I).Variables.Length = 0 then
                Put_Line("no variables declared");
             end if;
+            List_Variables_Loop :
             for J in Commands_List(I).Variables.Iterate loop
                Put_Line
                  (To_String(Variables_Container.Key(J)) & " = " &
                   To_String(Commands_List(I).Variables(J)));
-            end loop;
+            end loop List_Variables_Loop;
             Put_Line("##### Commands #####");
+            List_Commands_Loop :
             for Command of Commands_List(I).Execute loop
                Put_Line(To_String(Command));
-            end loop;
+            end loop List_Commands_Loop;
             Put_Line("##### Flags ########");
             if Commands_List(I).Flags.Length = 0 then
                Put_Line("no flags assigned");
             end if;
+            List_Flags_Loop :
             for Flag of Commands_List(I).Flags loop
                Put_Line(To_String(Flag));
-            end loop;
+            end loop List_Flags_Loop;
             Put_Line("##### Output #######");
             Put_Line(To_String(Commands_List(I).Output));
          end if;
