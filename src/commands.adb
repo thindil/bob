@@ -1,4 +1,4 @@
--- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ package body Commands is
          Args: Argument_List_Access;
          Result: Expect_Match;
       begin
+         Set_Environment_Variables_Loop :
          for I in Commands_List(Key).Variables.Iterate loop
             -- Just set environment variable
             if not EvaluateVariables then
@@ -77,28 +78,34 @@ package body Commands is
                end case;
                Close(Descriptor);
             end if;
-         end loop;
+         end loop Set_Environment_Variables_Loop;
       end;
+      Execute_Command_Loop :
       for Execute of Commands_List(Key).Execute loop
          if Length(Execute) = 0 then
             goto End_Of_Loop;
          end if;
          -- Replace variables with command line arguments (if needed)
          VariableStarts := 1;
+         Set_Variables_Loop :
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
-            exit when VariableStarts = 0 or VariableStarts = Length(Execute);
+            exit Set_Variables_Loop when VariableStarts = 0 or
+              VariableStarts = Length(Execute);
             if not Is_Digit(Element(Execute, VariableStarts + 1)) then
                goto End_Of_Command_Line_Loop;
             end if;
             NumberPosition := VariableStarts + 1;
             ArgumentNumber := Null_Unbounded_String;
+            Replace_With_Argument_Loop :
             loop
                Append(ArgumentNumber, Element(Execute, NumberPosition));
                NumberPosition := NumberPosition + 1;
-               exit when NumberPosition > Length(Execute);
-               exit when not Is_Digit(Element(Execute, NumberPosition));
-            end loop;
+               exit Replace_With_Argument_Loop when NumberPosition >
+                 Length(Execute);
+               exit Replace_With_Argument_Loop when not Is_Digit
+                   (Element(Execute, NumberPosition));
+            end loop Replace_With_Argument_Loop;
             if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
                ShowMessage
                  ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
@@ -109,7 +116,7 @@ package body Commands is
                Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
             <<End_Of_Command_Line_Loop>>
             VariableStarts := VariableStarts + 1;
-         end loop;
+         end loop Set_Variables_Loop;
          -- Replace variables with enviroment variables values (if needed)
          VariableStarts := 1;
          loop
@@ -237,7 +244,7 @@ package body Commands is
          Free(CommandPath);
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
-      end loop;
+      end loop Execute_Command_Loop;
    end ExecuteCommand;
 
 end Commands;
