@@ -87,10 +87,10 @@ package body Commands is
          end if;
          -- Replace variables with command line arguments (if needed)
          VariableStarts := 1;
-         Set_Variables_Loop :
+         Replace_Variable_With_Argument_Loop :
          loop
             VariableStarts := Index(Execute, "$", VariableStarts);
-            exit Set_Variables_Loop when VariableStarts = 0 or
+            exit Replace_Variable_With_Argument_Loop when VariableStarts = 0 or
               VariableStarts = Length(Execute);
             if not Is_Digit(Element(Execute, VariableStarts + 1)) then
                goto End_Of_Command_Line_Loop;
@@ -102,9 +102,8 @@ package body Commands is
                Append(ArgumentNumber, Element(Execute, NumberPosition));
                NumberPosition := NumberPosition + 1;
                exit Replace_With_Argument_Loop when NumberPosition >
-                 Length(Execute);
-               exit Replace_With_Argument_Loop when not Is_Digit
-                   (Element(Execute, NumberPosition));
+                 Length(Execute) or
+                 not Is_Digit(Element(Execute, NumberPosition));
             end loop Replace_With_Argument_Loop;
             if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
                ShowMessage
@@ -116,7 +115,7 @@ package body Commands is
                Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
             <<End_Of_Command_Line_Loop>>
             VariableStarts := VariableStarts + 1;
-         end loop Set_Variables_Loop;
+         end loop Replace_Variable_With_Argument_Loop;
          -- Replace variables with enviroment variables values (if needed)
          VariableStarts := 1;
          loop
