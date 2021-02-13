@@ -102,8 +102,8 @@ package body Commands is
                Append(ArgumentNumber, Element(Execute, NumberPosition));
                NumberPosition := NumberPosition + 1;
                exit Replace_With_Argument_Loop when NumberPosition >
-                 Length(Execute) or else
-                 not Is_Digit(Element(Execute, NumberPosition));
+                 Length(Execute)
+                 or else not Is_Digit(Element(Execute, NumberPosition));
             end loop Replace_With_Argument_Loop;
             if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
                ShowMessage
@@ -132,8 +132,8 @@ package body Commands is
             loop
                Append(ArgumentNumber, Element(Execute, NumberPosition));
                NumberPosition := NumberPosition + 1;
-               exit when NumberPosition > Length(Execute);
-               exit when not Is_Alphanumeric(Element(Execute, NumberPosition));
+               exit when NumberPosition > Length(Execute)
+                 or else not Is_Alphanumeric(Element(Execute, NumberPosition));
             end loop;
             if not Ada.Environment_Variables.Exists
                 (To_String(ArgumentNumber)) then
