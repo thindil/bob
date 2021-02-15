@@ -34,18 +34,20 @@ begin
    -- Show list of available commands
    if Argument_Count = 0
      or else
-     (Argument(1) = "help" or
-      (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
-       Argument(1) not in "about" | "config" | "show")) then
+     (Argument(Number => 1) = "help" or
+      (not Commands_List.Contains
+         (Key => To_Unbounded_String(Source => Argument(Number => 1))) and
+       Argument(Number => 1) not in "about" | "config" | "show")) then
       -- Show info about unknown command
       if Argument_Count > 0
         and then
-        (not Commands_List.Contains(To_Unbounded_String(Argument(1))) and
-         Argument(1) /= "help") then
-         ShowMessage("Unknown command '" & Argument(1) & "'.");
+        (not Commands_List.Contains
+           (Key => To_Unbounded_String(Source => Argument(Number => 1))) and
+         Argument(Number => 1) /= "help") then
+         ShowMessage(Text => "Unknown command '" & Argument(Number => 1) & "'.");
       end if;
-      Put_Line("Available commands are:");
-      Put_Line("##### Build-in commands #####");
+      Put_Line(Item => "Available commands are:");
+      Put_Line(Item => "##### Build-in commands #####");
       declare
          StringLength: Positive := 6;
       begin
@@ -91,7 +93,7 @@ begin
          end;
       end;
       -- Show information about the program
-   elsif Argument(1) = "about" then
+   elsif Argument(Number => 1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
       Put_Line("Copyright (C) 2019-2021 Bartek thindil Jasicki");
@@ -117,21 +119,22 @@ begin
       Put_Line
         ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
       -- Convert file to .bob.yml or add its command to it
-   elsif Argument(1) = "config" then
+   elsif Argument(Number => 1) = "config" then
       if Argument_Count < 2 then
          ShowMessage
            ("You have to enter the name of the file which will be added to .bob.yml");
          return;
       end if;
       if not Exists(".bob.yml") then
-         Copy_File(Argument(2), ".bob.yml");
+         Copy_File(Argument(Number => 2), ".bob.yml");
          ShowMessage
-           ("File '" & Argument(2) & "' was copied as .bob.yml", Normal);
+           ("File '" & Argument(Number => 2) & "' was copied as .bob.yml",
+            Normal);
       else
          declare
             Source_File, Config_File: File_Type;
          begin
-            Open(Source_File, In_File, Argument(2));
+            Open(Source_File, In_File, Argument(Number => 2));
             Open(Config_File, Append_File, ".bob.yml");
             Copy_Configuration_Loop :
             while not End_Of_File(Source_File) loop
@@ -141,22 +144,25 @@ begin
             Close(Source_File);
          end;
          ShowMessage
-           ("File '" & Argument(2) & "' content was copied to .bob.yml file",
+           ("File '" & Argument(Number => 2) &
+            "' content was copied to .bob.yml file",
             Normal);
       end if;
       -- Show the content of the selected command
-   elsif Argument(1) = "show" then
+   elsif Argument(Number => 1) = "show" then
       if Argument_Count < 2 then
          ShowMessage
            ("You have to enter the name of the command which content you want to see.");
          return;
       end if;
       if not Commands_List.Contains(To_Unbounded_String(Argument(2))) then
-         ShowMessage("Command: '" & Argument(2) & "' doesn't exists.");
+         ShowMessage
+           ("Command: '" & Argument(Number => 2) & "' doesn't exists.");
          return;
       end if;
       for I in Commands_List.Iterate loop
-         if Commands_Container.Key(I) = To_Unbounded_String(Argument(2)) then
+         if Commands_Container.Key(I) =
+           To_Unbounded_String(Argument(Number => 2)) then
             Put_Line("##### Variables ####");
             if Commands_List(I).Variables.Length = 0 then
                Put_Line("no variables declared");
@@ -186,7 +192,7 @@ begin
       end loop;
       -- Execute entered command
    else
-      ExecuteCommand(To_Unbounded_String(Argument(1)));
+      ExecuteCommand(To_Unbounded_String(Argument(Number => 1)));
    end if;
 exception
    when An_Exception : others =>
