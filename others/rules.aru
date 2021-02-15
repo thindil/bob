@@ -1,3 +1,4 @@
+set max_messages 20;
 check Assignments (repeated);
 check case_statement (others_span, min 1);
 check directly_accessed_globals;
