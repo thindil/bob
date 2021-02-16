@@ -104,6 +104,7 @@ version: 3.0
 - command:
    name: check
    execute:
+      - gprclean -P bob.gpr
       - cd obj
       - adactl -f ../others/rules.aru -p ../bob.gpr
    description: Run AdaControl to check correctness of the code
