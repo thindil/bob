@@ -44,22 +44,26 @@ begin
         (not Commands_List.Contains
            (Key => To_Unbounded_String(Source => Argument(Number => 1))) and
          Argument(Number => 1) /= "help") then
-         ShowMessage(Text => "Unknown command '" & Argument(Number => 1) & "'.");
+         ShowMessage
+           (Text => "Unknown command '" & Argument(Number => 1) & "'.");
       end if;
       Put_Line(Item => "Available commands are:");
       Put_Line(Item => "##### Build-in commands #####");
+      Show_Commands_Block :
       declare
-         StringLength: Positive := 6;
+         String_Length: Positive := 6;
       begin
          Get_String_Length_Loop :
          for I in Commands_List.Iterate loop
-            if Length(Commands_Container.Key(I)) > StringLength then
-               StringLength := Length(Commands_Container.Key(I));
+            if Length(Source => Commands_Container.Key(Position => I)) >
+              String_Length then
+               String_Length :=
+                 Length(Source => Commands_Container.Key(Position => I));
             end if;
          end loop Get_String_Length_Loop;
          declare
             procedure AddEntry(Key, Description: Unbounded_String) is
-               KeyString: String(1 .. StringLength) := (others => ' ');
+               KeyString: String(1 .. String_Length) := (others => ' ');
             begin
                KeyString(1 .. Length(Key)) := To_String(Key);
                Put_Line(KeyString & " - " & To_String(Description));
@@ -91,7 +95,7 @@ begin
                end if;
             end loop Get_Commands_Loop;
          end;
-      end;
+      end Show_Commands_Block;
       -- Show information about the program
    elsif Argument(Number => 1) = "about" then
       Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
