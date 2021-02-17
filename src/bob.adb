@@ -52,6 +52,12 @@ begin
       Show_Commands_Block :
       declare
          String_Length: Positive := 6;
+         procedure AddEntry(Key, Description: Unbounded_String) is
+            KeyString: String(1 .. String_Length) := (others => ' ');
+         begin
+            KeyString(1 .. Length(Key)) := To_String(Key);
+            Put_Line(KeyString & " - " & To_String(Description));
+         end AddEntry;
       begin
          Get_String_Length_Loop :
          for I in Commands_List.Iterate loop
@@ -61,40 +67,29 @@ begin
                  Length(Source => Commands_Container.Key(Position => I));
             end if;
          end loop Get_String_Length_Loop;
-         declare
-            procedure AddEntry(Key, Description: Unbounded_String) is
-               KeyString: String(1 .. String_Length) := (others => ' ');
-            begin
-               KeyString(1 .. Length(Key)) := To_String(Key);
-               Put_Line(KeyString & " - " & To_String(Description));
-            end AddEntry;
-         begin
-            AddEntry
-              (To_Unbounded_String("help"),
-               To_Unbounded_String
-                 ("show all available commands (this screen)"));
-            AddEntry
-              (To_Unbounded_String("about"),
-               To_Unbounded_String
-                 ("show the program version and license info"));
-            AddEntry
-              (To_Unbounded_String("config"),
-               To_Unbounded_String
-                 ("rename the selected file to .bob.yml or add it content to the existing .bob.yml"));
-            AddEntry
-              (To_Unbounded_String("show"),
-               To_Unbounded_String
-                 ("show the content of the selected local command"));
-            Put_Line("##### Local commands ########");
-            Get_Commands_Loop :
-            for I in Commands_List.Iterate loop
-               if not Commands_List(I).Flags.Contains
-                   (To_Unbounded_String("internal")) then
-                  AddEntry
-                    (Commands_Container.Key(I), Commands_List(I).Description);
-               end if;
-            end loop Get_Commands_Loop;
-         end;
+         AddEntry
+           (To_Unbounded_String("help"),
+            To_Unbounded_String("show all available commands (this screen)"));
+         AddEntry
+           (To_Unbounded_String("about"),
+            To_Unbounded_String("show the program version and license info"));
+         AddEntry
+           (To_Unbounded_String("config"),
+            To_Unbounded_String
+              ("rename the selected file to .bob.yml or add it content to the existing .bob.yml"));
+         AddEntry
+           (To_Unbounded_String("show"),
+            To_Unbounded_String
+              ("show the content of the selected local command"));
+         Put_Line("##### Local commands ########");
+         Get_Commands_Loop :
+         for I in Commands_List.Iterate loop
+            if not Commands_List(I).Flags.Contains
+                (To_Unbounded_String("internal")) then
+               AddEntry
+                 (Commands_Container.Key(I), Commands_List(I).Description);
+            end if;
+         end loop Get_Commands_Loop;
       end Show_Commands_Block;
       -- Show information about the program
    elsif Argument(Number => 1) = "about" then
