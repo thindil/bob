@@ -89,54 +89,66 @@ begin
             Description =>
               To_Unbounded_String
                 (Source => "show the content of the selected local command"));
-         Put_Line("##### Local commands ########");
+         Put_Line(Item => "##### Local commands ########");
          Get_Commands_Loop :
          for I in Commands_List.Iterate loop
             if not Commands_List(I).Flags.Contains
-                (To_Unbounded_String("internal")) then
+                (Item => To_Unbounded_String(Source => "internal")) then
                Add_Entry
-                 (Commands_Container.Key(I), Commands_List(I).Description);
+                 (Key => Commands_Container.Key(Position => I),
+                  Description => Commands_List(I).Description);
             end if;
          end loop Get_Commands_Loop;
       end Show_Commands_Block;
       -- Show information about the program
    elsif Argument(Number => 1) = "about" then
-      Put_Line("Bob v" & Version & " Not Intelligent Console Assistant");
+      Put_Line
+        (Item => "Bob v" & Version & " Not Intelligent Console Assistant");
       New_Line;
-      Put_Line("Copyright (C) 2019-2021 Bartek thindil Jasicki");
-      New_Line;
-      Put_Line
-        ("This program is free software: you can redistribute it and/or modify");
-      Put_Line
-        ("it under the terms of the GNU General Public License as published by");
-      Put_Line
-        ("the Free Software Foundation, either version 3 of the License, or");
-      Put_Line("(at your option) any later version.");
+      Put_Line(Item => "Copyright (C) 2019-2021 Bartek thindil Jasicki");
       New_Line;
       Put_Line
-        ("This program is distributed in the hope that it will be useful,");
+        (Item =>
+           "This program is free software: you can redistribute it and/or modify");
       Put_Line
-        ("but WITHOUT ANY WARRANTY; without even the implied warranty of");
+        (Item =>
+           "it under the terms of the GNU General Public License as published by");
       Put_Line
-        ("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
-      Put_Line("GNU General Public License for more details.");
+        (Item =>
+           "the Free Software Foundation, either version 3 of the License, or");
+      Put_Line(Item => "(at your option) any later version.");
       New_Line;
       Put_Line
-        ("You should have received a copy of the GNU General Public License");
+        (Item =>
+           "This program is distributed in the hope that it will be useful,");
       Put_Line
-        ("along with this program.  If not, see <https://www.gnu.org/licenses/>.");
+        (Item =>
+           "but WITHOUT ANY WARRANTY; without even the implied warranty of");
+      Put_Line
+        (Item =>
+           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
+      Put_Line(Item => "GNU General Public License for more details.");
+      New_Line;
+      Put_Line
+        (Item =>
+           "You should have received a copy of the GNU General Public License");
+      Put_Line
+        (Item =>
+           "along with this program.  If not, see <https://www.gnu.org/licenses/>.");
       -- Convert file to .bob.yml or add its command to it
    elsif Argument(Number => 1) = "config" then
       if Argument_Count < 2 then
          ShowMessage
-           ("You have to enter the name of the file which will be added to .bob.yml");
+           (Text =>
+              "You have to enter the name of the file which will be added to .bob.yml");
          return;
       end if;
       if not Exists(".bob.yml") then
          Copy_File(Argument(Number => 2), ".bob.yml");
          ShowMessage
-           ("File '" & Argument(Number => 2) & "' was copied as .bob.yml",
-            Normal);
+           (Text =>
+              "File '" & Argument(Number => 2) & "' was copied as .bob.yml",
+            MType => Normal);
       else
          declare
             Source_File, Config_File: File_Type;
