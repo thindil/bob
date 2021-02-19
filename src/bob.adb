@@ -143,30 +143,35 @@ begin
               "You have to enter the name of the file which will be added to .bob.yml");
          return;
       end if;
-      if not Exists(".bob.yml") then
-         Copy_File(Argument(Number => 2), ".bob.yml");
+      if not Exists(Name => ".bob.yml") then
+         Copy_File
+           (Source_Name => Argument(Number => 2), Target_Name => ".bob.yml");
          ShowMessage
            (Text =>
               "File '" & Argument(Number => 2) & "' was copied as .bob.yml",
             MType => Normal);
-      else
-         declare
-            Source_File, Config_File: File_Type;
-         begin
-            Open(Source_File, In_File, Argument(Number => 2));
-            Open(Config_File, Append_File, ".bob.yml");
-            Copy_Configuration_Loop :
-            while not End_Of_File(Source_File) loop
-               Put_Line(Config_File, Get_Line(Source_File));
-            end loop Copy_Configuration_Loop;
-            Close(Config_File);
-            Close(Source_File);
-         end;
-         ShowMessage
-           ("File '" & Argument(Number => 2) &
-            "' content was copied to .bob.yml file",
-            Normal);
+         return;
       end if;
+      Copy_Configuration_Block :
+      declare
+         Source_File, Config_File: File_Type;
+      begin
+         Open
+           (File => Source_File, Mode => In_File,
+            Name => Argument(Number => 2));
+         Open(File => Config_File, Mode => Append_File, Name => ".bob.yml");
+         Copy_Configuration_Loop :
+         while not End_Of_File(File => Source_File) loop
+            Put_Line
+              (File => Config_File, Item => Get_Line(File => Source_File));
+         end loop Copy_Configuration_Loop;
+         Close(File => Config_File);
+         Close(File => Source_File);
+      end Copy_Configuration_Block;
+      ShowMessage
+        ("File '" & Argument(Number => 2) &
+         "' content was copied to .bob.yml file",
+         Normal);
       -- Show the content of the selected command
    elsif Argument(Number => 1) = "show" then
       if Argument_Count < 2 then
@@ -179,6 +184,7 @@ begin
            ("Command: '" & Argument(Number => 2) & "' doesn't exists.");
          return;
       end if;
+      Show_Command_Content_Loop:
       for I in Commands_List.Iterate loop
          if Commands_Container.Key(I) =
            To_Unbounded_String(Argument(Number => 2)) then
@@ -208,7 +214,7 @@ begin
             Put_Line("##### Output #######");
             Put_Line(To_String(Commands_List(I).Output));
          end if;
-      end loop;
+      end loop Show_Command_Content_Loop;
       -- Execute entered command
    else
       ExecuteCommand(To_Unbounded_String(Argument(Number => 1)));
