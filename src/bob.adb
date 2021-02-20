@@ -169,43 +169,50 @@ begin
          Close(File => Source_File);
       end Copy_Configuration_Block;
       ShowMessage
-        ("File '" & Argument(Number => 2) &
-         "' content was copied to .bob.yml file",
-         Normal);
+        (Text =>
+           "File '" & Argument(Number => 2) &
+           "' content was copied to .bob.yml file",
+         MType => Normal);
       -- Show the content of the selected command
    elsif Argument(Number => 1) = "show" then
       if Argument_Count < 2 then
          ShowMessage
-           ("You have to enter the name of the command which content you want to see.");
+           (Text =>
+              "You have to enter the name of the command which content you want to see.");
          return;
       end if;
-      if not Commands_List.Contains(To_Unbounded_String(Argument(2))) then
+      if not Commands_List.Contains
+          (Key => To_Unbounded_String(Source => Argument(Number => 2))) then
          ShowMessage
-           ("Command: '" & Argument(Number => 2) & "' doesn't exists.");
+           (Text =>
+              "Command: '" & Argument(Number => 2) & "' doesn't exists.");
          return;
       end if;
-      Show_Command_Content_Loop:
+      Show_Command_Content_Loop :
       for I in Commands_List.Iterate loop
-         if Commands_Container.Key(I) =
-           To_Unbounded_String(Argument(Number => 2)) then
-            Put_Line("##### Variables ####");
+         if Commands_Container.Key(Position => I) =
+           To_Unbounded_String(Source => Argument(Number => 2)) then
+            Put_Line(Item => "##### Variables ####");
             if Commands_List(I).Variables.Length = 0 then
-               Put_Line("no variables declared");
+               Put_Line(Item => "no variables declared");
             end if;
             List_Variables_Loop :
             for J in Commands_List(I).Variables.Iterate loop
                Put_Line
-                 (To_String(Variables_Container.Key(J)) & " = " &
-                  To_String(Commands_List(I).Variables(J)));
+                 (Item =>
+                    To_String
+                      (Source => Variables_Container.Key(Position => J)) &
+                    " = " &
+                    To_String(Source => Commands_List(I).Variables(J)));
             end loop List_Variables_Loop;
-            Put_Line("##### Commands #####");
+            Put_Line(Item => "##### Commands #####");
             List_Commands_Loop :
             for Command of Commands_List(I).Execute loop
-               Put_Line(To_String(Command));
+               Put_Line(Item => To_String(Source => Command));
             end loop List_Commands_Loop;
-            Put_Line("##### Flags ########");
+            Put_Line(Item => "##### Flags ########");
             if Commands_List(I).Flags.Length = 0 then
-               Put_Line("no flags assigned");
+               Put_Line(Item => "no flags assigned");
             end if;
             List_Flags_Loop :
             for Flag of Commands_List(I).Flags loop
