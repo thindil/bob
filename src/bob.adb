@@ -216,44 +216,46 @@ begin
             end if;
             List_Flags_Loop :
             for Flag of Commands_List(I).Flags loop
-               Put_Line(To_String(Flag));
+               Put_Line(Item => To_String(Flag));
             end loop List_Flags_Loop;
-            Put_Line("##### Output #######");
-            Put_Line(To_String(Commands_List(I).Output));
+            Put_Line(Item => "##### Output #######");
+            Put_Line(Item => To_String(Source => Commands_List(I).Output));
          end if;
       end loop Show_Command_Content_Loop;
       -- Execute entered command
    else
-      ExecuteCommand(To_Unbounded_String(Argument(Number => 1)));
+      ExecuteCommand
+        (Key => To_Unbounded_String(Source => Argument(Number => 1)));
    end if;
 exception
    when An_Exception : others =>
+      Unhandled_Exception_Block :
       declare
-         ErrorFile: File_Type;
-         FilePath: constant String :=
+         Error_File: File_Type;
+         File_Path: constant String :=
            Current_Directory & Directory_Separator & "error.log";
       begin
          ShowMessage
            ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://www.laeran.pl/repositories/bob/wiki?name=Contact and attach (if possible) file '" &
-            FilePath & "'.");
+            File_Path & "'.");
          New_Line;
-         if Exists(FilePath) then
-            Open(ErrorFile, Append_File, FilePath);
+         if Exists(File_Path) then
+            Open(Error_File, Append_File, File_Path);
          else
-            Create(ErrorFile, Append_File, FilePath);
+            Create(Error_File, Append_File, File_Path);
          end if;
-         Put_Line(ErrorFile, Ada.Calendar.Formatting.Image(Clock));
-         Put_Line(ErrorFile, Version);
-         Put_Line(ErrorFile, "Exception: " & Exception_Name(An_Exception));
+         Put_Line(Error_File, Ada.Calendar.Formatting.Image(Clock));
+         Put_Line(Error_File, Version);
+         Put_Line(Error_File, "Exception: " & Exception_Name(An_Exception));
          Put_Line("Exception: " & Exception_Name(An_Exception));
-         Put_Line(ErrorFile, "Message: " & Exception_Message(An_Exception));
+         Put_Line(Error_File, "Message: " & Exception_Message(An_Exception));
          Put_Line("Message: " & Exception_Message(An_Exception));
          Put_Line
-           (ErrorFile, "-------------------------------------------------");
-         Put(ErrorFile, Symbolic_Traceback(An_Exception));
+           (Error_File, "-------------------------------------------------");
+         Put(Error_File, Symbolic_Traceback(An_Exception));
          Put_Line(Symbolic_Traceback(An_Exception));
          Put_Line
-           (ErrorFile, "-------------------------------------------------");
-         Close(ErrorFile);
-      end;
+           (Error_File, "-------------------------------------------------");
+         Close(Error_File);
+      end Unhandled_Exception_Block;
 end Bob;
