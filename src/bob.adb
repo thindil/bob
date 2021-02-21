@@ -216,7 +216,7 @@ begin
             end if;
             List_Flags_Loop :
             for Flag of Commands_List(I).Flags loop
-               Put_Line(Item => To_String(Flag));
+               Put_Line(Item => To_String(Source => Flag));
             end loop List_Flags_Loop;
             Put_Line(Item => "##### Output #######");
             Put_Line(Item => To_String(Source => Commands_List(I).Output));
@@ -236,26 +236,34 @@ exception
            Current_Directory & Directory_Separator & "error.log";
       begin
          ShowMessage
-           ("Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://www.laeran.pl/repositories/bob/wiki?name=Contact and attach (if possible) file '" &
-            File_Path & "'.");
+           (Text =>
+              "Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://www.laeran.pl/repositories/bob/wiki?name=Contact and attach (if possible) file '" &
+              File_Path & "'.");
          New_Line;
-         if Exists(File_Path) then
-            Open(Error_File, Append_File, File_Path);
+         if Exists(Name => File_Path) then
+            Open(File => Error_File, Mode => Append_File, Name => File_Path);
          else
-            Create(Error_File, Append_File, File_Path);
+            Create(File => Error_File, Mode => Append_File, Name => File_Path);
          end if;
-         Put_Line(Error_File, Ada.Calendar.Formatting.Image(Clock));
-         Put_Line(Error_File, Version);
-         Put_Line(Error_File, "Exception: " & Exception_Name(An_Exception));
-         Put_Line("Exception: " & Exception_Name(An_Exception));
-         Put_Line(Error_File, "Message: " & Exception_Message(An_Exception));
-         Put_Line("Message: " & Exception_Message(An_Exception));
          Put_Line
-           (Error_File, "-------------------------------------------------");
-         Put(Error_File, Symbolic_Traceback(An_Exception));
-         Put_Line(Symbolic_Traceback(An_Exception));
+           (File => Error_File, Item => Ada.Calendar.Formatting.Image(Clock));
+         Put_Line(File => Error_File, Item => Version);
          Put_Line
-           (Error_File, "-------------------------------------------------");
-         Close(Error_File);
+           (File => Error_File,
+            Item => "Exception: " & Exception_Name(An_Exception));
+         Put_Line(Item => "Exception: " & Exception_Name(An_Exception));
+         Put_Line
+           (File => Error_File,
+            Item => "Message: " & Exception_Message(An_Exception));
+         Put_Line(Item => "Message: " & Exception_Message(An_Exception));
+         Put_Line
+           (File => Error_File,
+            Item => "-------------------------------------------------");
+         Put(File => Error_File, Item => Symbolic_Traceback(An_Exception));
+         Put_Line(Item => Symbolic_Traceback(An_Exception));
+         Put_Line
+           (File => Error_File,
+            Item => "-------------------------------------------------");
+         Close(File => Error_File);
       end Unhandled_Exception_Block;
 end Bob;
