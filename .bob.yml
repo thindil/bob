@@ -106,7 +106,7 @@ version: 3.0
    execute:
       - gprclean -P bob.gpr
       - cd obj
-      - adactl -f ../others/rules.aru -p ../bob.gpr
+      - adactl -f ../others/rules.aru -p ../bob.gpr -r bob
    description: Run AdaControl to check correctness of the code
    flags:
       - unixpath
