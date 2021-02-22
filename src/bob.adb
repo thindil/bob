@@ -246,21 +246,23 @@ exception
             Create(File => Error_File, Mode => Append_File, Name => File_Path);
          end if;
          Put_Line
-           (File => Error_File, Item => Ada.Calendar.Formatting.Image(Clock));
+           (File => Error_File,
+            Item => Ada.Calendar.Formatting.Image(Date => Clock));
          Put_Line(File => Error_File, Item => Version);
          Put_Line
            (File => Error_File,
-            Item => "Exception: " & Exception_Name(An_Exception));
-         Put_Line(Item => "Exception: " & Exception_Name(An_Exception));
+            Item => "Exception: " & Exception_Name(X => An_Exception));
+         Put_Line(Item => "Exception: " & Exception_Name(X => An_Exception));
          Put_Line
            (File => Error_File,
-            Item => "Message: " & Exception_Message(An_Exception));
-         Put_Line(Item => "Message: " & Exception_Message(An_Exception));
+            Item => "Message: " & Exception_Message(X => An_Exception));
+         Put_Line(Item => "Message: " & Exception_Message(X => An_Exception));
          Put_Line
            (File => Error_File,
             Item => "-------------------------------------------------");
-         Put(File => Error_File, Item => Symbolic_Traceback(An_Exception));
-         Put_Line(Item => Symbolic_Traceback(An_Exception));
+         Put
+           (File => Error_File, Item => Symbolic_Traceback(E => An_Exception));
+         Put_Line(Item => Symbolic_Traceback(E => An_Exception));
          Put_Line
            (File => Error_File,
             Item => "-------------------------------------------------");
