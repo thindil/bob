@@ -13,16 +13,16 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Containers; use Ada.Containers;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Exceptions;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
-with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
+with GNAT.OS_Lib;
+with GNAT.Traceback.Symbolic;
 with Commands; use Commands;
 with Config; use Config;
 with Messages; use Messages;
@@ -231,6 +231,10 @@ exception
    when An_Exception : others =>
       Unhandled_Exception_Block :
       declare
+         use GNAT.Traceback.Symbolic;
+         use GNAT.OS_Lib;
+         use Ada.Exceptions;
+         use Ada.Calendar;
          Error_File: File_Type;
          File_Path: constant String :=
            Current_Directory & Directory_Separator & "error.log";
