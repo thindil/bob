@@ -1,4 +1,4 @@
--- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ package Commands is
    -- SOURCE
    procedure ExecuteCommand(Key: Unbounded_String) with
       Pre => Key /= Null_Unbounded_String,
-      Test_Case => ("Test_ExecuteCommand", Nominal);
+      Test_Case => (Name => "Test_ExecuteCommand", Mode => Nominal);
       -- ****
 
 end Commands;

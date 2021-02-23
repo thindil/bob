@@ -36,7 +36,7 @@ package Config is
    -- SOURCE
    procedure LoadConfig(FileName: String := ".bob.yml") with
       Pre => FileName'Length > 0,
-      Test_Case => ("Test_LoadConfig", Nominal);
+      Test_Case => (Name => "Test_LoadConfig", Mode => Nominal);
       -- ****
 
 end Config;
