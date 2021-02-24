@@ -25,7 +25,7 @@ with Messages; use Messages;
 
 package body Commands is
 
-   procedure ExecuteCommand(Key: Unbounded_String) is
+   procedure Execute_Command(Key: Unbounded_String) is
       Command, Arguments, ArgumentNumber: Unbounded_String :=
         Null_Unbounded_String;
       VariableStarts, NumberPosition: Natural := 1;
@@ -247,6 +247,6 @@ package body Commands is
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
       end loop Execute_Command_Loop;
-   end ExecuteCommand;
+   end Execute_Command;
 
 end Commands;

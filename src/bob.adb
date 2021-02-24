@@ -224,7 +224,7 @@ begin
       end loop Show_Command_Content_Loop;
       -- Execute entered command
    else
-      ExecuteCommand
+      Execute_Command
         (Key => To_Unbounded_String(Source => Argument(Number => 1)));
    end if;
 exception

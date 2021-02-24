@@ -26,11 +26,11 @@ with Ada.Strings.Unbounded.Hash;
 package Commands is
 -- ****
 
-   -- ****t* Commands/Commands.UnboundedString_Container
+   -- ****t* Commands/Commands.Unbounded_String_Container
    -- FUNCTION
    -- Used to store commands to execute
    -- SOURCE
-   package UnboundedString_Container is new Vectors(Positive,
+   package Unbounded_String_Container is new Vectors(Positive,
       Unbounded_String);
    -- ****
 
@@ -63,12 +63,23 @@ package Commands is
    --               variables.
    -- SOURCE
    type Command_Record is record
-      Execute: UnboundedString_Container.Vector;
+      Execute: Unbounded_String_Container.Vector;
       Variables: Variables_Container.Map;
       Description: Unbounded_String;
       Output: Unbounded_String;
-      Flags: UnboundedString_Container.Vector;
+      Flags: Unbounded_String_Container.Vector;
    end record;
+   -- ****
+
+   -- ****d* Commands/Empty_Command
+   -- FUNCTION
+   -- Empty command constant
+   -- SOURCE
+   Empty_Command: constant Command_Record :=
+     (Execute => Unbounded_String_Container.Empty_Vector,
+      Variables => Variables_Container.Empty_Map,
+      Description => Null_Unbounded_String, Output => Null_Unbounded_String,
+      Flags => Unbounded_String_Container.Empty_Vector);
    -- ****
 
    -- ****t* Commands/Commands.Commands_Container
@@ -86,14 +97,14 @@ package Commands is
    Commands_List: Commands_Container.Map;
    -- ****
 
-   -- ****f* Commands/Commands.ExecuteCommand
+   -- ****f* Commands/Commands.Execute_Command
    -- FUNCTION
    -- Execute selected Bob command
    -- PARAMETERS
    -- Key - Command name which the user entered as a first parameter for the
    --       program
    -- SOURCE
-   procedure ExecuteCommand(Key: Unbounded_String) with
+   procedure Execute_Command(Key: Unbounded_String) with
       Pre => Key /= Null_Unbounded_String,
       Test_Case => (Name => "Test_ExecuteCommand", Mode => Nominal);
       -- ****

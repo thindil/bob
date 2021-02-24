@@ -1,4 +1,4 @@
--- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ package body Config is
       ConfigFile: File_Type;
       Name, Line, Description, Key, Value, Output: Unbounded_String;
       SeparatorPosition: Natural;
-      Execute, Flags: UnboundedString_Container.Vector;
+      Execute, Flags: Unbounded_String_Container.Vector;
       Variables: Variables_Container.Map;
       type Items_Type is (COMMAND, VARIABLE, FLAG) with
          Default_Value => COMMAND;
