@@ -30,16 +30,17 @@ package Commands is
    -- FUNCTION
    -- Used to store commands to execute
    -- SOURCE
-   package Unbounded_String_Container is new Vectors(Positive,
-      Unbounded_String);
+   package Unbounded_String_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Unbounded_String);
    -- ****
 
    -- ****t* Commands/Commands.Variables_Container
    -- FUNCTION
    -- Used to store enviroment variables for the command
    -- SOURCE
-   package Variables_Container is new Hashed_Maps(Unbounded_String,
-      Unbounded_String, Ada.Strings.Unbounded.Hash, "=");
+   package Variables_Container is new Hashed_Maps(Key_Type => Unbounded_String,
+      Element_Type => Unbounded_String, Hash => Ada.Strings.Unbounded.Hash,
+      Equivalent_Keys => "=");
    -- ****
 
    -- ****t* Commands/Commands.Command_Record
@@ -86,8 +87,8 @@ package Commands is
    -- FUNCTION
    -- Used to store all available Bob commands.
    -- SOURCE
-   package Commands_Container is new Ordered_Maps(Unbounded_String,
-      Command_Record);
+   package Commands_Container is new Ordered_Maps(Key_Type => Unbounded_String,
+      Element_Type => Command_Record);
    -- ****
 
    -- ****v* Commands/Commands.Commands_List
