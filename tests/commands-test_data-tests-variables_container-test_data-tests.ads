@@ -6,12 +6,8 @@ with Gnattest_Generated;
 
 package Commands.Test_Data.Tests.Variables_Container.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Commands.Test_Data
-     .Tests
-     .Variables_Container
-     .Test_Data
-     .New_Test with
-   null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Commands.Test_Data.Tests.Variables_Container.Test_Data.New_Test
+   with null record;
 
 end Commands.Test_Data.Tests.Variables_Container.Test_Data.Tests;
 --  end read only

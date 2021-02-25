@@ -6,11 +6,10 @@ with Gnattest_Generated;
 
 package Config.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Config.Test_Data
-     .Test with
-   null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Config.Test_Data.Test
+   with null record;
 
-   procedure Test_LoadConfig_6c9f25_6dc4a6(Gnattest_T: in out Test);
+   procedure Test_LoadConfig_6c9f25_6dc4a6 (Gnattest_T : in out Test);
    --  config.ads:37:4:LoadConfig:Test_LoadConfig
 
 end Config.Test_Data.Tests;
