@@ -26,10 +26,10 @@ with Messages; use Messages;
 package body Commands is
 
    procedure Execute_Command(Key: Unbounded_String) is
-      Command, Arguments, ArgumentNumber: Unbounded_String :=
+      Command, Arguments, Argument_Number: Unbounded_String :=
         Null_Unbounded_String;
-      VariableStarts, NumberPosition: Natural := 1;
-      CommandPath: GNAT.OS_Lib.String_Access;
+      Variable_Starts, Number_Position: Natural := 1;
+      Command_Path: GNAT.OS_Lib.String_Access;
    begin
       if not Commands_List.Contains(Key) then
          ShowMessage
@@ -38,7 +38,7 @@ package body Commands is
       end if;
       -- Load environment variables if needed
       declare
-         EvaluateVariables: constant Boolean :=
+         Evaluate_Variables: constant Boolean :=
            Commands_List(Key).Flags.Contains
              (To_Unbounded_String("evaluatevariables"));
          Descriptor: Process_Descriptor;
@@ -48,7 +48,7 @@ package body Commands is
          Set_Environment_Variables_Loop :
          for I in Commands_List(Key).Variables.Iterate loop
             -- Just set environment variable
-            if not EvaluateVariables then
+            if not Evaluate_Variables then
                Set
                  (To_String(Variables_Container.Key(I)),
                   To_String(Commands_List(Key).Variables(I)));
@@ -86,67 +86,70 @@ package body Commands is
             goto End_Of_Loop;
          end if;
          -- Replace variables with command line arguments (if needed)
-         VariableStarts := 1;
+         Variable_Starts := 1;
          Replace_Variable_With_Argument_Loop :
          loop
-            VariableStarts := Index(Execute, "$", VariableStarts);
-            exit Replace_Variable_With_Argument_Loop when VariableStarts = 0 or
-              VariableStarts = Length(Execute);
-            if not Is_Digit(Element(Execute, VariableStarts + 1)) then
+            Variable_Starts := Index(Execute, "$", Variable_Starts);
+            exit Replace_Variable_With_Argument_Loop when Variable_Starts =
+              0 or
+              Variable_Starts = Length(Execute);
+            if not Is_Digit(Element(Execute, Variable_Starts + 1)) then
                goto End_Of_Command_Line_Loop;
             end if;
-            NumberPosition := VariableStarts + 1;
-            ArgumentNumber := Null_Unbounded_String;
+            Number_Position := Variable_Starts + 1;
+            Argument_Number := Null_Unbounded_String;
             Replace_With_Argument_Loop :
             loop
-               Append(ArgumentNumber, Element(Execute, NumberPosition));
-               NumberPosition := NumberPosition + 1;
-               exit Replace_With_Argument_Loop when NumberPosition >
+               Append(Argument_Number, Element(Execute, Number_Position));
+               Number_Position := Number_Position + 1;
+               exit Replace_With_Argument_Loop when Number_Position >
                  Length(Execute)
-                 or else not Is_Digit(Element(Execute, NumberPosition));
+                 or else not Is_Digit(Element(Execute, Number_Position));
             end loop Replace_With_Argument_Loop;
-            if Argument_Count <= Positive'Value(To_String(ArgumentNumber)) then
+            if Argument_Count <=
+              Positive'Value(To_String(Argument_Number)) then
                ShowMessage
                  ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
                return;
             end if;
             Replace_Slice
-              (Execute, VariableStarts, NumberPosition - 1,
-               Argument(Positive'Value(To_String(ArgumentNumber)) + 1));
+              (Execute, Variable_Starts, Number_Position - 1,
+               Argument(Positive'Value(To_String(Argument_Number)) + 1));
             <<End_Of_Command_Line_Loop>>
-            VariableStarts := VariableStarts + 1;
+            Variable_Starts := Variable_Starts + 1;
          end loop Replace_Variable_With_Argument_Loop;
          -- Replace variables with enviroment variables values (if needed)
-         VariableStarts := 1;
+         Variable_Starts := 1;
          Replace_Variables_With_Environment_Loop :
          loop
-            VariableStarts := Index(Execute, "$", VariableStarts);
-            exit Replace_Variables_With_Environment_Loop when VariableStarts =
+            Variable_Starts := Index(Execute, "$", Variable_Starts);
+            exit Replace_Variables_With_Environment_Loop when Variable_Starts =
               0 or
-              VariableStarts = Length(Execute);
-            if not Is_Alphanumeric(Element(Execute, VariableStarts + 1)) then
+              Variable_Starts = Length(Execute);
+            if not Is_Alphanumeric(Element(Execute, Variable_Starts + 1)) then
                goto End_Of_Variables_Loop;
             end if;
-            NumberPosition := VariableStarts + 1;
-            ArgumentNumber := Null_Unbounded_String;
+            Number_Position := Variable_Starts + 1;
+            Argument_Number := Null_Unbounded_String;
             loop
-               Append(ArgumentNumber, Element(Execute, NumberPosition));
-               NumberPosition := NumberPosition + 1;
-               exit when NumberPosition > Length(Execute)
-                 or else not Is_Alphanumeric(Element(Execute, NumberPosition));
+               Append(Argument_Number, Element(Execute, Number_Position));
+               Number_Position := Number_Position + 1;
+               exit when Number_Position > Length(Execute)
+                 or else not Is_Alphanumeric
+                   (Element(Execute, Number_Position));
             end loop;
             if not Ada.Environment_Variables.Exists
-                (To_String(ArgumentNumber)) then
+                (To_String(Argument_Number)) then
                ShowMessage
-                 ("Variable: " & To_String(ArgumentNumber) &
+                 ("Variable: " & To_String(Argument_Number) &
                   " doesn't exists.");
                return;
             end if;
             Replace_Slice
-              (Execute, VariableStarts, NumberPosition - 1,
-               Value(To_String(ArgumentNumber)));
+              (Execute, Variable_Starts, Number_Position - 1,
+               Value(To_String(Argument_Number)));
             <<End_Of_Variables_Loop>>
-            VariableStarts := VariableStarts + 1;
+            Variable_Starts := Variable_Starts + 1;
          end loop Replace_Variables_With_Environment_Loop;
          -- Split command line
          declare
@@ -201,14 +204,14 @@ package body Commands is
             Set_Directory(To_String(Arguments));
             goto End_Of_Loop;
          end if;
-         CommandPath := Locate_Exec_On_Path(To_String(Command));
-         if CommandPath = null then
+         Command_Path := Locate_Exec_On_Path(To_String(Command));
+         if Command_Path = null then
             ShowMessage
               ("Command: '" & To_String(Command) & "' doesn't exists.");
             return;
          end if;
          -- Execute command
-         Command := To_Unbounded_String(CommandPath.all);
+         Command := To_Unbounded_String(Command_Path.all);
          declare
             FileDescriptor: File_Descriptor;
             Output: constant String := To_String(Commands_List(Key).Output);
@@ -243,7 +246,7 @@ package body Commands is
             end if;
          end;
          <<End_Of_Loop>>
-         Free(CommandPath);
+         Free(Command_Path);
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
       end loop Execute_Command_Loop;
