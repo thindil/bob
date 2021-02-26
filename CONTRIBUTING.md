@@ -53,13 +53,10 @@ to fix my code.
 
 ### Coding standard
 
-When you write your own code, feel free to use any coding standard you want.
-Before you send your changes to the project, please use command `gnatpp` which
-automatically format the source code to the project coding standard. Proper
-`gnatpp` command usage (in the main project directory, where *bob.gpr* file
-is):
-
-`gnatpp -P bob.gpr`
+The full description of coding style used by the project, you can find on the
+[Coding Standard](https://www.laeran.pl/repositories/bob/wiki?name=Coding%20Standard) page.
+There also you will find some information about the testing process of the
+project.
 
 #### Code comments formatting
 
