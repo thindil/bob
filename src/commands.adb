@@ -30,6 +30,8 @@ package body Commands is
         Null_Unbounded_String;
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
+      FileDescriptor: File_Descriptor;
+      Output: constant String := To_String(Commands_List(Key).Output);
    begin
       if not Commands_List.Contains(Key => Key) then
          ShowMessage
@@ -88,6 +90,22 @@ package body Commands is
             end if;
          end loop Set_Environment_Variables_Loop;
       end;
+      if Output = "standard" then
+         FileDescriptor := Standout;
+      elsif Output = "error" then
+         FileDescriptor := Standerr;
+      else
+         if Ada.Directories.Exists(Output) then
+            Delete_File(Output);
+         end if;
+         FileDescriptor := Create_Output_Text_File(Output);
+         if FileDescriptor = Invalid_FD then
+            ShowMessage
+              ("Error during executing '" & To_String(Key) &
+               "'. Can't create '" & Output & "' as the output file.");
+            return;
+         end if;
+      end if;
       Execute_Command_Loop :
       for Execute of Commands_List(Key).Execute loop
          if Length(Execute) = 0 then
@@ -118,6 +136,10 @@ package body Commands is
               Positive'Value(To_String(Argument_Number)) then
                ShowMessage
                  ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
+               if Output not in "standard" | "error"
+                 and then Ada.Directories.Exists(Output) then
+                  Delete_File(Output);
+               end if;
                return;
             end if;
             Replace_Slice
@@ -151,6 +173,10 @@ package body Commands is
                ShowMessage
                  ("Variable: " & To_String(Argument_Number) &
                   " doesn't exists.");
+               if Output not in "standard" | "error"
+                 and then Ada.Directories.Exists(Output) then
+                  Delete_File(Output);
+               end if;
                return;
             end if;
             Replace_Slice
@@ -207,6 +233,10 @@ package body Commands is
             if not Ada.Directories.Exists(To_String(Arguments)) then
                ShowMessage
                  ("Directory: '" & To_String(Arguments) & "' doesn't exists.");
+               if Output not in "standard" | "error"
+                 and then Ada.Directories.Exists(Output) then
+                  Delete_File(Output);
+               end if;
                return;
             end if;
             Set_Directory(To_String(Arguments));
@@ -216,33 +246,19 @@ package body Commands is
          if Command_Path = null then
             ShowMessage
               ("Command: '" & To_String(Command) & "' doesn't exists.");
+            if Output not in "standard" | "error"
+              and then Ada.Directories.Exists(Output) then
+               Delete_File(Output);
+            end if;
             return;
          end if;
          -- Execute command
          Command := To_Unbounded_String(Command_Path.all);
          declare
-            FileDescriptor: File_Descriptor;
-            Output: constant String := To_String(Commands_List(Key).Output);
             ReturnCode: Integer;
             Arguments_List: Argument_List_Access :=
               Argument_String_To_List(To_String(Arguments));
          begin
-            if Output = "standard" then
-               FileDescriptor := Standout;
-            elsif Output = "error" then
-               FileDescriptor := Standerr;
-            else
-               if Ada.Directories.Exists(Output) then
-                  Delete_File(Output);
-               end if;
-               FileDescriptor := Create_Output_Text_File(Output);
-               if FileDescriptor = Invalid_FD then
-                  ShowMessage
-                    ("Error during executing '" & To_String(Execute) &
-                     "'. Can't create '" & Output & "' as the output file.");
-                  return;
-               end if;
-            end if;
             Spawn
               (To_String(Command), Arguments_List.all, FileDescriptor,
                ReturnCode);
@@ -250,6 +266,10 @@ package body Commands is
             if ReturnCode > 0 then
                ShowMessage
                  ("Error during executing '" & To_String(Execute) & "'");
+               if Output not in "standard" | "error"
+                 and then Ada.Directories.Exists(Output) then
+                  Delete_File(Output);
+               end if;
                return;
             end if;
          end;
