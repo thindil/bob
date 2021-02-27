@@ -31,16 +31,18 @@ package body Commands is
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
    begin
-      if not Commands_List.Contains(Key) then
+      if not Commands_List.Contains(Key => Key) then
          ShowMessage
-           ("No available command with name '" & To_String(Key) & "'.");
+           (Text =>
+              "No available command with name '" & To_String(Source => Key) &
+              "'.");
          return;
       end if;
       -- Load environment variables if needed
       declare
          Evaluate_Variables: constant Boolean :=
            Commands_List(Key).Flags.Contains
-             (To_Unbounded_String("evaluatevariables"));
+             (Item => To_Unbounded_String(Source => "evaluatevariables"));
          Descriptor: Process_Descriptor;
          Args: Argument_List_Access;
          Result: Expect_Match;
@@ -50,18 +52,24 @@ package body Commands is
             -- Just set environment variable
             if not Evaluate_Variables then
                Set
-                 (To_String(Variables_Container.Key(I)),
-                  To_String(Commands_List(Key).Variables(I)));
+                 (Name =>
+                    To_String
+                      (Source => Variables_Container.Key(Position => I)),
+                  Value =>
+                    To_String(Source => Commands_List(Key).Variables(I)));
                -- If proper flag is set, evaluate environment variable before
                -- set it
             else
                Args :=
                  Argument_String_To_List
-                   (To_String(Commands_List(Key).Variables(I)));
+                   (Arg_String =>
+                      To_String(Source => Commands_List(Key).Variables(I)));
                Non_Blocking_Spawn
-                 (Descriptor, Args(Args'First).all,
-                  Args(Args'First + 1 .. Args'Last));
-               Expect(Descriptor, Result, ".+", 10_000);
+                 (Descriptor => Descriptor, Command => Args(Args'First).all,
+                  Args => Args(Args'First + 1 .. Args'Last));
+               Expect
+                 (Descriptor => Descriptor, Result => Result, Regexp => ".+",
+                  Timeout => 10_000);
                case Result is
                   when Expect_Timeout =>
                      ShowMessage
