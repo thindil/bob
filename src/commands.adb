@@ -31,7 +31,8 @@ package body Commands is
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
       FileDescriptor: File_Descriptor;
-      Output: constant String := To_String(Commands_List(Key).Output);
+      Output: constant String :=
+        To_String(Source => Commands_List(Key).Output);
    begin
       if not Commands_List.Contains(Key => Key) then
          ShowMessage
@@ -75,18 +76,24 @@ package body Commands is
                case Result is
                   when Expect_Timeout =>
                      ShowMessage
-                       ("Failed to evaluate variable '" &
-                        To_String(Variables_Container.Key(I)) & "'.");
-                     Close(Descriptor);
+                       (Text =>
+                          "Failed to evaluate variable '" &
+                          To_String
+                            (Source =>
+                               Variables_Container.Key(Position => I)) &
+                          "'.");
+                     Close(Descriptor => Descriptor);
                      return;
                   when 1 =>
                      Set
-                       (To_String(Variables_Container.Key(I)),
-                        Expect_Out(Descriptor));
+                       (Name =>
+                          To_String
+                            (Source => Variables_Container.Key(Position => I)),
+                        Value => Expect_Out(Descriptor => Descriptor));
                   when others =>
                      null;
                end case;
-               Close(Descriptor);
+               Close(Descriptor => Descriptor);
             end if;
          end loop Set_Environment_Variables_Loop;
       end;
@@ -95,14 +102,15 @@ package body Commands is
       elsif Output = "error" then
          FileDescriptor := Standerr;
       else
-         if Ada.Directories.Exists(Output) then
-            Delete_File(Output);
+         if Ada.Directories.Exists(Name => Output) then
+            Delete_File(Name => Output);
          end if;
-         FileDescriptor := Create_Output_Text_File(Output);
+         FileDescriptor := Create_Output_Text_File(Name => Output);
          if FileDescriptor = Invalid_FD then
             ShowMessage
-              ("Error during executing '" & To_String(Key) &
-               "'. Can't create '" & Output & "' as the output file.");
+              (Text =>
+                 "Error during executing '" & To_String(Source => Key) &
+                 "'. Can't create '" & Output & "' as the output file.");
             return;
          end if;
       end if;
