@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Lack of default value for config item type
 - Memory leaks in parsing commands
+- Creating output file for commands
 
 ## [3.0] - 2020-11-11
 
