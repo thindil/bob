@@ -30,7 +30,7 @@ package body Commands is
         Null_Unbounded_String;
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
-      FileDescriptor: File_Descriptor;
+      File_Desc: File_Descriptor := 0;
       Output: constant String :=
         To_String(Source => Commands_List(Key).Output);
    begin
@@ -42,13 +42,14 @@ package body Commands is
          return;
       end if;
       -- Load environment variables if needed
+      Load_Environment_Variables_Block :
       declare
          Evaluate_Variables: constant Boolean :=
            Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "evaluatevariables"));
-         Descriptor: Process_Descriptor;
+         Descriptor: Process_Descriptor; --## rule line off IMPROPER_INITIALIZATION
          Args: Argument_List_Access;
-         Result: Expect_Match;
+         Result: Expect_Match := -1;
       begin
          Set_Environment_Variables_Loop :
          for I in Commands_List(Key).Variables.Iterate loop
@@ -96,17 +97,17 @@ package body Commands is
                Close(Descriptor => Descriptor);
             end if;
          end loop Set_Environment_Variables_Loop;
-      end;
+      end Load_Environment_Variables_Block;
       if Output = "standard" then
-         FileDescriptor := Standout;
+         File_Desc := Standout;
       elsif Output = "error" then
-         FileDescriptor := Standerr;
+         File_Desc := Standerr;
       else
          if Ada.Directories.Exists(Name => Output) then
             Delete_File(Name => Output);
          end if;
-         FileDescriptor := Create_Output_Text_File(Name => Output);
-         if FileDescriptor = Invalid_FD then
+         File_Desc := Create_Output_Text_File(Name => Output);
+         if File_Desc = Invalid_FD then
             ShowMessage
               (Text =>
                  "Error during executing '" & To_String(Source => Key) &
@@ -268,8 +269,7 @@ package body Commands is
               Argument_String_To_List(To_String(Arguments));
          begin
             Spawn
-              (To_String(Command), Arguments_List.all, FileDescriptor,
-               ReturnCode);
+              (To_String(Command), Arguments_List.all, File_Desc, ReturnCode);
             Free(Arguments_List);
             if ReturnCode > 0 then
                ShowMessage
