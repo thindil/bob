@@ -1,4 +1,4 @@
--- Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 
@@ -29,6 +30,9 @@ package body Messages is
       -- Reset text color in terminal if needed
       if Directory_Separator = '/' and then MType /= Normal then
          Put(ESC & "[0m");
+      end if;
+      if MType = Error then
+         Set_Exit_Status(Code => Failure);
       end if;
    end ShowMessage;
 
