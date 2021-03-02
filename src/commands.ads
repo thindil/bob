@@ -53,7 +53,7 @@ package Commands is
    --               help command.
    -- Output      - Where to send output of this command. Possible options are:
    --               "standard" standard output (default), "error" standard
-   --               error output, anything other will be treated as path to file
+--               error output, anything other will be treated as path to file
    --               where output should be redirected.
    -- Flags       - Flags assigned to this command. Possible options are:
    --               "unixonly" command available only on Unix systems,
