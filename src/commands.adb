@@ -117,34 +117,45 @@ package body Commands is
       end if;
       Execute_Command_Loop :
       for Execute of Commands_List(Key).Execute loop
-         if Length(Execute) = 0 then
+         if Length(Source => Execute) = 0 then
             goto End_Of_Loop;
          end if;
          -- Replace variables with command line arguments (if needed)
          Variable_Starts := 1;
          Replace_Variable_With_Argument_Loop :
          loop
-            Variable_Starts := Index(Execute, "$", Variable_Starts);
+            Variable_Starts :=
+              Index
+                (Source => Execute, Pattern => "$", From => Variable_Starts);
             exit Replace_Variable_With_Argument_Loop when Variable_Starts =
               0 or
-              Variable_Starts = Length(Execute);
-            if not Is_Digit(Element(Execute, Variable_Starts + 1)) then
+              Variable_Starts = Length(Source => Execute);
+            if not Is_Digit
+                (Item =>
+                   Element
+                     (Source => Execute, Index => Variable_Starts + 1)) then
                goto End_Of_Command_Line_Loop;
             end if;
             Number_Position := Variable_Starts + 1;
             Argument_Number := Null_Unbounded_String;
             Replace_With_Argument_Loop :
             loop
-               Append(Argument_Number, Element(Execute, Number_Position));
+               Append
+                 (Source => Argument_Number,
+                  New_Item =>
+                    Element(Source => Execute, Index => Number_Position));
                Number_Position := Number_Position + 1;
                exit Replace_With_Argument_Loop when Number_Position >
-                 Length(Execute)
-                 or else not Is_Digit(Element(Execute, Number_Position));
+                 Length(Source => Execute)
+                 or else not Is_Digit
+                   (Item =>
+                      Element(Source => Execute, Index => Number_Position));
             end loop Replace_With_Argument_Loop;
             if Argument_Count <=
-              Positive'Value(To_String(Argument_Number)) then
+              Positive'Value(To_String(Source => Argument_Number)) then
                ShowMessage
-                 ("You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
+                 (Text =>
+                    "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
                if Output not in "standard" | "error"
                  and then Ada.Directories.Exists(Output) then
                   Delete_File(Output);
