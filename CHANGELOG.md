@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Command to show the content of the selected local Bob command
+- Error exit status to the program when something wrong was happened
 
 ### Changed
 - Updated contributing guide
