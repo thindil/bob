@@ -157,14 +157,19 @@ package body Commands is
                  (Text =>
                     "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
                if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Output) then
-                  Delete_File(Output);
+                 and then Ada.Directories.Exists(Name => Output) then
+                  Delete_File(Name => Output);
                end if;
                return;
             end if;
             Replace_Slice
-              (Execute, Variable_Starts, Number_Position - 1,
-               Argument(Positive'Value(To_String(Argument_Number)) + 1));
+              (Source => Execute, Low => Variable_Starts,
+               High => Number_Position - 1,
+               By =>
+                 Argument
+                   (Number =>
+                      Positive'Value(To_String(Source => Argument_Number)) +
+                      1));
             <<End_Of_Command_Line_Loop>>
             Variable_Starts := Variable_Starts + 1;
          end loop Replace_Variable_With_Argument_Loop;
@@ -172,17 +177,25 @@ package body Commands is
          Variable_Starts := 1;
          Replace_Variables_With_Environment_Loop :
          loop
-            Variable_Starts := Index(Execute, "$", Variable_Starts);
+            Variable_Starts :=
+              Index
+                (Source => Execute, Pattern => "$", From => Variable_Starts);
             exit Replace_Variables_With_Environment_Loop when Variable_Starts =
               0 or
-              Variable_Starts = Length(Execute);
-            if not Is_Alphanumeric(Element(Execute, Variable_Starts + 1)) then
+              Variable_Starts = Length(Source => Execute);
+            if not Is_Alphanumeric
+                (Item =>
+                   Element
+                     (Source => Execute, Index => Variable_Starts + 1)) then
                goto End_Of_Variables_Loop;
             end if;
             Number_Position := Variable_Starts + 1;
             Argument_Number := Null_Unbounded_String;
             loop
-               Append(Argument_Number, Element(Execute, Number_Position));
+               Append
+                 (Source => Argument_Number,
+                  New_Item =>
+                    Element(Source => Execute, Index => Number_Position));
                Number_Position := Number_Position + 1;
                exit when Number_Position > Length(Execute)
                  or else not Is_Alphanumeric
