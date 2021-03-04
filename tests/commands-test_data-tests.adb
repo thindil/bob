@@ -31,12 +31,10 @@ package body Commands.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Execute_Command_96c470_533ac5 (Key: Unbounded_String) 
-   is
+   procedure Wrap_Test_Execute_Command_96c470_533ac5(Key: Unbounded_String) is
    begin
       begin
-         pragma Assert
-           (Key /= Null_Unbounded_String);
+         pragma Assert(Key /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,10 +42,9 @@ package body Commands.Test_Data.Tests is
               (False,
                "req_sloc(commands.ads:0):Test_ExecuteCommand test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Commands.Execute_Command (Key);
+      GNATtest_Generated.GNATtest_Standard.Commands.Execute_Command(Key);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -59,23 +56,27 @@ package body Commands.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_Execute_Command_test_executecommand (Gnattest_T : in out Test);
-   procedure Test_Execute_Command_96c470_533ac5 (Gnattest_T : in out Test) renames Test_Execute_Command_test_executecommand;
+   procedure Test_Execute_Command_test_executecommand(Gnattest_T: in out Test);
+   procedure Test_Execute_Command_96c470_533ac5
+     (Gnattest_T: in out Test) renames
+     Test_Execute_Command_test_executecommand;
 --  id:2.2/96c4708ae6b283e4/Execute_Command/1/0/test_executecommand/
-   procedure Test_Execute_Command_test_executecommand (Gnattest_T : in out Test) is
-   procedure Execute_Command (Key: Unbounded_String) renames Wrap_Test_Execute_Command_96c470_533ac5;
+   procedure Test_Execute_Command_test_executecommand
+     (Gnattest_T: in out Test) is
+      procedure Execute_Command(Key: Unbounded_String) renames
+        Wrap_Test_Execute_Command_96c470_533ac5;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
 
    begin
 
-        LoadConfig;
-        -- Test existing command
-        Execute_Command(To_Unbounded_String("test"));
-        -- Test non-existing command
-        Execute_Command(To_Unbounded_String("about"));
-        Assert(True, "This test can only crash.");
+      LoadConfig;
+      -- Test existing command
+      Execute_Command(To_Unbounded_String("test"));
+      -- Test non-existing command
+      Execute_Command(To_Unbounded_String("about"));
+      Assert(True, "This test can only crash.");
 
 --  begin read only
    end Test_Execute_Command_test_executecommand;
