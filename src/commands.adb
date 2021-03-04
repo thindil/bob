@@ -197,56 +197,59 @@ package body Commands is
                   New_Item =>
                     Element(Source => Execute, Index => Number_Position));
                Number_Position := Number_Position + 1;
-               exit when Number_Position > Length(Execute)
+               exit when Number_Position > Length(Source => Execute)
                  or else not Is_Alphanumeric
-                   (Element(Execute, Number_Position));
+                   (Item =>
+                      Element(Source => Execute, Index => Number_Position));
             end loop;
             if not Ada.Environment_Variables.Exists
-                (To_String(Argument_Number)) then
+                (Name => To_String(Source => Argument_Number)) then
                ShowMessage
-                 ("Variable: " & To_String(Argument_Number) &
-                  " doesn't exists.");
+                 (Text =>
+                    "Variable: " & To_String(Source => Argument_Number) &
+                    " doesn't exists.");
                if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Output) then
-                  Delete_File(Output);
+                 and then Ada.Directories.Exists(Name => Output) then
+                  Delete_File(Name => Output);
                end if;
                return;
             end if;
             Replace_Slice
-              (Execute, Variable_Starts, Number_Position - 1,
-               Value(To_String(Argument_Number)));
+              (Source => Execute, Low => Variable_Starts,
+               High => Number_Position - 1,
+               By => Value(Name => To_String(Source => Argument_Number)));
             <<End_Of_Variables_Loop>>
             Variable_Starts := Variable_Starts + 1;
          end loop Replace_Variables_With_Environment_Loop;
          -- Split command line
          declare
-            StartIndex: Positive range 1 .. 2;
-            EndIndex: Integer range -1 .. Length(Execute) + 3;
+            Start_Index: Positive range 1 .. 2;
+            End_Index: Integer range -1 .. Length(Execute) + 3;
          begin
             case Element(Execute, 1) is
                when ''' =>
-                  StartIndex := 2;
-                  EndIndex := Index(Execute, "'", 2) - 1;
+                  Start_Index := 2;
+                  End_Index := Index(Execute, "'", 2) - 1;
                when '"' =>
-                  StartIndex := 2;
-                  EndIndex := Index(Execute, """", 2) - 1;
+                  Start_Index := 2;
+                  End_Index := Index(Execute, """", 2) - 1;
                when others =>
-                  StartIndex := 1;
-                  EndIndex := Index(Execute, " ", 2) - 1;
+                  Start_Index := 1;
+                  End_Index := Index(Execute, " ", 2) - 1;
             end case;
-            if EndIndex < 1 then
-               EndIndex := Length(Execute);
+            if End_Index < 1 then
+               End_Index := Length(Execute);
             end if;
-            Command := Unbounded_Slice(Execute, StartIndex, EndIndex);
+            Command := Unbounded_Slice(Execute, Start_Index, End_Index);
             case Element(Execute, 1) is
                when ''' | '"' =>
-                  EndIndex := EndIndex + 3;
+                  End_Index := End_Index + 3;
                when others =>
-                  EndIndex := EndIndex + 2;
+                  End_Index := End_Index + 2;
             end case;
-            if EndIndex < Length(Execute) then
+            if End_Index < Length(Execute) then
                Arguments :=
-                 Unbounded_Slice(Execute, EndIndex, Length(Execute));
+                 Unbounded_Slice(Execute, End_Index, Length(Execute));
             end if;
          end;
          -- Translate path if needed
