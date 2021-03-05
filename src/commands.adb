@@ -31,8 +31,6 @@ package body Commands is
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
       File_Desc: File_Descriptor := 0;
-      Output: constant String :=
-        To_String(Source => Commands_List(Key).Output);
    begin
       if not Commands_List.Contains(Key => Key) then
          ShowMessage
@@ -98,20 +96,26 @@ package body Commands is
             end if;
          end loop Set_Environment_Variables_Loop;
       end Load_Environment_Variables_Block;
-      if Output = "standard" then
+      if Commands_List(Key).Output = "standard" then
          File_Desc := Standout;
-      elsif Output = "error" then
+      elsif Commands_List(Key).Output = "error" then
          File_Desc := Standerr;
       else
-         if Ada.Directories.Exists(Name => Output) then
-            Delete_File(Name => Output);
+         if Ada.Directories.Exists
+             (Name => To_String(Source => Commands_List(Key).Output)) then
+            Delete_File
+              (Name => To_String(Source => Commands_List(Key).Output));
          end if;
-         File_Desc := Create_Output_Text_File(Name => Output);
+         File_Desc :=
+           Create_Output_Text_File
+             (Name => To_String(Source => Commands_List(Key).Output));
          if File_Desc = Invalid_FD then
             ShowMessage
               (Text =>
                  "Error during executing '" & To_String(Source => Key) &
-                 "'. Can't create '" & Output & "' as the output file.");
+                 "'. Can't create '" &
+                 To_String(Source => Commands_List(Key).Output) &
+                 "' as the output file.");
             return;
          end if;
       end if;
@@ -156,9 +160,13 @@ package body Commands is
                ShowMessage
                  (Text =>
                     "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
-               if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Name => Output) then
-                  Delete_File(Name => Output);
+               if To_String(Source => Commands_List(Key).Output) not in
+                   "standard" | "error"
+                 and then Ada.Directories.Exists
+                   (Name =>
+                      To_String(Source => Commands_List(Key).Output)) then
+                  Delete_File
+                    (Name => To_String(Source => Commands_List(Key).Output));
                end if;
                return;
             end if;
@@ -208,9 +216,13 @@ package body Commands is
                  (Text =>
                     "Variable: " & To_String(Source => Argument_Number) &
                     " doesn't exists.");
-               if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Name => Output) then
-                  Delete_File(Name => Output);
+               if To_String(Source => Commands_List(Key).Output) not in
+                   "standard" | "error"
+                 and then Ada.Directories.Exists
+                   (Name =>
+                      To_String(Source => Commands_List(Key).Output)) then
+                  Delete_File
+                    (Name => To_String(Source => Commands_List(Key).Output));
                end if;
                return;
             end if;
@@ -274,9 +286,11 @@ package body Commands is
             if not Ada.Directories.Exists(To_String(Arguments)) then
                ShowMessage
                  ("Directory: '" & To_String(Arguments) & "' doesn't exists.");
-               if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Output) then
-                  Delete_File(Output);
+               if To_String(Source => Commands_List(Key).Output) not in
+                   "standard" | "error"
+                 and then Ada.Directories.Exists
+                   (To_String(Source => Commands_List(Key).Output)) then
+                  Delete_File(To_String(Source => Commands_List(Key).Output));
                end if;
                return;
             end if;
@@ -287,9 +301,11 @@ package body Commands is
          if Command_Path = null then
             ShowMessage
               ("Command: '" & To_String(Command) & "' doesn't exists.");
-            if Output not in "standard" | "error"
-              and then Ada.Directories.Exists(Output) then
-               Delete_File(Output);
+            if To_String(Source => Commands_List(Key).Output) not in
+                "standard" | "error"
+              and then Ada.Directories.Exists
+                (To_String(Source => Commands_List(Key).Output)) then
+               Delete_File(To_String(Source => Commands_List(Key).Output));
             end if;
             return;
          end if;
@@ -306,9 +322,11 @@ package body Commands is
             if ReturnCode > 0 then
                ShowMessage
                  ("Error during executing '" & To_String(Execute) & "'");
-               if Output not in "standard" | "error"
-                 and then Ada.Directories.Exists(Output) then
-                  Delete_File(Output);
+               if To_String(Source => Commands_List(Key).Output) not in
+                   "standard" | "error"
+                 and then Ada.Directories.Exists
+                   (To_String(Source => Commands_List(Key).Output)) then
+                  Delete_File(To_String(Source => Commands_List(Key).Output));
                end if;
                return;
             end if;
