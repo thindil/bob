@@ -224,24 +224,29 @@ package body Commands is
          -- Split command line
          declare
             Start_Index: Positive range 1 .. 2;
-            End_Index: Integer range -1 .. Length(Execute) + 3;
+            End_Index: Integer range -1 .. Length(Source => Execute) + 3;
          begin
-            case Element(Execute, 1) is
+            case Element(Source => Execute, Index => 1) is
                when ''' =>
                   Start_Index := 2;
-                  End_Index := Index(Execute, "'", 2) - 1;
+                  End_Index :=
+                    Index(Source => Execute, Pattern => "'", From => 2) - 1;
                when '"' =>
                   Start_Index := 2;
-                  End_Index := Index(Execute, """", 2) - 1;
+                  End_Index :=
+                    Index(Source => Execute, Pattern => """", From => 2) - 1;
                when others =>
                   Start_Index := 1;
-                  End_Index := Index(Execute, " ", 2) - 1;
+                  End_Index :=
+                    Index(Source => Execute, Pattern => " ", From => 2) - 1;
             end case;
             if End_Index < 1 then
-               End_Index := Length(Execute);
+               End_Index := Length(Source => Execute);
             end if;
-            Command := Unbounded_Slice(Execute, Start_Index, End_Index);
-            case Element(Execute, 1) is
+            Command :=
+              Unbounded_Slice
+                (Source => Execute, Low => Start_Index, High => End_Index);
+            case Element(Source => Execute, Index => 1) is
                when ''' | '"' =>
                   End_Index := End_Index + 3;
                when others =>
