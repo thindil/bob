@@ -31,6 +31,16 @@ package body Commands is
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
       File_Desc: File_Descriptor := 0;
+      procedure Delete_Output_File is
+      begin
+         if To_String(Source => Commands_List(Key).Output) not in "standard" |
+               "error"
+           and then Ada.Directories.Exists
+             (Name => To_String(Source => Commands_List(Key).Output)) then
+            Delete_File
+              (Name => To_String(Source => Commands_List(Key).Output));
+         end if;
+      end Delete_Output_File;
    begin
       if not Commands_List.Contains(Key => Key) then
          ShowMessage
@@ -160,14 +170,7 @@ package body Commands is
                ShowMessage
                  (Text =>
                     "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
-               if To_String(Source => Commands_List(Key).Output) not in
-                   "standard" | "error"
-                 and then Ada.Directories.Exists
-                   (Name =>
-                      To_String(Source => Commands_List(Key).Output)) then
-                  Delete_File
-                    (Name => To_String(Source => Commands_List(Key).Output));
-               end if;
+               Delete_Output_File;
                return;
             end if;
             Replace_Slice
@@ -216,14 +219,7 @@ package body Commands is
                  (Text =>
                     "Variable: " & To_String(Source => Argument_Number) &
                     " doesn't exists.");
-               if To_String(Source => Commands_List(Key).Output) not in
-                   "standard" | "error"
-                 and then Ada.Directories.Exists
-                   (Name =>
-                      To_String(Source => Commands_List(Key).Output)) then
-                  Delete_File
-                    (Name => To_String(Source => Commands_List(Key).Output));
-               end if;
+               Delete_Output_File;
                return;
             end if;
             Replace_Slice
@@ -292,12 +288,7 @@ package body Commands is
             if not Ada.Directories.Exists(To_String(Arguments)) then
                ShowMessage
                  ("Directory: '" & To_String(Arguments) & "' doesn't exists.");
-               if To_String(Source => Commands_List(Key).Output) not in
-                   "standard" | "error"
-                 and then Ada.Directories.Exists
-                   (To_String(Source => Commands_List(Key).Output)) then
-                  Delete_File(To_String(Source => Commands_List(Key).Output));
-               end if;
+               Delete_Output_File;
                return;
             end if;
             Set_Directory(To_String(Arguments));
@@ -307,12 +298,7 @@ package body Commands is
          if Command_Path = null then
             ShowMessage
               ("Command: '" & To_String(Command) & "' doesn't exists.");
-            if To_String(Source => Commands_List(Key).Output) not in
-                "standard" | "error"
-              and then Ada.Directories.Exists
-                (To_String(Source => Commands_List(Key).Output)) then
-               Delete_File(To_String(Source => Commands_List(Key).Output));
-            end if;
+            Delete_Output_File;
             return;
          end if;
          -- Execute command
@@ -328,12 +314,7 @@ package body Commands is
             if ReturnCode > 0 then
                ShowMessage
                  ("Error during executing '" & To_String(Execute) & "'");
-               if To_String(Source => Commands_List(Key).Output) not in
-                   "standard" | "error"
-                 and then Ada.Directories.Exists
-                   (To_String(Source => Commands_List(Key).Output)) then
-                  Delete_File(To_String(Source => Commands_List(Key).Output));
-               end if;
+               Delete_Output_File;
                return;
             end if;
          end;
