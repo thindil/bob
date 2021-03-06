@@ -264,20 +264,26 @@ package body Commands is
                when others =>
                   End_Index := End_Index + 2;
             end case;
-            if End_Index < Length(Execute) then
+            if End_Index < Length(Source => Execute) then
                Arguments :=
-                 Unbounded_Slice(Execute, End_Index, Length(Execute));
+                 Unbounded_Slice
+                   (Source => Execute, Low => End_Index,
+                    High => Length(Source => Execute));
             end if;
          end;
          -- Translate path if needed
          if Commands_List(Key).Flags.Contains
-             (To_Unbounded_String("windowspath")) and
+             (Item => To_Unbounded_String(Source => "windowspath")) and
            Directory_Separator = '/' then
-            Translate(Arguments, To_Mapping("\", "/"));
+            Translate
+              (Source => Arguments,
+               Mapping => To_Mapping(From => "\", To => "/"));
          elsif Commands_List(Key).Flags.Contains
-             (To_Unbounded_String("unixpath")) and
+             (Item => To_Unbounded_String(Source => "unixpath")) and
            Directory_Separator = '\' then
-            Translate(Arguments, To_Mapping("/", "\"));
+            Translate
+              (Source => Arguments,
+               Mapping => To_Mapping(From => "/", To => "\"));
          end if;
          -- Enter selected directory
          if Command = To_Unbounded_String("cd") then
