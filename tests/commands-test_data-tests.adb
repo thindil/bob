@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Ada.Command_Line; use Ada.Command_Line;
 with Config; use Config;
 
 --  begin read only
@@ -77,6 +78,7 @@ package body Commands.Test_Data.Tests is
       -- Test non-existing command
       Execute_Command(To_Unbounded_String("about"));
       Assert(True, "This test can only crash.");
+      Set_Exit_Status(Code => Success);
 
 --  begin read only
    end Test_Execute_Command_test_executecommand;

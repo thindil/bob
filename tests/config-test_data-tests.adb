@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Containers; use Ada.Containers;
 with Commands; use Commands;
 
@@ -74,6 +75,7 @@ package body Config.Test_Data.Tests is
       Commands_List.Clear;
       LoadConfig;
       Assert(Commands_List.Length = 1, "Failed to load all commands.");
+      Set_Exit_Status(Code => Success);
 
 --  begin read only
    end Test_LoadConfig_test_loadconfig;
