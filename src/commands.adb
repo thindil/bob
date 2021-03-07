@@ -282,44 +282,57 @@ package body Commands is
                Mapping => To_Mapping(From => "/", To => "\"));
          end if;
          -- Enter selected directory
-         if Command = To_Unbounded_String("cd") then
+         if Command = To_Unbounded_String(Source => "cd") then
             Arguments :=
-              To_Unbounded_String(Normalize_Pathname(To_String(Arguments)));
-            if not Ada.Directories.Exists(To_String(Arguments)) then
+              To_Unbounded_String
+                (Source =>
+                   Normalize_Pathname(Name => To_String(Source => Arguments)));
+            if not Ada.Directories.Exists
+                (Name => To_String(Source => Arguments)) then
                ShowMessage
-                 ("Directory: '" & To_String(Arguments) & "' doesn't exists.");
+                 (Text =>
+                    "Directory: '" & To_String(Source => Arguments) &
+                    "' doesn't exists.");
                Delete_Output_File;
                return;
             end if;
-            Set_Directory(To_String(Arguments));
+            Set_Directory(Directory => To_String(Source => Arguments));
             goto End_Of_Loop;
          end if;
-         Command_Path := Locate_Exec_On_Path(To_String(Command));
+         Command_Path :=
+           Locate_Exec_On_Path(Exec_Name => To_String(Source => Command));
          if Command_Path = null then
             ShowMessage
-              ("Command: '" & To_String(Command) & "' doesn't exists.");
+              (Text =>
+                 "Command: '" & To_String(Source => Command) &
+                 "' doesn't exists.");
             Delete_Output_File;
             return;
          end if;
          -- Execute command
-         Command := To_Unbounded_String(Command_Path.all);
+         Command := To_Unbounded_String(Source => Command_Path.all);
          declare
             ReturnCode: Integer;
             Arguments_List: Argument_List_Access :=
-              Argument_String_To_List(To_String(Arguments));
+              Argument_String_To_List
+                (Arg_String => To_String(Source => Arguments));
          begin
             Spawn
-              (To_String(Command), Arguments_List.all, File_Desc, ReturnCode);
-            Free(Arguments_List);
+              (Program_Name => To_String(Source => Command),
+               Args => Arguments_List.all, Output_File_Descriptor => File_Desc,
+               Return_Code => ReturnCode);
+            Free(Arg => Arguments_List);
             if ReturnCode > 0 then
                ShowMessage
-                 ("Error during executing '" & To_String(Execute) & "'");
+                 (Text =>
+                    "Error during executing '" & To_String(Source => Execute) &
+                    "'");
                Delete_Output_File;
                return;
             end if;
          end;
          <<End_Of_Loop>>
-         Free(Command_Path);
+         Free(X => Command_Path);
          Command := Null_Unbounded_String;
          Arguments := Null_Unbounded_String;
       end loop Execute_Command_Loop;
