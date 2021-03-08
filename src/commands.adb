@@ -61,17 +61,9 @@ package body Commands is
       begin
          Set_Environment_Variables_Loop :
          for I in Commands_List(Key).Variables.Iterate loop
-            -- Just set environment variable
-            if not Evaluate_Variables then
-               Set
-                 (Name =>
-                    To_String
-                      (Source => Variables_Container.Key(Position => I)),
-                  Value =>
-                    To_String(Source => Commands_List(Key).Variables(I)));
-               -- If proper flag is set, evaluate environment variable before
-               -- set it
-            else
+            -- If proper flag is set, evaluate environment variable before
+            -- set it
+            if Evaluate_Variables then
                Args :=
                  Argument_String_To_List
                    (Arg_String =>
@@ -103,6 +95,14 @@ package body Commands is
                      null;
                end case;
                Close(Descriptor => Descriptor);
+               -- Just set environment variable
+            else
+               Set
+                 (Name =>
+                    To_String
+                      (Source => Variables_Container.Key(Position => I)),
+                  Value =>
+                    To_String(Source => Commands_List(Key).Variables(I)));
             end if;
          end loop Set_Environment_Variables_Loop;
       end Load_Environment_Variables_Block;
@@ -141,9 +141,8 @@ package body Commands is
             Variable_Starts :=
               Index
                 (Source => Execute, Pattern => "$", From => Variable_Starts);
-            exit Replace_Variable_With_Argument_Loop when Variable_Starts =
-              0 or
-              Variable_Starts = Length(Source => Execute);
+            exit Replace_Variable_With_Argument_Loop when Variable_Starts in
+                0 | Length(Source => Execute);
             if not Is_Digit
                 (Item =>
                    Element
@@ -191,9 +190,8 @@ package body Commands is
             Variable_Starts :=
               Index
                 (Source => Execute, Pattern => "$", From => Variable_Starts);
-            exit Replace_Variables_With_Environment_Loop when Variable_Starts =
-              0 or
-              Variable_Starts = Length(Source => Execute);
+            exit Replace_Variables_With_Environment_Loop when Variable_Starts in
+                0 | Length(Source => Execute);
             if not Is_Alphanumeric
                 (Item =>
                    Element
@@ -202,17 +200,19 @@ package body Commands is
             end if;
             Number_Position := Variable_Starts + 1;
             Argument_Number := Null_Unbounded_String;
+            Set_Argument_Number_Loop :
             loop
                Append
                  (Source => Argument_Number,
                   New_Item =>
                     Element(Source => Execute, Index => Number_Position));
                Number_Position := Number_Position + 1;
-               exit when Number_Position > Length(Source => Execute)
+               exit Set_Argument_Number_Loop when Number_Position >
+                 Length(Source => Execute)
                  or else not Is_Alphanumeric
                    (Item =>
                       Element(Source => Execute, Index => Number_Position));
-            end loop;
+            end loop Set_Argument_Number_Loop;
             if not Ada.Environment_Variables.Exists
                 (Name => To_String(Source => Argument_Number)) then
                ShowMessage
@@ -230,6 +230,7 @@ package body Commands is
             Variable_Starts := Variable_Starts + 1;
          end loop Replace_Variables_With_Environment_Loop;
          -- Split command line
+         Split_Command_Line_Block :
          declare
             Start_Index: Positive range 1 .. 2;
             End_Index: Integer range -1 .. Length(Source => Execute) + 3;
@@ -266,7 +267,7 @@ package body Commands is
                    (Source => Execute, Low => End_Index,
                     High => Length(Source => Execute));
             end if;
-         end;
+         end Split_Command_Line_Block;
          -- Translate path if needed
          if Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "windowspath")) and
@@ -311,8 +312,9 @@ package body Commands is
          end if;
          -- Execute command
          Command := To_Unbounded_String(Source => Command_Path.all);
+         Execute_Command_Block :
          declare
-            ReturnCode: Integer;
+            Return_Code: Integer;
             Arguments_List: Argument_List_Access :=
               Argument_String_To_List
                 (Arg_String => To_String(Source => Arguments));
@@ -320,9 +322,9 @@ package body Commands is
             Spawn
               (Program_Name => To_String(Source => Command),
                Args => Arguments_List.all, Output_File_Descriptor => File_Desc,
-               Return_Code => ReturnCode);
+               Return_Code => Return_Code);
             Free(Arg => Arguments_List);
-            if ReturnCode > 0 then
+            if Return_Code > 0 then
                ShowMessage
                  (Text =>
                     "Error during executing '" & To_String(Source => Execute) &
@@ -330,7 +332,7 @@ package body Commands is
                Delete_Output_File;
                return;
             end if;
-         end;
+         end Execute_Command_Block;
          <<End_Of_Loop>>
          Free(X => Command_Path);
          Command := Null_Unbounded_String;
