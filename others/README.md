@@ -6,3 +6,6 @@ Various files which are not necessary needed for development:
                      this script from the main project directory, not from here.
 * rules.aru        - configuration file with rules for check code with
                      AdaControl.
+* tests.tcl        - Build and run the unit tests for the project. **Important:**
+                     run this script from the main project directory, not
+                     from here.
