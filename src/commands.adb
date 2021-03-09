@@ -13,19 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Command_Line; use Ada.Command_Line;
-with Ada.Directories; use Ada.Directories;
-with Ada.Environment_Variables; use Ada.Environment_Variables;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Maps; use Ada.Strings.Maps;
-with GNAT.Expect; use GNAT.Expect;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
-with Messages; use Messages;
+with Ada.Characters.Handling;
+with Ada.Command_Line;
+with Ada.Directories;
+with Ada.Environment_Variables;
+with Ada.Strings;
+with Ada.Strings.Maps;
+with GNAT.Expect;
+with GNAT.OS_Lib;
+with Messages;
 
 package body Commands is
 
    procedure Execute_Command(Key: Unbounded_String) is
+      use Ada.Characters.Handling;
+      use Ada.Command_Line;
+      use Ada.Directories;
+      use Ada.Environment_Variables;
+      use Ada.Strings.Maps;
+      use GNAT.OS_Lib;
+      use Messages;
+
       Command, Arguments, Argument_Number: Unbounded_String :=
         Null_Unbounded_String;
       Variable_Starts, Number_Position: Natural := 1;
@@ -52,6 +60,8 @@ package body Commands is
       -- Load environment variables if needed
       Load_Environment_Variables_Block :
       declare
+         use GNAT.Expect;
+
          Evaluate_Variables: constant Boolean :=
            Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "evaluatevariables"));
