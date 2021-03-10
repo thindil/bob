@@ -72,7 +72,7 @@ package body Commands.Test_Data.Tests is
 
    begin
 
-      LoadConfig;
+      Load_Config;
       -- Test existing command
       Execute_Command(To_Unbounded_String("test"));
       -- Test non-existing command

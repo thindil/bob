@@ -33,11 +33,11 @@ package body Config.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_LoadConfig_6c9f25_6dc4a6
-     (FileName: String := ".bob.yml") is
+   procedure Wrap_Test_Load_Config_aedccf_546b4c
+     (File_Name: String := ".bob.yml") is
    begin
       begin
-         pragma Assert(FileName'Length > 0);
+         pragma Assert(File_Name'Length > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -45,7 +45,7 @@ package body Config.Test_Data.Tests is
               (False,
                "req_sloc(config.ads:0):Test_LoadConfig test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Config.LoadConfig(FileName);
+      GNATtest_Generated.GNATtest_Standard.Config.Load_Config(File_Name);
       begin
          pragma Assert(True);
          null;
@@ -55,17 +55,17 @@ package body Config.Test_Data.Tests is
               (False,
                "ens_sloc(config.ads:0:):Test_LoadConfig test commitment violated");
       end;
-   end Wrap_Test_LoadConfig_6c9f25_6dc4a6;
+   end Wrap_Test_Load_Config_aedccf_546b4c;
 --  end read only
 
 --  begin read only
-   procedure Test_LoadConfig_test_loadconfig(Gnattest_T: in out Test);
-   procedure Test_LoadConfig_6c9f25_6dc4a6(Gnattest_T: in out Test) renames
-     Test_LoadConfig_test_loadconfig;
---  id:2.2/6c9f251425eed056/LoadConfig/1/0/test_loadconfig/
-   procedure Test_LoadConfig_test_loadconfig(Gnattest_T: in out Test) is
-      procedure LoadConfig(FileName: String := ".bob.yml") renames
-        Wrap_Test_LoadConfig_6c9f25_6dc4a6;
+   procedure Test_Load_Config_test_loadconfig(Gnattest_T: in out Test);
+   procedure Test_Load_Config_aedccf_546b4c(Gnattest_T: in out Test) renames
+     Test_Load_Config_test_loadconfig;
+--  id:2.2/aedccf1c0dfb769e/Load_Config/1/0/test_loadconfig/
+   procedure Test_Load_Config_test_loadconfig(Gnattest_T: in out Test) is
+      procedure Load_Config(File_Name: String := ".bob.yml") renames
+        Wrap_Test_Load_Config_aedccf_546b4c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -73,12 +73,12 @@ package body Config.Test_Data.Tests is
    begin
 
       Commands_List.Clear;
-      LoadConfig;
+      Load_Config;
       Assert(Commands_List.Length = 1, "Failed to load all commands.");
       Set_Exit_Status(Code => Success);
 
 --  begin read only
-   end Test_LoadConfig_test_loadconfig;
+   end Test_Load_Config_test_loadconfig;
 --  end read only
 
 --  begin read only

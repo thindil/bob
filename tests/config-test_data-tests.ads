@@ -10,8 +10,8 @@ package Config.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_LoadConfig_6c9f25_6dc4a6(Gnattest_T: in out Test);
-   --  config.ads:37:4:LoadConfig:Test_LoadConfig
+   procedure Test_Load_Config_aedccf_546b4c(Gnattest_T: in out Test);
+   --  config.ads:37:4:Load_Config:Test_LoadConfig
 
 end Config.Test_Data.Tests;
 --  end read only
