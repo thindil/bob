@@ -27,15 +27,15 @@ package Config is
    Version: constant String := "3.1";
    -- ****
 
-   -- ****f* Config/Config.LoadConfig
+   -- ****f* Config/Config.Load_Config
    -- FUNCTION
    -- Load specified configuration file
    -- PARAMETERS
    -- FileName - Path (absolute or relative) to configuration file which will
    --            be loaded
    -- SOURCE
-   procedure LoadConfig(FileName: String := ".bob.yml") with
-      Pre => FileName'Length > 0,
+   procedure Load_Config(File_Name: String := ".bob.yml") with
+      Pre => File_Name'Length > 0,
       Test_Case => (Name => "Test_LoadConfig", Mode => Nominal);
       -- ****
 

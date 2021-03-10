@@ -24,7 +24,7 @@ with Messages; use Messages;
 
 package body Config is
 
-   procedure LoadConfig(FileName: String := ".bob.yml") is
+   procedure Load_Config(File_Name: String := ".bob.yml") is
       ConfigFile: File_Type;
       Name, Line, Description, Key, Value, Output: Unbounded_String;
       SeparatorPosition: Natural;
@@ -70,11 +70,11 @@ package body Config is
       end AddCommand;
    begin
       -- Check if selected configuration file exist
-      if not Exists(FileName) then
-         ShowMessage("File: '" & FileName & "' doesn't exists.");
+      if not Exists(File_Name) then
+         ShowMessage("File: '" & File_Name & "' doesn't exists.");
          return;
       end if;
-      Open(ConfigFile, In_File, FileName);
+      Open(ConfigFile, In_File, File_Name);
       while not End_Of_File(ConfigFile) loop
          Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
          if Length(Line) = 0 or Element(Line, 1) = '#' then
@@ -88,7 +88,7 @@ package body Config is
               Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
             if Float'Value(To_String(Value)) > Float'Value(Version) then
                ShowMessage
-                 ("Can't add commands from configuration file '" & FileName &
+                 ("Can't add commands from configuration file '" & File_Name &
                   "'. It require Bob in version at least: '" &
                   To_String(Value) & "' while your version is '" & Version &
                   "'.");
@@ -100,7 +100,7 @@ package body Config is
             SeparatorPosition := Index(Line, ":");
             Value :=
               Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
-            LoadConfig(To_String(Value));
+            Load_Config(To_String(Value));
             goto End_Of_Loop;
          end if;
          -- Add a command
@@ -171,6 +171,6 @@ package body Config is
       end loop;
       AddCommand;
       Close(ConfigFile);
-   end LoadConfig;
+   end Load_Config;
 
 end Config;
