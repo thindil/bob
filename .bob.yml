@@ -38,9 +38,7 @@ version: 3.0
 - command:
    name: tests
    execute:
-      - gprbuild -P tests/driver/test_driver.gpr
-      - cd tests/driver
-      - ./test_runner
+      - tclsh others/tests.tcl
    description: Build and execute Bob unit tests
    flags:
       - unixpath
