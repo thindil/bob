@@ -25,15 +25,17 @@ with Messages; use Messages;
 package body Config is
 
    procedure Load_Config(File_Name: String := ".bob.yml") is
-      ConfigFile: File_Type;
-      Name, Line, Description, Key, Value, Output: Unbounded_String;
-      SeparatorPosition: Natural;
-      Execute, Flags: Unbounded_String_Container.Vector;
-      Variables: Variables_Container.Map;
+      Config_File: File_Type;
+      Name, Line, Description, Key, Value, Output: Unbounded_String :=
+        Null_Unbounded_String;
+      Separator_Position: Natural := 0;
+      Execute, Flags: Unbounded_String_Container.Vector :=
+        Unbounded_String_Container.Empty_Vector;
+      Variables: Variables_Container.Map := Variables_Container.Empty_Map;
       type Items_Type is (COMMAND, VARIABLE, FLAG) with
          Default_Value => COMMAND;
-      ItemType: Items_Type;
-      procedure AddCommand is
+      Item_Type: Items_Type := COMMAND;
+      procedure Add_Command is
       begin
          if Flags.Contains(To_Unbounded_String("windowsonly")) and
            Directory_Separator = '/' then
@@ -67,25 +69,25 @@ package body Config is
                    Variables => Variables, Output => Output, Flags => Flags));
             end if;
          end if;
-      end AddCommand;
+      end Add_Command;
    begin
       -- Check if selected configuration file exist
       if not Exists(File_Name) then
          ShowMessage("File: '" & File_Name & "' doesn't exists.");
          return;
       end if;
-      Open(ConfigFile, In_File, File_Name);
-      while not End_Of_File(ConfigFile) loop
-         Line := Trim(To_Unbounded_String(Get_Line(ConfigFile)), Both);
+      Open(Config_File, In_File, File_Name);
+      while not End_Of_File(Config_File) loop
+         Line := Trim(To_Unbounded_String(Get_Line(Config_File)), Both);
          if Length(Line) = 0 or Element(Line, 1) = '#' then
             goto End_Of_Loop;
          end if;
          -- Check compatybility of configuration file version and the program
          -- version
          if Length(Line) > 8 and then Slice(Line, 1, 8) = "version:" then
-            SeparatorPosition := Index(Line, ":");
+            Separator_Position := Index(Line, ":");
             Value :=
-              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+              Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
             if Float'Value(To_String(Value)) > Float'Value(Version) then
                ShowMessage
                  ("Can't add commands from configuration file '" & File_Name &
@@ -97,15 +99,15 @@ package body Config is
          end if;
          -- Include other configuration file
          if Length(Line) > 10 and then Slice(Line, 1, 10) = "- include:" then
-            SeparatorPosition := Index(Line, ":");
+            Separator_Position := Index(Line, ":");
             Value :=
-              Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+              Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
             Load_Config(To_String(Value));
             goto End_Of_Loop;
          end if;
          -- Add a command
          if Line = To_Unbounded_String("- command:") then
-            AddCommand;
+            Add_Command;
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
@@ -115,30 +117,30 @@ package body Config is
             goto End_Of_Loop;
          end if;
          -- Parse configuration settings
-         SeparatorPosition := Index(Line, "-");
-         if SeparatorPosition /= 1 then
-            SeparatorPosition := Index(Line, ":");
+         Separator_Position := Index(Line, "-");
+         if Separator_Position /= 1 then
+            Separator_Position := Index(Line, ":");
          end if;
-         if SeparatorPosition = 0 then
+         if Separator_Position = 0 then
             ShowMessage
               ("Command '" & To_String(Name) & "' invalid entry: '" &
                To_String(Line) & "'");
             goto End_Of_Loop;
          end if;
-         Key := Unbounded_Slice(Line, 1, SeparatorPosition - 1);
+         Key := Unbounded_Slice(Line, 1, Separator_Position - 1);
          if Key in To_Unbounded_String("execute") |
                To_Unbounded_String("variables") |
                To_Unbounded_String("flags") then
             Value := Null_Unbounded_String;
          else
-            if SeparatorPosition + 2 >= Length(Line) then
+            if Separator_Position + 2 >= Length(Line) then
                ShowMessage
                  ("Command: '" & To_String(Name) & "' empty value for key: '" &
                   To_String(Key) & "'.");
                Value := Null_Unbounded_String;
             else
                Value :=
-                 Unbounded_Slice(Line, SeparatorPosition + 2, Length(Line));
+                 Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
             end if;
          end if;
          if Key = To_Unbounded_String("name") then
@@ -148,29 +150,29 @@ package body Config is
          elsif Key = To_Unbounded_String("output") then
             Output := Value;
          elsif Key = To_Unbounded_String("execute") then
-            ItemType := COMMAND;
+            Item_Type := COMMAND;
          elsif Key = To_Unbounded_String("variables") then
-            ItemType := VARIABLE;
+            Item_Type := VARIABLE;
          elsif Key = To_Unbounded_String("flags") then
-            ItemType := FLAG;
+            Item_Type := FLAG;
          else
-            case ItemType is
+            case Item_Type is
                when COMMAND =>
                   Execute.Append(Value);
                when FLAG =>
                   Flags.Append(Value);
                when VARIABLE =>
-                  SeparatorPosition := Index(Value, "=");
+                  Separator_Position := Index(Value, "=");
                   Variables.Include
-                    (Unbounded_Slice(Value, 1, SeparatorPosition - 2),
+                    (Unbounded_Slice(Value, 1, Separator_Position - 2),
                      Unbounded_Slice
-                       (Value, SeparatorPosition + 2, Length(Value)));
+                       (Value, Separator_Position + 2, Length(Value)));
             end case;
          end if;
          <<End_Of_Loop>>
       end loop;
-      AddCommand;
-      Close(ConfigFile);
+      Add_Command;
+      Close(Config_File);
    end Load_Config;
 
 end Config;
