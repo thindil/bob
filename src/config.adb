@@ -37,46 +37,54 @@ package body Config is
       Item_Type: Items_Type := COMMAND;
       procedure Add_Command is
       begin
-         if Flags.Contains(To_Unbounded_String("windowsonly")) and
+         if Flags.Contains
+             (Item => To_Unbounded_String(Source => "windowsonly")) and
            Directory_Separator = '/' then
             return;
          end if;
-         if Flags.Contains(To_Unbounded_String("unixonly")) and
+         if Flags.Contains
+             (Item => To_Unbounded_String(Source => "unixonly")) and
            Directory_Separator = '\' then
             return;
          end if;
-         if Commands_List.Contains(Name) then
+         if Commands_List.Contains(Key => Name) then
             ShowMessage
-              ("Can't add command '" & To_String(Name) &
-               "'. There is one declared with that name.");
+              (Text =>
+                 "Can't add command '" & To_String(Source => Name) &
+                 "'. There is one declared with that name.");
          elsif Name /= Null_Unbounded_String then
             if Execute.Length = 0 then
                ShowMessage
-                 ("Can't add command '" & To_String(Name) &
-                  "'. No commands to execute are entered.");
+                 (Text =>
+                    "Can't add command '" & To_String(Source => Name) &
+                    "'. No commands to execute are entered.");
             elsif Description = Null_Unbounded_String then
                ShowMessage
-                 ("Can't add command '" & To_String(Name) &
-                  "'. No command description provided.");
+                 (Text =>
+                    "Can't add command '" & To_String(Source => Name) &
+                    "'. No command description provided.");
             elsif Output = Null_Unbounded_String then
                ShowMessage
-                 ("Can't add command '" & To_String(Name) &
-                  "'. No command result output provided.");
+                 (Text =>
+                    "Can't add command '" & To_String(Source => Name) &
+                    "'. No command result output provided.");
             else
                Commands_List.Include
-                 (Name,
-                  (Execute => Execute, Description => Description,
-                   Variables => Variables, Output => Output, Flags => Flags));
+                 (Key => Name,
+                  New_Item =>
+                    (Execute => Execute, Description => Description,
+                     Variables => Variables, Output => Output,
+                     Flags => Flags));
             end if;
          end if;
       end Add_Command;
    begin
       -- Check if selected configuration file exist
-      if not Exists(File_Name) then
-         ShowMessage("File: '" & File_Name & "' doesn't exists.");
+      if not Exists(Name => File_Name) then
+         ShowMessage(Text => "File: '" & File_Name & "' doesn't exists.");
          return;
       end if;
-      Open(Config_File, In_File, File_Name);
+      Open(File => Config_File, Mode => In_File, Name => File_Name);
       while not End_Of_File(Config_File) loop
          Line := Trim(To_Unbounded_String(Get_Line(Config_File)), Both);
          if Length(Line) = 0 or Element(Line, 1) = '#' then
