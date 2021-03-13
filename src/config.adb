@@ -85,23 +85,35 @@ package body Config is
          return;
       end if;
       Open(File => Config_File, Mode => In_File, Name => File_Name);
-      while not End_Of_File(Config_File) loop
-         Line := Trim(To_Unbounded_String(Get_Line(Config_File)), Both);
-         if Length(Line) = 0 or Element(Line, 1) = '#' then
+      Read_Config_File_Loop :
+      while not End_Of_File(File => Config_File) loop
+         Line :=
+           Trim
+             (Source =>
+                To_Unbounded_String(Source => Get_Line(File => Config_File)),
+              Side => Both);
+         if Length(Source => Line) = 0 or
+           Element(Source => Line, Index => 1) = '#' then
             goto End_Of_Loop;
          end if;
          -- Check compatybility of configuration file version and the program
          -- version
-         if Length(Line) > 8 and then Slice(Line, 1, 8) = "version:" then
-            Separator_Position := Index(Line, ":");
+         if Length(Source => Line) > 8
+           and then Slice(Source => Line, Low => 1, High => 8) =
+             "version:" then
+            Separator_Position := Index(Source => Line, Pattern => ":");
             Value :=
-              Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
-            if Float'Value(To_String(Value)) > Float'Value(Version) then
+              Unbounded_Slice
+                (Source => Line, Low => Separator_Position + 2,
+                 High => Length(Source => Line));
+            if Float'Value(To_String(Source => Value)) >
+              Float'Value(Version) then
                ShowMessage
-                 ("Can't add commands from configuration file '" & File_Name &
-                  "'. It require Bob in version at least: '" &
-                  To_String(Value) & "' while your version is '" & Version &
-                  "'.");
+                 (Text =>
+                    "Can't add commands from configuration file '" &
+                    File_Name & "'. It require Bob in version at least: '" &
+                    To_String(Source => Value) & "' while your version is '" &
+                    Version & "'.");
                return;
             end if;
          end if;
@@ -178,7 +190,7 @@ package body Config is
             end case;
          end if;
          <<End_Of_Loop>>
-      end loop;
+      end loop Read_Config_File_Loop;
       Add_Command;
       Close(Config_File);
    end Load_Config;
