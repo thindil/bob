@@ -118,33 +118,38 @@ package body Config is
             end if;
          end if;
          -- Include other configuration file
-         if Length(Line) > 10 and then Slice(Line, 1, 10) = "- include:" then
-            Separator_Position := Index(Line, ":");
+         if Length(Source => Line) > 10
+           and then Slice(Source => Line, Low => 1, High => 10) =
+             "- include:" then
+            Separator_Position := Index(Source => Line, Pattern => ":");
             Value :=
-              Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
-            Load_Config(To_String(Value));
+              Unbounded_Slice
+                (Source => Line, Low => Separator_Position + 2,
+                 High => Length(Source => Line));
+            Load_Config(File_Name => To_String(Source => Value));
             goto End_Of_Loop;
          end if;
          -- Add a command
-         if Line = To_Unbounded_String("- command:") then
+         if Line = To_Unbounded_String(Source => "- command:") then
             Add_Command;
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
             Flags.Clear;
             Description := Null_Unbounded_String;
-            Output := To_Unbounded_String("standard");
+            Output := To_Unbounded_String(Source => "standard");
             goto End_Of_Loop;
          end if;
          -- Parse configuration settings
-         Separator_Position := Index(Line, "-");
+         Separator_Position := Index(Source => Line, Pattern => "-");
          if Separator_Position /= 1 then
-            Separator_Position := Index(Line, ":");
+            Separator_Position := Index(Source => Line, Pattern => ":");
          end if;
          if Separator_Position = 0 then
             ShowMessage
-              ("Command '" & To_String(Name) & "' invalid entry: '" &
-               To_String(Line) & "'");
+              (Text =>
+                 "Command '" & To_String(Source => Name) &
+                 "' invalid entry: '" & To_String(Source => Line) & "'");
             goto End_Of_Loop;
          end if;
          Key := Unbounded_Slice(Line, 1, Separator_Position - 1);
