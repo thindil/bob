@@ -32,9 +32,9 @@ package body Config is
       Execute, Flags: Unbounded_String_Container.Vector :=
         Unbounded_String_Container.Empty_Vector;
       Variables: Variables_Container.Map := Variables_Container.Empty_Map;
-      type Items_Type is (COMMAND, VARIABLE, FLAG) with
-         Default_Value => COMMAND;
-      Item_Type: Items_Type := COMMAND;
+      type Items_Type is (COMMAND, VARIABLE, FLAG);
+      Default_Item_Type: constant Items_Type := COMMAND;
+      Item_Type: Items_Type := Default_Item_Type;
       procedure Add_Command is
       begin
          if Flags.Contains
@@ -189,21 +189,26 @@ package body Config is
          else
             case Item_Type is
                when COMMAND =>
-                  Execute.Append(Value);
+                  Execute.Append(New_Item => Value);
                when FLAG =>
-                  Flags.Append(Value);
+                  Flags.Append(New_Item => Value);
                when VARIABLE =>
-                  Separator_Position := Index(Value, "=");
+                  Separator_Position := Index(Source => Value, Pattern => "=");
                   Variables.Include
-                    (Unbounded_Slice(Value, 1, Separator_Position - 2),
-                     Unbounded_Slice
-                       (Value, Separator_Position + 2, Length(Value)));
+                    (Key =>
+                       Unbounded_Slice
+                         (Source => Value, Low => 1,
+                          High => Separator_Position - 2),
+                     New_Item =>
+                       Unbounded_Slice
+                         (Source => Value, Low => Separator_Position + 2,
+                          High => Length(Source => Value)));
             end case;
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
       Add_Command;
-      Close(Config_File);
+      Close(File => Config_File);
    end Load_Config;
 
 end Config;
