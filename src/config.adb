@@ -152,33 +152,39 @@ package body Config is
                  "' invalid entry: '" & To_String(Source => Line) & "'");
             goto End_Of_Loop;
          end if;
-         Key := Unbounded_Slice(Line, 1, Separator_Position - 1);
-         if Key in To_Unbounded_String("execute") |
-               To_Unbounded_String("variables") |
-               To_Unbounded_String("flags") then
+         Key :=
+           Unbounded_Slice
+             (Source => Line, Low => 1, High => Separator_Position - 1);
+         if Key in To_Unbounded_String(Source => "execute") |
+               To_Unbounded_String(Source => "variables") |
+               To_Unbounded_String(Source => "flags") then
             Value := Null_Unbounded_String;
          else
-            if Separator_Position + 2 >= Length(Line) then
+            if Separator_Position + 2 >= Length(Source => Line) then
                ShowMessage
-                 ("Command: '" & To_String(Name) & "' empty value for key: '" &
-                  To_String(Key) & "'.");
+                 (Text =>
+                    "Command: '" & To_String(Source => Name) &
+                    "' empty value for key: '" & To_String(Source => Key) &
+                    "'.");
                Value := Null_Unbounded_String;
             else
                Value :=
-                 Unbounded_Slice(Line, Separator_Position + 2, Length(Line));
+                 Unbounded_Slice
+                   (Source => Line, Low => Separator_Position + 2,
+                    High => Length(Source => Line));
             end if;
          end if;
-         if Key = To_Unbounded_String("name") then
+         if Key = To_Unbounded_String(Source => "name") then
             Name := Value;
-         elsif Key = To_Unbounded_String("description") then
+         elsif Key = To_Unbounded_String(Source => "description") then
             Description := Value;
-         elsif Key = To_Unbounded_String("output") then
+         elsif Key = To_Unbounded_String(Source => "output") then
             Output := Value;
-         elsif Key = To_Unbounded_String("execute") then
+         elsif Key = To_Unbounded_String(Source => "execute") then
             Item_Type := COMMAND;
-         elsif Key = To_Unbounded_String("variables") then
+         elsif Key = To_Unbounded_String(Source => "variables") then
             Item_Type := VARIABLE;
-         elsif Key = To_Unbounded_String("flags") then
+         elsif Key = To_Unbounded_String(Source => "flags") then
             Item_Type := FLAG;
          else
             case Item_Type is
