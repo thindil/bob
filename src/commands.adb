@@ -51,7 +51,7 @@ package body Commands is
       end Delete_Output_File;
    begin
       if not Commands_List.Contains(Key => Key) then
-         ShowMessage
+         Show_Message
            (Text =>
               "No available command with name '" & To_String(Source => Key) &
               "'.");
@@ -86,7 +86,7 @@ package body Commands is
                   Timeout => 10_000);
                case Result is
                   when Expect_Timeout =>
-                     ShowMessage
+                     Show_Message
                        (Text =>
                           "Failed to evaluate variable '" &
                           To_String
@@ -130,7 +130,7 @@ package body Commands is
            Create_Output_Text_File
              (Name => To_String(Source => Commands_List(Key).Output));
          if File_Desc = Invalid_FD then
-            ShowMessage
+            Show_Message
               (Text =>
                  "Error during executing '" & To_String(Source => Key) &
                  "'. Can't create '" &
@@ -176,7 +176,7 @@ package body Commands is
             end loop Replace_With_Argument_Loop;
             if Argument_Count <=
               Positive'Value(To_String(Source => Argument_Number)) then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
                Delete_Output_File;
@@ -225,7 +225,7 @@ package body Commands is
             end loop Set_Argument_Number_Loop;
             if not Ada.Environment_Variables.Exists
                 (Name => To_String(Source => Argument_Number)) then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Variable: " & To_String(Source => Argument_Number) &
                     " doesn't exists.");
@@ -300,7 +300,7 @@ package body Commands is
                    Normalize_Pathname(Name => To_String(Source => Arguments)));
             if not Ada.Directories.Exists
                 (Name => To_String(Source => Arguments)) then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Directory: '" & To_String(Source => Arguments) &
                     "' doesn't exists.");
@@ -313,7 +313,7 @@ package body Commands is
          Command_Path :=
            Locate_Exec_On_Path(Exec_Name => To_String(Source => Command));
          if Command_Path = null then
-            ShowMessage
+            Show_Message
               (Text =>
                  "Command: '" & To_String(Source => Command) &
                  "' doesn't exists.");
@@ -335,7 +335,7 @@ package body Commands is
                Return_Code => Return_Code);
             Free(Arg => Arguments_List);
             if Return_Code > 0 then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Error during executing '" & To_String(Source => Execute) &
                     "'");

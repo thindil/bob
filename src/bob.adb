@@ -44,7 +44,7 @@ begin
         (not Commands_List.Contains
            (Key => To_Unbounded_String(Source => Argument(Number => 1))) and
          Argument(Number => 1) /= "help") then
-         ShowMessage
+         Show_Message
            (Text => "Unknown command '" & Argument(Number => 1) & "'.");
       end if;
       Put_Line(Item => "Available commands are:");
@@ -138,7 +138,7 @@ begin
       -- Convert file to .bob.yml or add its command to it
    elsif Argument(Number => 1) = "config" then
       if Argument_Count < 2 then
-         ShowMessage
+         Show_Message
            (Text =>
               "You have to enter the name of the file which will be added to .bob.yml");
          return;
@@ -146,10 +146,10 @@ begin
       if not Exists(Name => ".bob.yml") then
          Copy_File
            (Source_Name => Argument(Number => 2), Target_Name => ".bob.yml");
-         ShowMessage
+         Show_Message
            (Text =>
               "File '" & Argument(Number => 2) & "' was copied as .bob.yml",
-            MType => Normal);
+            Message_Type => NORMAL);
          return;
       end if;
       Copy_Configuration_Block :
@@ -168,22 +168,22 @@ begin
          Close(File => Config_File);
          Close(File => Source_File);
       end Copy_Configuration_Block;
-      ShowMessage
+      Show_Message
         (Text =>
            "File '" & Argument(Number => 2) &
            "' content was copied to .bob.yml file",
-         MType => Normal);
+         Message_Type => NORMAL);
       -- Show the content of the selected command
    elsif Argument(Number => 1) = "show" then
       if Argument_Count < 2 then
-         ShowMessage
+         Show_Message
            (Text =>
               "You have to enter the name of the command which content you want to see.");
          return;
       end if;
       if not Commands_List.Contains
           (Key => To_Unbounded_String(Source => Argument(Number => 2))) then
-         ShowMessage
+         Show_Message
            (Text =>
               "Command: '" & Argument(Number => 2) & "' doesn't exists.");
          return;
@@ -239,7 +239,7 @@ exception
          File_Path: constant String :=
            Current_Directory & Directory_Separator & "error.log";
       begin
-         ShowMessage
+         Show_Message
            (Text =>
               "Oops, something bad happen and program crashed. Please, remember what you done before crash and report this problem at https://www.laeran.pl/repositories/bob/wiki?name=Contact and attach (if possible) file '" &
               File_Path & "'.");

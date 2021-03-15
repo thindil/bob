@@ -1,4 +1,4 @@
--- Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2019-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,18 +24,18 @@ package Messages is
    -- FUNCTION
    -- Types of messages: Normal or Error
    -- SOURCE
-   type Messages_Types is (Normal, Error);
+   type Messages_Types is (NORMAL, ERROR);
    -- ****
 
-   -- ****f* Messages/Messages.ShowMessage
+   -- ****f* Messages/Messages.Show_Message
    -- FUNCTION
    -- Show selected message to the user. On Unix Error type messages are
    -- colored
    -- PARAMETERS
-   -- Text  - Text to show to the user
-   -- MType - Type of message. Default is Error
+   -- Text         - Text to show to the user
+   -- Message_Type - Type of message. Default is Error
    -- SOURCE
-   procedure ShowMessage(Text: String; MType: Messages_Types := Error);
+   procedure Show_Message(Text: String; Message_Type: Messages_Types := ERROR);
    -- ****
 
 end Messages;
