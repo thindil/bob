@@ -13,18 +13,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
-with Ada.Directories; use Ada.Directories;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
-with Commands; use Commands;
-with Messages; use Messages;
+with Ada.Containers;
+with Ada.Directories;
+with Ada.Strings;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;
+with GNAT.OS_Lib;
+with Commands;
+with Messages;
 
 package body Config is
 
    procedure Load_Config(File_Name: String := ".bob.yml") is
+      use Ada.Directories;
+      use Ada.Strings;
+      use Ada.Strings.Unbounded;
+      use Ada.Text_IO;
+      use Commands;
+      use Messages;
+
       Config_File: File_Type;
       Name, Line, Description, Key, Value, Output: Unbounded_String :=
         Null_Unbounded_String;
@@ -36,6 +43,9 @@ package body Config is
       Default_Item_Type: constant Items_Type := COMMAND;
       Item_Type: Items_Type := Default_Item_Type;
       procedure Add_Command is
+         use Ada.Containers;
+         use GNAT.OS_Lib;
+
       begin
          if Flags.Contains
              (Item => To_Unbounded_String(Source => "windowsonly")) and
@@ -48,23 +58,23 @@ package body Config is
             return;
          end if;
          if Commands_List.Contains(Key => Name) then
-            ShowMessage
+            Show_Message
               (Text =>
                  "Can't add command '" & To_String(Source => Name) &
                  "'. There is one declared with that name.");
          elsif Name /= Null_Unbounded_String then
             if Execute.Length = 0 then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Can't add command '" & To_String(Source => Name) &
                     "'. No commands to execute are entered.");
             elsif Description = Null_Unbounded_String then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Can't add command '" & To_String(Source => Name) &
                     "'. No command description provided.");
             elsif Output = Null_Unbounded_String then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Can't add command '" & To_String(Source => Name) &
                     "'. No command result output provided.");
@@ -81,7 +91,7 @@ package body Config is
    begin
       -- Check if selected configuration file exist
       if not Exists(Name => File_Name) then
-         ShowMessage(Text => "File: '" & File_Name & "' doesn't exists.");
+         Show_Message(Text => "File: '" & File_Name & "' doesn't exists.");
          return;
       end if;
       Open(File => Config_File, Mode => In_File, Name => File_Name);
@@ -108,7 +118,7 @@ package body Config is
                  High => Length(Source => Line));
             if Float'Value(To_String(Source => Value)) >
               Float'Value(Version) then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Can't add commands from configuration file '" &
                     File_Name & "'. It require Bob in version at least: '" &
@@ -146,7 +156,7 @@ package body Config is
             Separator_Position := Index(Source => Line, Pattern => ":");
          end if;
          if Separator_Position = 0 then
-            ShowMessage
+            Show_Message
               (Text =>
                  "Command '" & To_String(Source => Name) &
                  "' invalid entry: '" & To_String(Source => Line) & "'");
@@ -161,7 +171,7 @@ package body Config is
             Value := Null_Unbounded_String;
          else
             if Separator_Position + 2 >= Length(Source => Line) then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "Command: '" & To_String(Source => Name) &
                     "' empty value for key: '" & To_String(Source => Key) &
