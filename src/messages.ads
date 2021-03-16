@@ -27,6 +27,13 @@ package Messages is
    type Messages_Types is (NORMAL, ERROR);
    -- ****
 
+   -- ****d* Messages/Messages.Default_Message_Type
+   -- FUNCTION
+   -- Default message type
+   -- SOURCE
+   Default_Message_Type: constant Messages_Types := ERROR;
+   -- ****
+
    -- ****f* Messages/Messages.Show_Message
    -- FUNCTION
    -- Show selected message to the user. On Unix Error type messages are
@@ -35,7 +42,8 @@ package Messages is
    -- Text         - Text to show to the user
    -- Message_Type - Type of message. Default is Error
    -- SOURCE
-   procedure Show_Message(Text: String; Message_Type: Messages_Types := ERROR);
+   procedure Show_Message
+     (Text: String; Message_Type: Messages_Types := Default_Message_Type);
    -- ****
 
 end Messages;
