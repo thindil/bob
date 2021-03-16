@@ -21,16 +21,16 @@ with GNAT.OS_Lib; use GNAT.OS_Lib;
 package body Messages is
 
    procedure Show_Message
-     (Text: String; Message_Type: Messages_Types := ERROR) is
+     (Text: String; Message_Type: Messages_Types := Default_Message_Type) is
    begin
       -- If operating system is Unix and message type is Error, color it in red
       if Directory_Separator = '/' and then Message_Type = ERROR then
-         Put(ESC & "[31m");
+         Put(Item => ESC & "[31m");
       end if;
-      Put_Line(Text);
+      Put_Line(Item => Text);
       -- Reset text color in terminal if needed
       if Directory_Separator = '/' and then Message_Type /= NORMAL then
-         Put(ESC & "[0m");
+         Put(Item => ESC & "[0m");
       end if;
       if Message_Type = ERROR then
          Set_Exit_Status(Code => Failure);
