@@ -13,15 +13,20 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Command_Line; use Ada.Command_Line;
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
+with Ada.Characters.Latin_1;
+with Ada.Command_Line;
+with Ada.Text_IO;
+with GNAT.OS_Lib;
 
 package body Messages is
 
    procedure Show_Message
      (Text: String; Message_Type: Messages_Types := Default_Message_Type) is
+      use Ada.Characters.Latin_1;
+      use Ada.Command_Line;
+      use Ada.Text_IO;
+      use GNAT.OS_Lib;
+
    begin
       -- If operating system is Unix and message type is Error, color it in red
       if Directory_Separator = '/' and then Message_Type = ERROR then
