@@ -52,8 +52,9 @@ begin
       Show_Commands_Block :
       declare
          String_Length: Positive := 6;
-         procedure Add_Entry(Key, Description: Unbounded_String) is
-            Key_String: String(1 .. String_Length) := (others => ' ');
+         procedure Add_Entry
+           (Key, Description: Unbounded_String; Key_Length: Positive) is
+            Key_String: String(1 .. Key_Length) := (others => ' ');
          begin
             Key_String(1 .. Length(Source => Key)) := To_String(Source => Key);
             Put_Line
@@ -72,23 +73,27 @@ begin
            (Key => To_Unbounded_String(Source => "help"),
             Description =>
               To_Unbounded_String
-                (Source => "show all available commands (this screen)"));
+                (Source => "show all available commands (this screen)"),
+            Key_Length => String_Length);
          Add_Entry
            (Key => To_Unbounded_String(Source => "about"),
             Description =>
               To_Unbounded_String
-                (Source => "show the program version and license info"));
+                (Source => "show the program version and license info"),
+            Key_Length => String_Length);
          Add_Entry
            (Key => To_Unbounded_String(Source => "config"),
             Description =>
               To_Unbounded_String
                 (Source =>
-                   "rename the selected file to .bob.yml or add it content to the existing .bob.yml"));
+                   "rename the selected file to .bob.yml or add it content to the existing .bob.yml"),
+            Key_Length => String_Length);
          Add_Entry
            (Key => To_Unbounded_String(Source => "show"),
             Description =>
               To_Unbounded_String
-                (Source => "show the content of the selected local command"));
+                (Source => "show the content of the selected local command"),
+            Key_Length => String_Length);
          Put_Line(Item => "##### Local commands ########");
          Get_Commands_Loop :
          for I in Commands_List.Iterate loop
@@ -96,7 +101,8 @@ begin
                 (Item => To_Unbounded_String(Source => "internal")) then
                Add_Entry
                  (Key => Commands_Container.Key(Position => I),
-                  Description => Commands_List(I).Description);
+                  Description => Commands_List(I).Description,
+                  Key_Length => String_Length);
             end if;
          end loop Get_Commands_Loop;
       end Show_Commands_Block;
