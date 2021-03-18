@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Commands;
+
 -- ****h* Config/Config
 -- FUNCTION
 -- Provide code for manipulate configuration files
@@ -31,10 +33,13 @@ package Config is
    -- FUNCTION
    -- Load specified configuration file
    -- PARAMETERS
-   -- FileName - Path (absolute or relative) to configuration file which will
-   --            be loaded
+   -- Bob_Commands_List - The list of the program commands
+   -- FileName          - Path (absolute or relative) to configuration file
+   --                     which will be loaded
    -- SOURCE
-   procedure Load_Config(File_Name: String := ".bob.yml") with
+   procedure Load_Config
+     (Bob_Commands_List: in out Commands.Commands_Container.Map;
+      File_Name: String := ".bob.yml") with
       Pre => File_Name'Length > 0,
       Test_Case => (Name => "Test_LoadConfig", Mode => Nominal);
       -- ****

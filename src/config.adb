@@ -19,12 +19,13 @@ with Ada.Strings;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with GNAT.OS_Lib;
-with Commands;
 with Messages;
 
 package body Config is
 
-   procedure Load_Config(File_Name: String := ".bob.yml") is
+   procedure Load_Config
+     (Bob_Commands_List: in out Commands.Commands_Container.Map;
+      File_Name: String := ".bob.yml") is
       use Ada.Directories;
       use Ada.Strings;
       use Ada.Strings.Unbounded;
@@ -42,7 +43,8 @@ package body Config is
       type Items_Type is (COMMAND, VARIABLE, FLAG);
       Default_Item_Type: constant Items_Type := COMMAND;
       Item_Type: Items_Type := Default_Item_Type;
-      procedure Add_Command is
+      procedure Add_Command
+        (The_Commands_List: in out Commands_Container.Map) is
          use Ada.Containers;
          use GNAT.OS_Lib;
 
@@ -57,7 +59,7 @@ package body Config is
            Directory_Separator = '\' then
             return;
          end if;
-         if Commands_List.Contains(Key => Name) then
+         if The_Commands_List.Contains(Key => Name) then
             Show_Message
               (Text =>
                  "Can't add command '" & To_String(Source => Name) &
@@ -79,7 +81,7 @@ package body Config is
                     "Can't add command '" & To_String(Source => Name) &
                     "'. No command result output provided.");
             else
-               Commands_List.Include
+               The_Commands_List.Include
                  (Key => Name,
                   New_Item =>
                     (Execute => Execute, Description => Description,
@@ -136,12 +138,14 @@ package body Config is
               Unbounded_Slice
                 (Source => Line, Low => Separator_Position + 2,
                  High => Length(Source => Line));
-            Load_Config(File_Name => To_String(Source => Value));
+            Load_Config
+              (Bob_Commands_List => Bob_Commands_List,
+               File_Name => To_String(Source => Value));
             goto End_Of_Loop;
          end if;
          -- Add a command
          if Line = To_Unbounded_String(Source => "- command:") then
-            Add_Command;
+            Add_Command(The_Commands_List => Bob_Commands_List);
             Name := Null_Unbounded_String;
             Execute.Clear;
             Variables.Clear;
@@ -217,7 +221,7 @@ package body Config is
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
-      Add_Command;
+      Add_Command(The_Commands_List => Bob_Commands_List);
       Close(File => Config_File);
    end Load_Config;
 

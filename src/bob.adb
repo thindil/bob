@@ -30,7 +30,7 @@ with Messages; use Messages;
 procedure Bob is
 begin
    -- Load local configuration file
-   Load_Config;
+   Load_Config(Bob_Commands_List => Commands_List);
    -- Show list of available commands
    if Argument_Count = 0
      or else
