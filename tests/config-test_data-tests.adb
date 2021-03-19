@@ -33,8 +33,9 @@ package body Config.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Load_Config_aedccf_546b4c
-     (File_Name: String := ".bob.yml") is
+   procedure Wrap_Test_Load_Config_748c50_546b4c
+     (Bob_Commands_List: in out Commands.Commands_Container.Map;
+      File_Name: String := ".bob.yml") is
    begin
       begin
          pragma Assert(File_Name'Length > 0);
@@ -45,7 +46,8 @@ package body Config.Test_Data.Tests is
               (False,
                "req_sloc(config.ads:0):Test_LoadConfig test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Config.Load_Config(File_Name);
+      GNATtest_Generated.GNATtest_Standard.Config.Load_Config
+        (Bob_Commands_List, File_Name);
       begin
          pragma Assert(True);
          null;
@@ -55,17 +57,19 @@ package body Config.Test_Data.Tests is
               (False,
                "ens_sloc(config.ads:0:):Test_LoadConfig test commitment violated");
       end;
-   end Wrap_Test_Load_Config_aedccf_546b4c;
+   end Wrap_Test_Load_Config_748c50_546b4c;
 --  end read only
 
 --  begin read only
    procedure Test_Load_Config_test_loadconfig(Gnattest_T: in out Test);
-   procedure Test_Load_Config_aedccf_546b4c(Gnattest_T: in out Test) renames
+   procedure Test_Load_Config_748c50_546b4c(Gnattest_T: in out Test) renames
      Test_Load_Config_test_loadconfig;
---  id:2.2/aedccf1c0dfb769e/Load_Config/1/0/test_loadconfig/
+--  id:2.2/748c505de8907e18/Load_Config/1/0/test_loadconfig/
    procedure Test_Load_Config_test_loadconfig(Gnattest_T: in out Test) is
-      procedure Load_Config(File_Name: String := ".bob.yml") renames
-        Wrap_Test_Load_Config_aedccf_546b4c;
+      procedure Load_Config
+        (Bob_Commands_List: in out Commands.Commands_Container.Map;
+         File_Name: String := ".bob.yml") renames
+        Wrap_Test_Load_Config_748c50_546b4c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -73,7 +77,7 @@ package body Config.Test_Data.Tests is
    begin
 
       Commands_List.Clear;
-      Load_Config;
+      Load_Config(Commands_List);
       Assert(Commands_List.Length = 1, "Failed to load all commands.");
       Set_Exit_Status(Code => Success);
 

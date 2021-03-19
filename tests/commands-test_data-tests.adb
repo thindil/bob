@@ -32,7 +32,9 @@ package body Commands.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Execute_Command_96c470_533ac5(Key: Unbounded_String) is
+   procedure Wrap_Test_Execute_Command_a5f63a_533ac5
+     (Key: Unbounded_String;
+      Bob_Commands_List: in out Commands_Container.Map) is
    begin
       begin
          pragma Assert(Key /= Null_Unbounded_String);
@@ -43,7 +45,8 @@ package body Commands.Test_Data.Tests is
               (False,
                "req_sloc(commands.ads:0):Test_ExecuteCommand test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Commands.Execute_Command(Key);
+      GNATtest_Generated.GNATtest_Standard.Commands.Execute_Command
+        (Key, Bob_Commands_List);
       begin
          pragma Assert(True);
          null;
@@ -53,30 +56,32 @@ package body Commands.Test_Data.Tests is
               (False,
                "ens_sloc(commands.ads:0:):Test_ExecuteCommand test commitment violated");
       end;
-   end Wrap_Test_Execute_Command_96c470_533ac5;
+   end Wrap_Test_Execute_Command_a5f63a_533ac5;
 --  end read only
 
 --  begin read only
    procedure Test_Execute_Command_test_executecommand(Gnattest_T: in out Test);
-   procedure Test_Execute_Command_96c470_533ac5
+   procedure Test_Execute_Command_a5f63a_533ac5
      (Gnattest_T: in out Test) renames
      Test_Execute_Command_test_executecommand;
---  id:2.2/96c4708ae6b283e4/Execute_Command/1/0/test_executecommand/
+--  id:2.2/a5f63adb28ef4d48/Execute_Command/1/0/test_executecommand/
    procedure Test_Execute_Command_test_executecommand
      (Gnattest_T: in out Test) is
-      procedure Execute_Command(Key: Unbounded_String) renames
-        Wrap_Test_Execute_Command_96c470_533ac5;
+      procedure Execute_Command
+        (Key: Unbounded_String;
+         Bob_Commands_List: in out Commands_Container.Map) renames
+        Wrap_Test_Execute_Command_a5f63a_533ac5;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Load_Config;
+      Load_Config(Commands_List);
       -- Test existing command
-      Execute_Command(To_Unbounded_String("test"));
+      Execute_Command(To_Unbounded_String("test"), Commands_List);
       -- Test non-existing command
-      Execute_Command(To_Unbounded_String("about"));
+      Execute_Command(To_Unbounded_String("about"), Commands_List);
       Assert(True, "This test can only crash.");
       Set_Exit_Status(Code => Success);
 
