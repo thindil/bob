@@ -102,10 +102,13 @@ package Commands is
    -- FUNCTION
    -- Execute selected Bob command
    -- PARAMETERS
-   -- Key - Command name which the user entered as a first parameter for the
-   --       program
+   -- Bob_Commands_List - The list of the program commands
+   -- Key               - Command name which the user entered as a first
+   --                     parameter for the program
    -- SOURCE
-   procedure Execute_Command(Key: Unbounded_String) with
+   procedure Execute_Command
+     (Key: Unbounded_String;
+      Bob_Commands_List: in out Commands_Container.Map) with
       Pre => Key /= Null_Unbounded_String,
       Test_Case => (Name => "Test_ExecuteCommand", Mode => Nominal);
       -- ****

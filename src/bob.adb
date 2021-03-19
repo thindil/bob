@@ -231,7 +231,8 @@ begin
       -- Execute entered command
    else
       Execute_Command
-        (Key => To_Unbounded_String(Source => Argument(Number => 1)));
+        (Key => To_Unbounded_String(Source => Argument(Number => 1)),
+         Bob_Commands_List => Commands_List);
    end if;
 exception
    when An_Exception : others =>

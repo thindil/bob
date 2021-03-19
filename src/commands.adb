@@ -25,7 +25,9 @@ with Messages;
 
 package body Commands is
 
-   procedure Execute_Command(Key: Unbounded_String) is
+   procedure Execute_Command
+     (Key: Unbounded_String;
+      Bob_Commands_List: in out Commands_Container.Map) is
       use Ada.Characters.Handling;
       use Ada.Command_Line;
       use Ada.Directories;
@@ -39,18 +41,19 @@ package body Commands is
       Variable_Starts, Number_Position: Natural := 1;
       Command_Path: GNAT.OS_Lib.String_Access;
       File_Desc: File_Descriptor := 0;
-      procedure Delete_Output_File is
+      procedure Delete_Output_File
+        (The_Commands_List: in out Commands_Container.Map) is
       begin
-         if To_String(Source => Commands_List(Key).Output) not in "standard" |
-               "error"
+         if To_String(Source => The_Commands_List(Key).Output) not in
+             "standard" | "error"
            and then Ada.Directories.Exists
-             (Name => To_String(Source => Commands_List(Key).Output)) then
+             (Name => To_String(Source => The_Commands_List(Key).Output)) then
             Delete_File
-              (Name => To_String(Source => Commands_List(Key).Output));
+              (Name => To_String(Source => The_Commands_List(Key).Output));
          end if;
       end Delete_Output_File;
    begin
-      if not Commands_List.Contains(Key => Key) then
+      if not Bob_Commands_List.Contains(Key => Key) then
          Show_Message
            (Text =>
               "No available command with name '" & To_String(Source => Key) &
@@ -63,21 +66,22 @@ package body Commands is
          use GNAT.Expect;
 
          Evaluate_Variables: constant Boolean :=
-           Commands_List(Key).Flags.Contains
+           Bob_Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "evaluatevariables"));
          Descriptor: Process_Descriptor; --## rule line off IMPROPER_INITIALIZATION
          Args: Argument_List_Access;
          Result: Expect_Match := -1;
       begin
          Set_Environment_Variables_Loop :
-         for I in Commands_List(Key).Variables.Iterate loop
+         for I in Bob_Commands_List(Key).Variables.Iterate loop
             -- If proper flag is set, evaluate environment variable before
             -- set it
             if Evaluate_Variables then
                Args :=
                  Argument_String_To_List
                    (Arg_String =>
-                      To_String(Source => Commands_List(Key).Variables(I)));
+                      To_String
+                        (Source => Bob_Commands_List(Key).Variables(I)));
                Non_Blocking_Spawn
                  (Descriptor => Descriptor, Command => Args(Args'First).all,
                   Args => Args(Args'First + 1 .. Args'Last));
@@ -112,35 +116,35 @@ package body Commands is
                     To_String
                       (Source => Variables_Container.Key(Position => I)),
                   Value =>
-                    To_String(Source => Commands_List(Key).Variables(I)));
+                    To_String(Source => Bob_Commands_List(Key).Variables(I)));
             end if;
          end loop Set_Environment_Variables_Loop;
       end Load_Environment_Variables_Block;
-      if Commands_List(Key).Output = "standard" then
+      if Bob_Commands_List(Key).Output = "standard" then
          File_Desc := Standout;
-      elsif Commands_List(Key).Output = "error" then
+      elsif Bob_Commands_List(Key).Output = "error" then
          File_Desc := Standerr;
       else
          if Ada.Directories.Exists
-             (Name => To_String(Source => Commands_List(Key).Output)) then
+             (Name => To_String(Source => Bob_Commands_List(Key).Output)) then
             Delete_File
-              (Name => To_String(Source => Commands_List(Key).Output));
+              (Name => To_String(Source => Bob_Commands_List(Key).Output));
          end if;
          File_Desc :=
            Create_Output_Text_File
-             (Name => To_String(Source => Commands_List(Key).Output));
+             (Name => To_String(Source => Bob_Commands_List(Key).Output));
          if File_Desc = Invalid_FD then
             Show_Message
               (Text =>
                  "Error during executing '" & To_String(Source => Key) &
                  "'. Can't create '" &
-                 To_String(Source => Commands_List(Key).Output) &
+                 To_String(Source => Bob_Commands_List(Key).Output) &
                  "' as the output file.");
             return;
          end if;
       end if;
       Execute_Command_Loop :
-      for Execute of Commands_List(Key).Execute loop
+      for Execute of Bob_Commands_List(Key).Execute loop
          if Length(Source => Execute) = 0 then
             goto End_Of_Loop;
          end if;
@@ -179,7 +183,7 @@ package body Commands is
                Show_Message
                  (Text =>
                     "You didn't entered enough arguments for this command. Please check it description for information what should be entered.");
-               Delete_Output_File;
+               Delete_Output_File(The_Commands_List => Bob_Commands_List);
                return;
             end if;
             Replace_Slice
@@ -229,7 +233,7 @@ package body Commands is
                  (Text =>
                     "Variable: " & To_String(Source => Argument_Number) &
                     " doesn't exists.");
-               Delete_Output_File;
+               Delete_Output_File(The_Commands_List => Bob_Commands_List);
                return;
             end if;
             Replace_Slice
@@ -279,13 +283,13 @@ package body Commands is
             end if;
          end Split_Command_Line_Block;
          -- Translate path if needed
-         if Commands_List(Key).Flags.Contains
+         if Bob_Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "windowspath")) and
            Directory_Separator = '/' then
             Translate
               (Source => Arguments,
                Mapping => To_Mapping(From => "\", To => "/"));
-         elsif Commands_List(Key).Flags.Contains
+         elsif Bob_Commands_List(Key).Flags.Contains
              (Item => To_Unbounded_String(Source => "unixpath")) and
            Directory_Separator = '\' then
             Translate
@@ -304,7 +308,7 @@ package body Commands is
                  (Text =>
                     "Directory: '" & To_String(Source => Arguments) &
                     "' doesn't exists.");
-               Delete_Output_File;
+               Delete_Output_File(The_Commands_List => Bob_Commands_List);
                return;
             end if;
             Set_Directory(Directory => To_String(Source => Arguments));
@@ -317,7 +321,7 @@ package body Commands is
               (Text =>
                  "Command: '" & To_String(Source => Command) &
                  "' doesn't exists.");
-            Delete_Output_File;
+            Delete_Output_File(The_Commands_List => Bob_Commands_List);
             return;
          end if;
          -- Execute command
@@ -339,7 +343,7 @@ package body Commands is
                  (Text =>
                     "Error during executing '" & To_String(Source => Execute) &
                     "'");
-               Delete_Output_File;
+               Delete_Output_File(The_Commands_List => Bob_Commands_List);
                return;
             end if;
          end Execute_Command_Block;
