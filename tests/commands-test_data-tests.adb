@@ -74,6 +74,7 @@ package body Commands.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      Commands_List: Commands_Container.Map;
 
    begin
 

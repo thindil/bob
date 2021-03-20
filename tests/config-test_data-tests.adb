@@ -73,10 +73,10 @@ package body Config.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      Commands_List: Commands_Container.Map;
 
    begin
 
-      Commands_List.Clear;
       Load_Config(Commands_List);
       Assert(Commands_List.Length = 1, "Failed to load all commands.");
       Set_Exit_Status(Code => Success);
