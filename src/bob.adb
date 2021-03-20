@@ -28,6 +28,7 @@ with Config; use Config;
 with Messages; use Messages;
 
 procedure Bob is
+   Commands_List: Commands_Container.Map := Commands_Container.Empty_Map;
 begin
    -- Load local configuration file
    Load_Config(Bob_Commands_List => Commands_List);

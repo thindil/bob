@@ -53,7 +53,7 @@ package Commands is
    --               help command.
    -- Output      - Where to send output of this command. Possible options are:
    --               "standard" standard output (default), "error" standard
-   --               error output, anything other will be treated as path to file
+--               error output, anything other will be treated as path to file
    --               where output should be redirected.
    -- Flags       - Flags assigned to this command. Possible options are:
    --               "unixonly" command available only on Unix systems,
@@ -79,7 +79,8 @@ package Commands is
    Empty_Command: constant Command_Record :=
      (Execute => Unbounded_String_Container.Empty_Vector,
       Variables => Variables_Container.Empty_Map,
-      Description => Null_Unbounded_String, Output => Null_Unbounded_String,
+      Description => Null_Unbounded_String,
+      Output => To_Unbounded_String(Source => "standard"),
       Flags => Unbounded_String_Container.Empty_Vector);
    -- ****
 
@@ -89,13 +90,6 @@ package Commands is
    -- SOURCE
    package Commands_Container is new Ordered_Maps(Key_Type => Unbounded_String,
       Element_Type => Command_Record);
-   -- ****
-
-   -- ****v* Commands/Commands.Commands_List
-   -- FUNCTION
-   -- List of all available Bob commands.
-   -- SOURCE
-   Commands_List: Commands_Container.Map;
    -- ****
 
    -- ****f* Commands/Commands.Execute_Command
