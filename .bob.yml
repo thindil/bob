@@ -108,3 +108,19 @@ version: 3.0
    description: Run AdaControl to check correctness of the code
    flags:
       - unixpath
+- command:
+   name: checkall
+   execute:
+      - bob debug
+      - bob tests
+      - bob check
+   description: Run all the project tests
+- command:
+   name: checkfile
+   execute:
+      - gprclean -P bob.gpr
+      - cd obj
+      - adactl -f ../others/rules.aru -p ../bob.gpr ../src/$1
+   description: Run AdaControl to check correctness of the selected file
+   flags:
+      - unixpath
