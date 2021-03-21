@@ -34,59 +34,53 @@ package body Config is
       use Messages;
 
       Config_File: File_Type;
-      Name, Line, Description, Key, Value, Output: Unbounded_String :=
-        Null_Unbounded_String;
+      Name, Line, Key, Value: Unbounded_String := Null_Unbounded_String;
       Separator_Position: Natural := 0;
-      Execute, Flags: Unbounded_String_Container.Vector :=
-        Unbounded_String_Container.Empty_Vector;
-      Variables: Variables_Container.Map := Variables_Container.Empty_Map;
       type Items_Type is (COMMAND, VARIABLE, FLAG);
       Default_Item_Type: constant Items_Type := COMMAND;
       Item_Type: Items_Type := Default_Item_Type;
+      New_Command: Command_Record := Empty_Command;
       procedure Add_Command
-        (The_Commands_List: in out Commands_Container.Map) is
+        (The_Commands_List: in out Commands_Container.Map;
+         Command_To_Add: Command_Record; Command_Name: Unbounded_String) is
          use Ada.Containers;
          use GNAT.OS_Lib;
 
       begin
-         if Flags.Contains
+         if Command_To_Add.Flags.Contains
              (Item => To_Unbounded_String(Source => "windowsonly")) and
            Directory_Separator = '/' then
             return;
          end if;
-         if Flags.Contains
+         if Command_To_Add.Flags.Contains
              (Item => To_Unbounded_String(Source => "unixonly")) and
            Directory_Separator = '\' then
             return;
          end if;
-         if The_Commands_List.Contains(Key => Name) then
+         if The_Commands_List.Contains(Key => Command_Name) then
             Show_Message
               (Text =>
-                 "Can't add command '" & To_String(Source => Name) &
+                 "Can't add command '" & To_String(Source => Command_Name) &
                  "'. There is one declared with that name.");
-         elsif Name /= Null_Unbounded_String then
-            if Execute.Length = 0 then
+         elsif Command_Name /= Null_Unbounded_String then
+            if Command_To_Add.Execute.Length = 0 then
                Show_Message
                  (Text =>
-                    "Can't add command '" & To_String(Source => Name) &
+                    "Can't add command '" & To_String(Source => Command_Name) &
                     "'. No commands to execute are entered.");
-            elsif Description = Null_Unbounded_String then
+            elsif Command_To_Add.Description = Null_Unbounded_String then
                Show_Message
                  (Text =>
-                    "Can't add command '" & To_String(Source => Name) &
+                    "Can't add command '" & To_String(Source => Command_Name) &
                     "'. No command description provided.");
-            elsif Output = Null_Unbounded_String then
+            elsif Command_To_Add.Output = Null_Unbounded_String then
                Show_Message
                  (Text =>
-                    "Can't add command '" & To_String(Source => Name) &
+                    "Can't add command '" & To_String(Source => Command_Name) &
                     "'. No command result output provided.");
             else
                The_Commands_List.Include
-                 (Key => Name,
-                  New_Item =>
-                    (Execute => Execute, Description => Description,
-                     Variables => Variables, Output => Output,
-                     Flags => Flags));
+                 (Key => Command_Name, New_Item => Command_To_Add);
             end if;
          end if;
       end Add_Command;
@@ -145,13 +139,11 @@ package body Config is
          end if;
          -- Add a command
          if Line = To_Unbounded_String(Source => "- command:") then
-            Add_Command(The_Commands_List => Bob_Commands_List);
+            Add_Command
+              (The_Commands_List => Bob_Commands_List,
+               Command_To_Add => New_Command, Command_Name => Name);
+            New_Command := Empty_Command;
             Name := Null_Unbounded_String;
-            Execute.Clear;
-            Variables.Clear;
-            Flags.Clear;
-            Description := Null_Unbounded_String;
-            Output := To_Unbounded_String(Source => "standard");
             goto End_Of_Loop;
          end if;
          -- Parse configuration settings
@@ -191,9 +183,9 @@ package body Config is
          if Key = To_Unbounded_String(Source => "name") then
             Name := Value;
          elsif Key = To_Unbounded_String(Source => "description") then
-            Description := Value;
+            New_Command.Description := Value;
          elsif Key = To_Unbounded_String(Source => "output") then
-            Output := Value;
+            New_Command.Output := Value;
          elsif Key = To_Unbounded_String(Source => "execute") then
             Item_Type := COMMAND;
          elsif Key = To_Unbounded_String(Source => "variables") then
@@ -203,12 +195,12 @@ package body Config is
          else
             case Item_Type is
                when COMMAND =>
-                  Execute.Append(New_Item => Value);
+                  New_Command.Execute.Append(New_Item => Value);
                when FLAG =>
-                  Flags.Append(New_Item => Value);
+                  New_Command.Flags.Append(New_Item => Value);
                when VARIABLE =>
                   Separator_Position := Index(Source => Value, Pattern => "=");
-                  Variables.Include
+                  New_Command.Variables.Include
                     (Key =>
                        Unbounded_Slice
                          (Source => Value, Low => 1,
@@ -221,7 +213,9 @@ package body Config is
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
-      Add_Command(The_Commands_List => Bob_Commands_List);
+      Add_Command
+        (The_Commands_List => Bob_Commands_List, Command_To_Add => New_Command,
+         Command_Name => Name);
       Close(File => Config_File);
    end Load_Config;
 
