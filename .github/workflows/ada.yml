@@ -27,6 +27,13 @@ jobs:
     - name: Build and run the tests
       run: others/tests.tcl
 
+    - name: Run AdaControl static analysis
+      run: |
+         gprclean -P bob.gpr
+         cd obj
+         adactl -f ../others/rules.aru -p ../bob.gpr -o ../adacontrol.log -r bob
+         cd ..
+
   build_linux:
 
     needs: tests
