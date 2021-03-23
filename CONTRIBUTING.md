@@ -55,8 +55,9 @@ to fix my code.
 
 The full description of coding style used by the project, you can find on the
 [Coding Standard](https://www.laeran.pl/repositories/bob/wiki?name=Coding%20Standard) page.
-There also you will find some information about the testing process of the
-project.
+On the page [Testing the Project](https://www.laeran.pl/repositories/bob/wiki?name=Testing%20the%20Project) you will
+find information how to test your code, so it will be compliant with the
+project standards.
 
 #### Code comments formatting
 
