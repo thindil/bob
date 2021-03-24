@@ -7,19 +7,8 @@ version: 3.0
 - command:
    name: release
    execute:
-      - gprclean -P bob.gpr
-      - gprbuild -p bob.gpr -XMode=release
-      - mkdir -p usr/share/doc/bob
-      - mkdir -p usr/bin
-      - cp bin/bob usr/bin
-      - cp README.md usr/share/doc/bob
-      - cp COPYING usr/share/doc/bob
-      - cp CHANGELOG.md usr/share/doc/bob
-      - cp CONTRIBUTING.md usr/share/doc/bob
-      - gprclean -P bob.gpr
+      - tclsh others/build.tcl
    description: Build Bob in release mode
-   flags:
-      - unixonly
 - command:
    name: analyze
    execute:
@@ -60,33 +49,10 @@ version: 3.0
 - command:
    name: windows
    execute:
-      - gprclean -P bob.gpr --target=x86_64-windows
-      - gprbuild -p -P steamsky.gpr -XMode=release --target=x86_64-windows
-      - mkdir -p release/doc/bob
-      - mkdir -p release/bin
-      - cp bin/bob release/bin
-      - cp README.md release/doc/bob
-      - cp COPYING release/doc/bob
-      - cp CHANGELOG.md release/doc/bob
-      - cp CONTRIBUTING.md release/doc/bob
-      - gprclean -P bob.gpr --target=x86_64-windows
-   description: Build Windows version of Bob on Linux
+      - sudo docker run --rm -w /app -v $1:/app ghcr.io/thindil/adabuildwin64 /bin/bash others/build.tcl x86_64-windows
+   description: Build Windows version of Bob on Linux, required argument is full path to the project
    flags:
       - unixonly
-- command:
-   name: release
-   execute:
-      - gprclean -P bob.gpr
-      - gprbuild -P bob.gpr -XMode=release
-      - XCOPY /S bin release\
-      - XCOPY README.md release\doc\
-      - XCOPY COPYING release\doc\
-      - XCOPY CHANGELOG.md release\doc\
-      - XCOPY CONTRIBUTING.md release\doc\
-      - gprclean -P bob.gpr
-   description: Build Bob in release mode
-   flags:
-      - windowsonly
 - command:
    name: pretty
    execute:
