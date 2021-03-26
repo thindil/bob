@@ -44,8 +44,7 @@ project bob is
             for Default_Switches ("ada") use ("-O2",
                "-ffunction-sections",
                "-fdata-sections",
-               "-s",
-               "-flto");
+               "-s");
          when "analyze" =>
             for Default_Switches ("ada") use ("-pg",
                "-fprofile-arcs",
@@ -60,8 +59,7 @@ project bob is
          when "release" =>
             for Default_Switches ("ada") use ("-Wl,--gc-sections",
                "-s",
-               "-O2",
-               "-flto");
+               "-O2");
          when "analyze" =>
             for Default_Switches ("ada") use ("-no-pie", "-pg", "-fprofile-arcs");
       end case;
