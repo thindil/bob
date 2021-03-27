@@ -110,17 +110,17 @@ life example, look at it own *.bob.yml* file.
 
 You can use Docker images `adabuild` and `adabuildwin64` from the project
 [dockerada](https://github.com/thindil/dockerada). They contain all libraries
-and compiler needed to build the game.
+and compiler needed to build the game. Recommended version is `9`
 
-To build Linux version of the program, download `adabuild` image and type in
+To build Linux version of the program, download `adabuild:9` image and type in
 console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuild /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuild:9 /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release"`
 
-To build Windows 64-bit version of the program, download `adabuildwin64` image
+To build Windows 64-bit version of the program, download `adabuildwin64:9` image
 and type in console:
 
-`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuildwin64 /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release --target=x86_64-windows"`
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuildwin64:9 /bin/bash -c "cd /app && gprbuild -p -P bob.gpr -XMode=release --target=x86_64-windows"`
 
 ### Classic way
 
