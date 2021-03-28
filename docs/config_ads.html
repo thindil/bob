@@ -12,14 +12,16 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Bob v3.0 code documentation</a>
+<a name="robo_top_of_doc">Bob v3.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="./sources.html#top">Source files</a>
 <a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_constants.html#top">Constants</a>
 <a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_records.html#top">Records</a>
 <a class="menuitem" href="./robo_types.html#top">Types</a>
 <a class="menuitem" href="./robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
@@ -28,8 +30,8 @@
 <ul>
 <li>1. <a href="#robo1">Config/Config</a></li>
 <ul>
-<li>1.1. <a href="#robo9">Config/Config.Version</a></li>
-<li>1.2. <a href="#robo11">Config/Config.LoadConfig</a></li>
+<li>1.1. <a href="#robo10">Config/Config.Version</a></li>
+<li>1.2. <a href="#robo12">Config/Config.Load_Config</a></li>
 </ul>
 </ul>
 <hr />
@@ -46,37 +48,40 @@
 
 <hr />
 <a name="Config2fConfig2eVersion"></a>
-<a name="robo9"></a><h2>Config/Config.Version [ Variables ]</h2>
+<a name="robo10"></a><h2>Config/Config.Version [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Version of the program
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"3.0"</span><span class="sign">;</span>
+<pre class="source">   Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"3.1"</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Config2fConfig2eLoadConfig"></a>
-<a name="robo11"></a><h2>Config/Config.LoadConfig [ Subprograms ]</h2>
+<a name="Config2fConfig2eLoad5fConfig"></a>
+<a name="robo12"></a><h2>Config/Config.Load_Config [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load specified configuration file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LoadConfig<span class="sign">(</span>FileName<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".bob.yml"</span><span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> FileName<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
-      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_LoadConfig"</span><span class="sign">,</span> Nominal<span class="sign">);</span>
+<pre class="source">   <span class="keyword">procedure</span> Load_Config
+     <span class="sign">(</span>Bob_Commands_List<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./commands_ads.html#robo0">Commands</a><span class="sign">.</span>Commands_Container<span class="sign">.</span>Map<span class="sign">;</span>
+      File_Name<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".bob.yml"</span><span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> File_Name<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_LoadConfig"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> FileName - Path (absolute or relative) to configuration file which will
-            be loaded
+<pre> Bob_Commands_List - The list of the program commands
+ FileName          - Path (absolute or relative) to configuration file
+                     which will be loaded
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Nov 10 2020 07:46:08
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 28 2021 07:50:06
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,14 +12,16 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Bob v3.0 code documentation</a>
+<a name="robo_top_of_doc">Bob v3.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="./sources.html#top">Source files</a>
 <a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_constants.html#top">Constants</a>
 <a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_records.html#top">Records</a>
 <a class="menuitem" href="./robo_types.html#top">Types</a>
 <a class="menuitem" href="./robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
@@ -28,12 +30,12 @@
 <ul>
 <li>1. <a href="#robo0">Commands/Commands</a></li>
 <ul>
-<li>1.1. <a href="#robo3">Commands/Commands.Command_Record</a></li>
-<li>1.2. <a href="#robo4">Commands/Commands.Commands_Container</a></li>
-<li>1.3. <a href="#robo5">Commands/Commands.UnboundedString_Container</a></li>
-<li>1.4. <a href="#robo6">Commands/Commands.Variables_Container</a></li>
-<li>1.5. <a href="#robo8">Commands/Commands.Commands_List</a></li>
-<li>1.6. <a href="#robo10">Commands/Commands.ExecuteCommand</a></li>
+<li>1.1. <a href="#robo3">Commands/Commands.Commands_Container</a></li>
+<li>1.2. <a href="#robo4">Commands/Commands.Unbounded_String_Container</a></li>
+<li>1.3. <a href="#robo5">Commands/Commands.Variables_Container</a></li>
+<li>1.4. <a href="#robo7">Commands/Commands.Command_Record</a></li>
+<li>1.5. <a href="#robo8">Commands/Empty_Command</a></li>
+<li>1.6. <a href="#robo11">Commands/Commands.Execute_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -49,20 +51,60 @@
 </pre>
 
 <hr />
-<a name="Commands2fCommands2eCommand5fRecord"></a>
-<a name="robo3"></a><h2>Commands/Commands.Command_Record [ Types ]</h2>
+<a name="Commands2fCommands2eCommands5fContainer"></a>
+<a name="robo3"></a><h2>Commands/Commands.Commands_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store all available Bob commands.
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> Commands_Container <span class="keyword">is</span> <span class="keyword">new</span> Ordered_Maps<span class="sign">(</span>Key_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">,</span>
+      Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Command_Record<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Commands2fCommands2eUnbounded5fString5fContainer"></a>
+<a name="robo4"></a><h2>Commands/Commands.Unbounded_String_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store commands to execute
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> Unbounded_String_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span>
+      Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Commands2fCommands2eVariables5fContainer"></a>
+<a name="robo5"></a><h2>Commands/Commands.Variables_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store enviroment variables for the command
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> Variables_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Key_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">,</span>
+      Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">,</span> Hash <span class="sign">=</span><span class="sign">&gt;</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      Equivalent_Keys <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Commands2fCommands2eCommand5fRecord"></a>
+<a name="robo7"></a><h2>Commands/Commands.Command_Record [ Records ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for the Bob commands.
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Command_Record <span class="keyword">is</span> <span class="keyword">record</span>
-      Execute<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Execute<span class="sign">:</span> Unbounded_String_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Variables<span class="sign">:</span> Variables_Container<span class="sign">.</span>Map<span class="sign">;</span>
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Output<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Flags<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Flags<span class="sign">:</span> Unbounded_String_Container<span class="sign">.</span>Vector<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -84,77 +126,46 @@
 </pre>
 
 <hr />
-<a name="Commands2fCommands2eCommands5fContainer"></a>
-<a name="robo4"></a><h2>Commands/Commands.Commands_Container [ Types ]</h2>
+<a name="Commands2fEmpty5fCommand"></a>
+<a name="robo8"></a><h2>Commands/Empty_Command [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Used to store all available Bob commands.
+<pre> Empty command constant
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Commands_Container <span class="keyword">is</span> <span class="keyword">new</span> Ordered_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      Command_Record<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <strong>Empty_Command</strong><span class="sign">:</span> <span class="keyword">constant</span> Command_Record <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>Execute <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String_Container<span class="sign">.</span>Empty_Vector<span class="sign">,</span>
+      Variables <span class="sign">=</span><span class="sign">&gt;</span> Variables_Container<span class="sign">.</span>Empty_Map<span class="sign">,</span>
+      Description <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span>
+      Output <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"standard"</span><span class="sign">)</span><span class="sign">,</span>
+      Flags <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String_Container<span class="sign">.</span>Empty_Vector<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Commands2fCommands2eUnboundedString5fContainer"></a>
-<a name="robo5"></a><h2>Commands/Commands.UnboundedString_Container [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to store commands to execute
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> UnboundedString_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span>
-      Unbounded_String<span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Commands2fCommands2eVariables5fContainer"></a>
-<a name="robo6"></a><h2>Commands/Commands.Variables_Container [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to store enviroment variables for the command
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Variables_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      Unbounded_String<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Commands2fCommands2eCommands5fList"></a>
-<a name="robo8"></a><h2>Commands/Commands.Commands_List [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> List of all available Bob commands.
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   Commands_List<span class="sign">:</span> Commands_Container<span class="sign">.</span>Map<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Commands2fCommands2eExecuteCommand"></a>
-<a name="robo10"></a><h2>Commands/Commands.ExecuteCommand [ Subprograms ]</h2>
+<a name="Commands2fCommands2eExecute5fCommand"></a>
+<a name="robo11"></a><h2>Commands/Commands.Execute_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Commands</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Execute selected Bob command
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> ExecuteCommand<span class="sign">(</span>Key<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Execute_Command
+     <span class="sign">(</span>Key<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Bob_Commands_List<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Commands_Container<span class="sign">.</span>Map<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Key <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_ExecuteCommand"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ExecuteCommand"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Key - Command name which the user entered as a first parameter for the
-       program
+<pre> Bob_Commands_List - The list of the program commands
+ Key               - Command name which the user entered as a first
+                     parameter for the program
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/commands.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Nov 10 2020 07:46:08
+<p>Generated from ./src/commands.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 28 2021 07:50:06
 </p>
 </div> <!-- footer -->
 </body>
