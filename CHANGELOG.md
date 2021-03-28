@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.1] - 2021-03-28
 
 ### Added
 - Command to show the content of the selected local Bob command
