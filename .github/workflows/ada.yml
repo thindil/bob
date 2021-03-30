@@ -47,15 +47,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build the program
-      run: |
-         gprbuild -p -P bob.gpr -XMode=release
-         mkdir -p usr/share/doc/bob
-         mkdir -p usr/bin
-         cp bin/bob usr/bin
-         cp README.md usr/share/doc/bob
-         cp COPYING usr/share/doc/bob
-         cp CHANGELOG.md usr/share/doc/bob
-         cp CONTRIBUTING.md usr/share/doc/bob
+      run: others/build.tcl
 
     - name: Compress the artifact
       run: tar -cf bob-linux.tar usr
@@ -79,16 +71,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build the program
-      run: |
-         gprbuild -p -P bob.gpr -XMode=release --target=x86_64-windows
-         mkdir -p bin/doc
-         cp README.md bin/doc
-         cp COPYING bin/doc
-         cp CHANGELOG.md bin/doc
-         cp CONTRIBUTING.md bin/doc
+      run: others/build.tcl --target=x86_64-windows
 
     - name: Compress the artifact
-      run: tar -cf bob-windows.tar bin
+      run: tar -cf bob-windows.tar release
 
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
