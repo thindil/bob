@@ -81,3 +81,28 @@ jobs:
       with:
          name: bob-windows.tar
          path: bob-windows.tar
+
+  build_raspberry_pi:
+
+    needs: tests
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuildraspi
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build the program
+      run: others/build.tcl --target=arm-linux-gnueabihf
+
+    - name: Compress the artifact
+      run: tar -cf bob-raspberrypi.tar usr
+
+    - name: Upload the artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: bob-raspberrypi.tar
+         path: bob-raspberrypi.tar
+
