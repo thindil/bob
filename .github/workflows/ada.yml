@@ -71,7 +71,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build the program
-      run: others/build.tcl --target=x86_64-windows
+      run: others/build.tcl x86_64-windows
 
     - name: Compress the artifact
       run: tar -cf bob-windows.tar release
@@ -95,7 +95,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build the program
-      run: others/build.tcl --target=arm-linux-gnueabihf
+      run: others/build.tcl arm-linux-gnueabihf
 
     - name: Compress the artifact
       run: tar -cf bob-raspberrypi.tar usr
