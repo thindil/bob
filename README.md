@@ -3,18 +3,15 @@
 Bob is Not Intelligent console assistant. Bod doesn't try to replace any
 existing shells or build systems. It is designed for extend them. Often
 when you have few projects to work, they use different commands or build
-systems to maintain. To organize it, often you have to add or global aliases
+systems to maintain. To organize it, typically you have to add or global aliases
 to your shell or create scripts which grow over time to maintain it. Bob
 trying to solve this problem by adding ability to create local aliases for
 each directory. It is doing this by creating configuration files (in YAML) with
 defined aliases in each directory. When Bob is executed in selected directory,
 it reads configuration file (if exists) for selected directory for aliases.
 
-**Note:** This version of README.md is about development version of the
-program. Some things may be different in released version of Bob.
-If you read this file on Github: **please don't send pull requests here**.
-All will be automatically closed. Any code propositions should go to
-the [Fossil](https://www.laeran.pl/repositories/bob) repository.
+**INFO:** This project is no longer maintained. Feel free to clone it and take
+care about it.
 
 ### Configuration file
 
@@ -55,7 +52,7 @@ Explanation:
 * `variables:`         - Mark start of list of environmental variables which
                          will be added when running this Bob command.
 * `- [name] = [value]` - Each environment variable which will be added
-                         during running this Bob command must starts with
+                         during running this Bob command must start with
                          hypen. [name] is the name of the variable which will
                          be added, [value] is the value of the variable which
                          will be added. Each command can have as much as you
@@ -63,7 +60,7 @@ Explanation:
 * `execute:`           - Mark start of list of commands or programs to execute
                          when running this Bob command.
 * `- [command]`        - Each command or program which will be executed during
-                         running this Bob command must starts with hypen. If
+                         running this Bob command must start with hypen. If
                          you want to make that command maximum portable, use
                          relative paths instead of absolute. If you want to
                          execute command which contains space, put it in
@@ -172,7 +169,7 @@ directory (where this file is) enter terminal command:
 `others/generatedocs.tcl`. For more information about this script, please look
 [here](https://github.com/thindil/roboada#generatedocspy). This version of
 script have set all default settings for Bob code. If you have Bob installed,
-you can also use for it command: `bob docs`.
+you can also use for that the command: `bob docs`.
 
 ## Contributing to the project
 For detailed information about contributing to the project (bugs reporting,
